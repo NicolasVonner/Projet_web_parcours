@@ -1,0 +1,3 @@
+document.getElementById('signIn').addEventListener('click', getAuthIn_controller => location = "/Authentification/Auth_controller/displaySignin");
+document.getElementById('signUp').addEventListener('click', getAuthUp_controller => location.href = "/Authentification/Auth_controller/displaySignup");
+document.getElementById('guest').addEventListener('click', getGameG_controller => location.href = "/Game/Game_controller/createGuest");
