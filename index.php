@@ -12,15 +12,14 @@ if(sizeof(explode('/',$_GET['p'])) == 1){
 
 $folder= empty(!$params[0])? $params[0] : 'Index';
 $controller= isset($params[1])? $params[1] : 'Index_controller';
-$action = isset($params[2])? $params[2] : 'verifyConnection';
+$action = isset($params[2])? $params[2] : 'rootDirection';
 $p1 = isset($params[3])? $params[3] : null;
 $p2 = isset($params[4])? $params[4] : null;
 $p3 = isset($params[5])? $params[5] : null;
-
 // die('Les paramètres sont => '.$folder.' -- '.$controller.' -- '.$action.' -- '.$p1.'-- '.$p2.' -- '.$p3.' -- '.sizeof($params).' ');
 
 require('./Controllers/'.$folder.'/'.$controller.'.php');
-$controller= new $controller();
+$controller = new $controller();
 // Vérifier pour paramètres 
 if(empty(array_slice($params,3))){
     if(method_exists($controller,$action)){
@@ -37,8 +36,4 @@ if(empty(array_slice($params,3))){
         require('Views/Errors/404_view.php');
     }
 }
-
-
-// ErrorDocument 400 "<h1>404 Error</h1><p>Page not found...</p>"
-// ErrorDocument 500 "<h1>500 Error</h1><p>Page not found...</p>"
 ?>

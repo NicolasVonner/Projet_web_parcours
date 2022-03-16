@@ -5,18 +5,26 @@
             <div class="card col-lg-4 mx-auto">
               <div class="card-body px-5 py-5">
                 <h3 class="card-title text-left mb-3">Register</h3>
-                <form>
-                  <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" class="form-control p_input">
+                <form method="POST" action="/Authentification/Auth_controller/verify_signup">
+                <div class="form-group">
+                    <label>First name</label>
+                    <input type="text" placeholder="First name" name="firstname" class="form-control p_input">
                   </div>
                   <div class="form-group">
+                    <label>Last name</label>
+                    <input type="text" placeholder="Last name" name="lastname" class="form-control p_input">
+                  </div>
+                <div class="form-group">
                     <label>Email</label>
-                    <input type="email" class="form-control p_input">
+                    <input type="email" placeholder="email@gmail.com" name="email" class="form-control p_input">
+                  </div>
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" placeholder="Username" name="username" class="form-control p_input">
                   </div>
                   <div class="form-group">
                     <label>Password</label>
-                    <input type="password" class="form-control p_input">
+                    <input type="password" placeholder="password" name="password" class="form-control p_input">
                   </div>
                   <div class="form-group d-flex align-items-center justify-content-between">
                     <div class="form-check">
