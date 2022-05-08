@@ -1,31 +1,32 @@
 <?php
-require('./connexion_model.php');
-    class Utilisateur extends Connexion
+
+namespace Projet_Web_parcours\Models;
+
+use \Exception;
+
+    class Utilisateur extends Model
     {
-
-        //Methodes d'affichage de l'objet
-        public function to_String() : string{
-            return 'Utilisateur =>'.$this->nomM .'/'. $this->prenomM .'/'. $this->adressMail .'/'. $this->dateInscription .'/'. $this->dateNaissance .'/'. $this->badgeCrea .'/'. $this->badgeAv;
-        } 
-        public function __toString ( ) : string{
-            return $this->to_String();
-        }   
-
-        //Créer le pdo dans le constructeur Utilisateur
-        function createUser($database){  
-            $connect = Connexion::getInstance($database);   
-            $connect->query('INSERT INTO membre VALUES (jose, anigo, jose.anigo@gmail.com, '.date("d-m-Y").','.date("d-m-Y").',Novice, Marcheur_du_dimanche)');
+        // Vérifie l'email ou le username existe déja dans la base lors de l'inscription.
+        public static function redundancyUser($what, $where){  
+            $result = array();
+            foreach ($where as $attibute => $value) {
+                $stmt = Model::select(table: "membre", param_what: $what, param_where: array($attibute => $value));
+                $count = (int)$stmt->fetch()->utilisateur;
+                if($count != 0){
+                    $result = array_merge($result, array($attibute => $value));
+                }
+            }
+            return empty($result) ? false : $result;                
         }
-    
-        function updateUserbadgeCrea($database, $id, $badgeCRea){  
-            $connect = Connexion::getInstance($database);   
-            $connect->query('UPDATE `membre`
-            SET badgeCrea='.$badgeCRea.', column2=value2,...
-            WHERE codeM='.$id);
+        
+        //Vérifie si l'utilisateur existe dans la base, et le renvoie.
+        public static function existUser($where, $what = null){  
+           return isset($what)? Model::select(table: "membre", param_what: $what, param_where: $where):
+           Model::select(table: "membre", param_where: $where);        
         }
-    
-        function deleteUser($database, $nom ){  
-            $connect = Connexion::getInstance($database);   
-            $connect->query('DELETE FROM `membre` WHERE nomM = '.$nom);
+
+        //Ajoute un utilisateur dans la base.
+        public static function persistUser($user){  
+           Model::insert("membre", $user->to_Array());          
         }
     }

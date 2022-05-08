@@ -1,15 +1,9 @@
 <?php 
-use Controllers\Index\Index_controller;
 
  class Game_controller{
-    function createGuest(){
-        
-        //Creer une session visiteur pour les visiteurs ? Comment faire perdurer les informations visiteur quand on change de page ? 
-        session_start();
-        //Calculer le visiteur " Vous etes² le n eme visiteur "
-        $_SESSION["Visiteur"] = rand(0, 15);
-            require('Views/Main/mainpage_view.php');
-            // require('Views/Main/main_vue.php'); 
-            // require('Views/Login/butdeconnection_vue.php');
+
+    //TODO Charger les informations utilisateur et les implenter dans la vue +  faire des fonction de mise à jour des infos du menbres + static?
+    static function displayMembreMainInterface(){
+        require('Views/Main/main_jeu.view');
     }
  }

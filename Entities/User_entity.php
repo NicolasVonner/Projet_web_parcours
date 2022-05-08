@@ -1,49 +1,53 @@
 <?php
 
-namespace App\Entity;
+namespace Projet_Web_parcours\Entities;
 
 class User
 {
     private $nomM;
     private $prenomM;
     private $username;
-    private $adressMail;
+    private $adresseMail;
     private $password;
     private $dateInscription;
     private $dateNaissance;
-    private $badgeCrea;
-    private $badgeAv;
+    private $avatar;
+    private $equipe;
 
     //Constructeur
-    function __construct($new_nom, $new_prenom, $new_username, $new_password, $new_adresse, $new_dateInscription, $new_dateNaissance, $new_badgeCrea, $new_badgeAv)
+    function __construct($datas)
     {
-        print "Création d'un utilisateur\n";
-        $this->nomM = $new_nom;
-        $this->prenomM = $new_prenom;
-        $this->username = $new_username;
-        $this->password = $new_password;
-        $this->adressMail = $new_adresse;
-        $this->dateInscription = $new_dateInscription;
-        $this->dateNaissance = $new_dateNaissance;
-        $this->badgeCrea = $new_badgeCrea;
-        $this->badgeAv = $new_badgeAv;
+        $this->hydrate($datas);
     }
 
-    //Acesseur / Mutateur
-    public function getNom()
+    //Hydratation
+    public function hydrate(array $data) {
+        foreach ($data as $key => $value) {
+           // One gets the setter's name matching the attribute.
+           $method = 'set'.ucfirst($key);
+           // If the matching setter exists
+           if (method_exists($this, $method)) {
+              // One calls the setter.
+              $this->$method($value);
+           }
+        }
+     }
+
+    //Acesseurs / Mutateurs
+    public function getNomM()
     {
         return $this->nomM;
     }
-    public function setNom($new_nom)
+    public function setNomM($new_nom)
     {
         $this->nomM = $new_nom;
     }
 
-    public function getPrenom()
+    public function getPrenomM()
     {
         return $this->prenomM;
     }
-    public function setPrenom($new_prenom)
+    public function setPrenomM($new_prenom)
     {
         $this->prenomM = $new_prenom;
     }
@@ -52,9 +56,9 @@ class User
     {
         return $this->username;
     }
-    public function setUsername($new_usernames)
+    public function setUsername($new_username)
     {
-        $this->username = $new_usernames;
+        $this->username = $new_username;
     }
 
     public function getPassword()
@@ -66,13 +70,13 @@ class User
         $this->password = $new_password;
     }
 
-    public function getAddress()
+    public function getAdresseMail()
     {
-        return $this->adressMail;
+        return $this->adresseMail;
     }
-    public function setAddress($new_adressMail)
+    public function setAdresseMail($new_adresseMail)
     {
-        $this->adressMail = $new_adressMail;
+        $this->adresseMail = $new_adresseMail;
     }
 
     public function getDateInscription()
@@ -93,35 +97,45 @@ class User
         $this->dateNaissance = $new_dateNaissance;
     }
 
-    public function getBadgeCrea()
+    public function getAvatar()
     {
-        return $this->badgeCrea;
+        return $this->avatar;
     }
-    public function setBadgeCreae($new_badgeCrea)
+    public function setAvatar($new_avatar)
     {
-        $this->badgeCrea = $new_badgeCrea;
+        $this->avatar = $new_avatar;
     }
 
-    public function getBadgeAv()
+    public function getEquipe()
     {
-        return $this->badgeAv;
+        return $this->equipe;
     }
-    public function setBadgeAv($new_badgeAv)
+    public function setEquipe($new_equipe)
     {
-        $this->badgeAv = $new_badgeAv;
+        $this->equipe = $new_equipe;
     }
 
     //Methodes d'affichage de l'objet
-    public function to_String(): string
-    {
-        return 'Utilisateur =>' . $this->nomM . '/' . $this->prenomM . '/' . $this->adressMail . '/' . $this->dateInscription . '/' . $this->dateNaissance . '/' . $this->badgeCrea . '/' . $this->badgeAv;
+    public function __toString(): string{
+        return 'Utilisateur =>' . $this->getNomM() . '/' . $this->getPrenomM() . '/' . $this->getUsername() . '/' . $this->getAdresseMail() . '/' .$this->getPassword() . '/' . $this->getDateInscription() . '/' . $this->getDateNaissance() . '/' . $this->getAvatar() . '/' . $this->getEquipe();
     }
-    public function __toString(): string
-    {
-        return $this->to_String();
+
+    //Tranforme l'objet en tableau associatif (Equipe, default null)
+    public function to_Array(): array{
+        return array (
+            'nomM' => $this->getNomM(),
+            'prenomM' => $this->getPrenomM(),
+            'username' => $this->getUsername(),
+            'adresseMail' => $this->getAdresseMail(),
+            'password' => $this->getPassword(),
+            'dateInscription' => $this->getDateInscription(),
+            'dateNaissance' => $this->getDateNaissance(),
+            'avatar' => $this->getAvatar(),
+            'equipe' => $this->getEquipe(),
+        );
     }
-    public static function jose(): string
-    {
-        return "salut";
+    //Tranforme l'objet en tableau associatif en ne gardant que certains paramètres 
+    public function reduceUserArray($offset, $length): array{
+        return array_slice($this->to_Array(),$offset,$length);
     }
 }

@@ -11,8 +11,8 @@
               <div class="card-body px-5 py-5"style="text-align: center;">
                 <h3 class="card-title text-left mb-3">fastAdventure</h3>
                 <div style="text-align: center;margin-top:5%">
-                  <button type="button" id='signIn' class="btn btn-fw" style="padding: 0;"> Sign in </button>
-                <button type="button" id ="signUp" class="btn btn-outline-light btn-rounded btn-fw"> Sign up </button>
+                  <button type="button" id='signIn' class="btn btn-fw" style="padding: 0;"> Sign in</button>
+                  <button type="button" id ="signUp" class="btn btn-outline-light btn-rounded btn-fw"> Sign up</button>
                 </div>
                 <div style="text-align: center;margin-top:5%">
                   <button type="button" id ="guest" class="btn btn-link btn-rounded btn-fw"> Continuer en tant qu'invité </button>

@@ -1,0 +1,7 @@
+Split du tableau en fonction d'expresion régulière
+            //echo preg_replace("/user/i", "", explode('\\',$champ)[1]) .'---'. $value .strlen($value);
+            //echo preg_replace("/user/i", "", explode('\\',$champ)[2]) .'---'. $value .strlen($value);
+             //�
+ Le fetch   
+            //die("Il y a ".$stmt->fetch()->$champ. $champ . $value."dans la BDDs");
+            //die(var_dump((int)$stmt->fetch()->$champ));
