@@ -38,37 +38,26 @@
                                           <a class="dropdown-item preview-item">
                                             <div class="preview-thumbnail">
                                               <div class="preview-icon bg-dark rounded-circle">
-                                                <i class="mdi mdi-file-outline text-primary"></i>
+                                                <i class=" mdi mdi-view-list text-primary"></i>
                                               </div>
                                             </div>
                                             <div class="preview-item-content">
-                                              <p class="preview-subject ellipsis mb-1">Software Development</p>
+                                              <p class="preview-subject ellipsis mb-1">Search parcour</p>
                                             </div>
                                           </a>
                                           <div class="dropdown-divider"></div>
                                           <a class="dropdown-item preview-item">
                                             <div class="preview-thumbnail">
                                               <div class="preview-icon bg-dark rounded-circle">
-                                                <i class="mdi mdi-web text-info"></i>
+                                                <i class="mdi mdi-qrcode text-info"></i>
                                               </div>
                                             </div>
                                             <div class="preview-item-content">
-                                              <p class="preview-subject ellipsis mb-1">UI Development</p>
+                                              <p class="preview-subject ellipsis mb-1">Enter code</p>
                                             </div>
                                           </a>
                                           <div class="dropdown-divider"></div>
-                                          <a class="dropdown-item preview-item">
-                                            <div class="preview-thumbnail">
-                                              <div class="preview-icon bg-dark rounded-circle">
-                                                <i class="mdi mdi-layers text-danger"></i>
-                                              </div>
-                                            </div>
-                                            <div class="preview-item-content">
-                                              <p class="preview-subject ellipsis mb-1">Software Testing</p>
-                                            </div>
-                                          </a>
-                                          <div class="dropdown-divider"></div>
-                                          <p class="p-3 mb-0 text-center">See all projects</p>
+                                          <p class="p-3 mb-0 text-center">Live your best adventure</p>
                                         </div>
                         </li>
                         <li class="nav-item dropdown">

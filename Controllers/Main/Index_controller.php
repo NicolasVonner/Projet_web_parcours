@@ -11,7 +11,7 @@ use Projet_Web_parcours\Assets\enums\request\Fetch;
     function rootDirection($utilisateur = null){
         //On vérifie si utilisateur est un array => TODO bug à corriger.
        if(is_array($utilisateur)) $utilisateur = null;
-            if($this->is_session_started() && !isset($utilisateur)){            
+            if($this->is_session_started() && !isset($utilisateur)){      
                 //On vas chercher les infos du user par rapport
                 $correspondance_array = Utilisateur::existUser(array('username' => $_SESSION['username']));
                 if($correspondance_array->rowCount() != 0){

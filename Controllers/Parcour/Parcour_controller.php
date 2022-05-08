@@ -33,8 +33,6 @@ class Parcour_controller extends Index_controller{
 
     //Crée un parcour
     function createParcour(){
-      //TODO on envoie les informations à la base, on inserre le parcour, avec la clef, on insere une position , ses activités, une autre position, ses activités ....
-      //TODO faire les boucle d'insertion.
       $course = json_decode($_POST["parcours"]);
 
       //On récupère le créateur
@@ -43,6 +41,7 @@ class Parcour_controller extends Index_controller{
       //On crée le parcour
       $course_params = array("createur"=>$codeUser,
         "nomPa"=>htmlspecialchars($course->nomPa),
+        "descriptionPa"=>substr(htmlspecialchars($course->descriptionPa), 0, 64000),
         "dateCreation"=>htmlspecialchars(date('Y-m-d')),
         "dateDerniereModif"=>htmlspecialchars(date('Y-m-d')),
         "hashCode"=>$this->generatehash(),
@@ -90,7 +89,7 @@ class Parcour_controller extends Index_controller{
       $parcour = Parcour::existParcour(null, array("COUNT(*) as nombreParcour"));
       $nombreParcours = (int)$parcour->fetch(Fetch::_ASSOC)['nombreParcour'];
       //La longeur de la suite de bites générés en fonction du nombre de parcour en bdd -> 1 bit = 2 possibilités.
-      if($nombreParcours == 0){
+      if($nombreParcours == 0 || $nombreParcours == 1){
         $hashlength = 1;
       }else{
         $hashlength = log($nombreParcours, 2) % 2 == 0? (int)log($nombreParcours, 2) : (int)log($nombreParcours, 2) + 1;

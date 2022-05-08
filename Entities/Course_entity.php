@@ -6,6 +6,7 @@ class Course
 {
     private $createur;
     private $nomPa;
+    private $descriptionPa;
     private $dateCreation;
     private $dateDerniereModif;
     private $hashCode;
@@ -48,6 +49,15 @@ class Course
         $this->nomPa = $new_nomPa;
     }
 
+    public function getDescriptionPa()
+    {
+        return $this->descriptionPa;
+    }
+    public function setDescriptionPa($new_descriptionPa)
+    {
+        $this->descriptionPa = $new_descriptionPa;
+    }
+
     public function getDateCreation()
     {
         return $this->dateCreation;
@@ -86,7 +96,7 @@ class Course
 
     //Methodes d'affichage de l'objet
     public function __toString(): string{
-        return 'Parcour =>' . $this->getCreateur() . '/' . $this->getNomPa() . '/' . $this->getDateCreation() . '/' . $this->getDateDerniereModif() . '/' .$this->getHashCode();
+        return 'Parcour =>' . $this->getCreateur() . '/' . $this->getNomPa() . '/' . $this->getDescriptionPa() . '/' . $this->getDateCreation() . '/' . $this->getDateDerniereModif() . '/' .$this->getHashCode();
     }
 
     //Tranforme l'objet en tableau associatif (Equipe, default null)
@@ -94,6 +104,7 @@ class Course
         return array (
             'createur' => $this->getCreateur(),
             'nomPa' => $this->getNomPa(),
+            'descriptionPa' =>$this->getDescriptionPa(),
             'dateCreation' => $this->getDateCreation(),
             'dateDerniereModif' => $this->getDateDerniereModif(),
             'hashCode' => $this->getHashCode(),

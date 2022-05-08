@@ -148,6 +148,8 @@ $(document).on('click', '#create-parcours', function() { // close modal
     }
     //On récupère le nom du parcour
     parcour.nomPa = document.querySelector("#parcourName").textContent;
+    parcour.descriptionPa = document.querySelector("#parcourDescription").textContent;
+    parcour.descriptionPa = parcour.descriptionPa.substr(0, 64000);
     let response = confirm("Etes vous sur de vouloir envoyer : "+ JSON.stringify(parcour));
     if(response){
         $.post("http://fastadventure/Parcour/Parcour_controller/createParcour","parcours="+JSON.stringify(parcour) , function(result){
