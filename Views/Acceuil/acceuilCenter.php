@@ -1,4 +1,3 @@
-<?php define("RACINE", "http://fastadventure/");?>
 <div class="container-scroller">
       <?php include './Views/navSide.php';?>
       <!-- partial -->

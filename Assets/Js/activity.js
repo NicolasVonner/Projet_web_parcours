@@ -1,10 +1,11 @@
+import RACINE from '../settings/Settings.js';
 let inputType = new Map([
     ['varchar', 'text'],
     ['int', 'number'],
 ]);
 let configData = new Map();
 
-$.ajax({url: "http://localhost:8888/create_parcours/get_list_activity.php", success: function(result){
+$.ajax({url: RACINE+"create_parcours/get_list_activity.php", success: function(result){
     configData = new Map(JSON.parse(result));
     configData.forEach((config,activity)=>{
         $('<a>', {

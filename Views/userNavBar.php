@@ -1,4 +1,5 @@
 <?php 
+use Projet_Web_parcours\Assets\settings\Settings;
            echo'      
             <nav class="navbar p-0 fixed-top flex-row">
                   <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
@@ -18,12 +19,12 @@
                     <ul class="navbar-nav navbar-nav-right">';
                     if(!isset($utilisateur) || empty($utilisateur)){
                       echo'
-                        <a href="'.RACINE.'Authentification/Authentification_controller/displaySignup">
+                        <a href="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignup">
                           <li class="nav-item">
                             <button type="button" class="btn btn-outline-light btn-fw" id="signUp" style="border: none;min-width: auto;"> Sign Up</button>
                           </li>
                         </a>
-                        <a href="'.RACINE.'Authentification/Authentification_controller/displaySignin">
+                        <a href="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignin">
                           <li class="nav-item">
                             <button type="button" class="btn btn-outline-light btn-fw" id="signIn" style="border: none;min-width: auto;"> Sign In</button>
                           </li>
@@ -63,7 +64,7 @@
                         <li class="nav-item dropdown">
                           <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                             <div class="navbar-profile">
-                              <img class="img-xs rounded-circle" src="'.RACINE.'Assets/Images/faces/'.$utilisateur->getAvatar().'" alt="">
+                              <img class="img-xs rounded-circle" src="'.Settings::RACINE.'Assets/Images/faces/'.$utilisateur->getAvatar().'" alt="">
                               <p class="mb-0 d-none d-sm-block navbar-profile-name">'.$utilisateur->getUsername().'</p>
                               <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                             </div>
@@ -82,7 +83,7 @@
                               </div>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item" href="'.RACINE.'Main/Index_controller/logout">
+                            <a class="dropdown-item preview-item" href="'.Settings::RACINE.'Main/Index_controller/logout">
                               <div class="preview-thumbnail">
                                 <div class="preview-icon bg-dark rounded-circle">
                                   <i class="mdi mdi-logout text-danger"></i>

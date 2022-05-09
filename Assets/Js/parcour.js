@@ -1,3 +1,4 @@
+import RACINE from '../settings/Settings.js';
 let adress = document.getElementById("adress");
 let longitude = document.getElementById("longitude");
 let altitude = document.getElementById("latitude");
@@ -143,7 +144,7 @@ const displayAddGamesButton = () => {
 $(document).on('click', '#create-parcours', function() { // close modal
     if(parcour.positions.length == 0){
         let retour  = confirm("Ajouter un parcour sans étapes n'est pas autorisé, voulez vous continuer la contruction de votre parcour ?");
-        if(!retour) location.href = "http://fastadventure/";
+        if(!retour) location.href = RACINE;
         return;
     }
     //On récupère le nom du parcour
@@ -152,9 +153,9 @@ $(document).on('click', '#create-parcours', function() { // close modal
     parcour.descriptionPa = parcour.descriptionPa.substr(0, 64000);
     let response = confirm("Etes vous sur de vouloir envoyer : "+ JSON.stringify(parcour));
     if(response){
-        $.post("http://fastadventure/Parcour/Parcour_controller/createParcour","parcours="+JSON.stringify(parcour) , function(result){
+        $.post(RACINE+"Parcour/Parcour_controller/createParcour","parcours="+JSON.stringify(parcour) , function(result){
             console.log(result);
-            location.href = "http://fastadventure/";
+            location.href = RACINE;
         });
     }
 });

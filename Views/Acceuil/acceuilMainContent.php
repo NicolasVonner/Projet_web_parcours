@@ -1,3 +1,4 @@
+<?php use Projet_Web_parcours\Assets\settings\Settings;?>
 <div class="content-wrapper">           
                       <?php
                           if(!isset($utilisateur) || empty($utilisateur)){
@@ -30,7 +31,7 @@
                                   <div class="col-2 col-sm-2 col-lg-2 grid-margin"></div>
                                   <div class="col-8 col-sm-8 col-lg-8 grid-margin"></div>
                                   <div class="col-8 col-sm-8 col-lg-8 grid-margin"></div>
-                                  <div class="col-2 col-sm-2 col-lg-2 grid-margin"><a class="nav-link btn btn-success create-new-button" id="addButton" href="'.RACINE.'Parcour/Parcour_controller/displayParcourCreatePage">+ Add parcour </i></a></div>
+                                  <div class="col-2 col-sm-2 col-lg-2 grid-margin"><a class="nav-link btn btn-success create-new-button" id="addButton" href="'.Settings::RACINE.'Parcour/Parcour_controller/displayParcourCreatePage">+ Add parcour </i></a></div>
                             </div>';
                         }  
                       ?>                

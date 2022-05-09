@@ -9,6 +9,7 @@ use Projet_Web_parcours\Entities\Point;
 use Projet_Web_parcours\Entities\Activity;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
 use Projet_Web_parcours\Assets\enums\game\Type;
+use Projet_Web_parcours\Assets\settings\Settings;
 
 
 //TODO mettre un namespace et appeler la classe par cette intermediaire
@@ -19,7 +20,7 @@ class Parcour_controller extends Index_controller{
      //Appel le formulaire de création d'un parcour
     function displayParcourCreatePage($errors = null){
       if(!$this->is_session_started()){
-        header('Location: http://fastadventure/');
+        header('Location: '.Settings::RACINE.'');
         return;
       }else{
         $correspondance_array = Utilisateur::existUser(array('username' => $_SESSION['username']));

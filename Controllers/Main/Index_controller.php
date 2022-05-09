@@ -5,6 +5,7 @@ use Projet_Web_parcours\Entities\Session;
 use Projet_Web_parcours\Models\Utilisateur;
 use Projet_Web_parcours\Entities\User;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
+use Projet_Web_parcours\Assets\settings\Settings;
 
  class Index_controller{
 
@@ -27,7 +28,7 @@ use Projet_Web_parcours\Assets\enums\request\Fetch;
     function logout(){
         $_SESSION['username'] = null;
         //session_destroy(); //destroy the session
-         header('Location: http://fastadventure/'); //to redirect back to "index.php" after logging out
+         header('Location: '.Settings::RACINE.''); //to redirect back to "index.php" after logging out
     }
 
     function is_session_started()

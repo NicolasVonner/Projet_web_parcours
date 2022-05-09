@@ -1,4 +1,3 @@
-<?php define("RACINE", "http://fastadventure/");?>
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -38,7 +37,7 @@
     <script src="../../template/assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="../../template/assets/js/misc.js"></script>
     <!-- endinject -->
-    <script src="../../Assets/Js/parcour.js" ></script>
-    <script src="../../Assets/Js/activity.js" ></script>
+    <script src="../../Assets/Js/parcour.js" type="module" ></script>
+    <script src="../../Assets/Js/activity.js" type="module" ></script>
   </body>
 </html>

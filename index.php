@@ -20,7 +20,10 @@ spl_autoload_register(function ($class_name) {
     }
     else if($path[0] == 'Assets'){
         if($path[1] == 'enums')
-        $path[3] .= '_enum';
+          $path[3] .= '_enum';
+          else if($path[1] == 'settings'){
+            $path[2] .= '_conf';
+          }
     }
     else if($path[0] == 'Controllers'){
         $type = explode('_',$path[1]);

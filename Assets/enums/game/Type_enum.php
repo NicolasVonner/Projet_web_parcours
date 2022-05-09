@@ -1,6 +1,6 @@
 <?php
 
-namespace Projet_Web_parcours\Assets\enums\request;
+namespace Projet_Web_parcours\Assets\enums\game;
 
 abstract class Type
 {
