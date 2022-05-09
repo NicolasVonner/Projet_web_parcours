@@ -1,4 +1,4 @@
-import RACINE from '../settings/Settings.js';
+import {RACINE} from '../settings/Settings.js';
 let adress = document.getElementById("adress");
 let longitude = document.getElementById("longitude");
 let altitude = document.getElementById("latitude");
@@ -28,8 +28,8 @@ let lineGroup = L.layerGroup().addTo(map);
 
 
 map.on('click',function(e){
-	lat = e.latlng.lat;
-	lon = e.latlng.lng;
+	let lat = e.latlng.lat;
+	let lon = e.latlng.lng;
 
     fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${accessToken}`)
     .then(res => res.json())

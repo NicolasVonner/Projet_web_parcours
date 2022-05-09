@@ -1,4 +1,4 @@
-import RACINE from '../settings/Settings.js';
+import {RACINE} from '../settings/Settings.js';
 let inputType = new Map([
     ['varchar', 'text'],
     ['int', 'number'],
@@ -136,7 +136,7 @@ const removeActivity = (index) => {
     displayAddGamesButton();
 };
 
-const displayActivityList = (actList) => { // affiche les activités dans la page
+export const displayActivityList = (actList) => { // affiche les activités dans la page
     // console.log("On souhaite afficher la liste des activités de la position =>"+index);
     activityList.innerHTML = "";
     for (let i = 0; i < actList.length; i++)
