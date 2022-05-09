@@ -5,7 +5,7 @@ let inputType = new Map([
 ]);
 let configData = new Map();
 
-$.ajax({url: RACINE+"create_parcours/get_list_activity.php", success: function(result){
+$.ajax({url: RACINE+"Parcour/Parcour_controller/getListActivity", success: function(result){
     configData = new Map(JSON.parse(result));
     configData.forEach((config,activity)=>{
         $('<a>', {

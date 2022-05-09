@@ -80,6 +80,9 @@ class Parcour_controller extends Index_controller{
        }
       }
     }
+    function getListActivity(){
+      
+    }
     
     //TODO verifier qu'on à bien 2 possibilités avec 1 bit vue qu'il y a convertion. -> Des milliers de parcours pourraient avoir un code trop important pour rien.
     //Retour un hascode unique pour un parcour
