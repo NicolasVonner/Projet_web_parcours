@@ -34,7 +34,13 @@
                                                 <p class="text-muted mb-0">'.$value->steps.' étapes</p>
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                                <button type="button" id="$parcour->getId()" class="btn btn-inverse-primary btn-fw">Jouer</button>
+                                                <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>
+                                          ';
+                                    if(isset($utilisateur))
+                                    echo '
+                                                <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-warning btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-border-color btn-icon-prepend"></i>Edit</button>
+                                                ';
+                                    echo '
                                               </div>
                                             </div>
                                         </div>

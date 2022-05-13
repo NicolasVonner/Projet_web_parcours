@@ -42,5 +42,6 @@
   <body>
      <?php include './Views/Acceuil/acceuilCenter.php';?>
      <script src="../../Assets/Js/parcourboard.js"></script>
+     <script src="../../Assets/Js/acceuil.js"></script>
   </body>
 </html>

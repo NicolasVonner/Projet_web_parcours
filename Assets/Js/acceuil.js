@@ -2,12 +2,15 @@
 // document.getElementById('signUp').addEventListener('click', getAuthiUp_controller => location.href = "http://fastadventure/Authentification/Authentification_controller/displaySignup");
 // document.getElementById('guest').addEventListener('click', getGameG_controller => location.href = "http://fastadventure/Game/Game_controller/createGuest");
 
-// verifySize();
 
-// // //TODO Faire le responsive de la page en css plutot qu'en js, surtout que cette page n'est pas appamée sur la vue.
+//Pour le démarrage de l'appli.
+verifySize()
 window.addEventListener('resize', verifySize);
 
 function verifySize(){
+    window.innerWidth < 780?
+        document.getElementById('addButton').innerHTML  = "+":
+        document.getElementById('addButton').innerHTML = "+ Add parcour";
     window.innerWidth < 780?
         document.getElementById('addButton').innerHTML  = "+":
         document.getElementById('addButton').innerHTML = "+ Add parcour";

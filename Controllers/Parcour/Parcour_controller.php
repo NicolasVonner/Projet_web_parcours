@@ -21,7 +21,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
 require('Controllers/Main/Index_controller.php');
 class Parcour_controller extends Index_controller{  
      //Appel le formulaire de création d'un parcour
-    function displayParcourCreatePage($errors = null){
+    function displayParcourCreatePage($errors = null){ //TODO c'est ici qu'on vas rentrer pour modifier les parcours.
       if(!$this->is_session_started()){
         header('Location: '.Settings::RACINE.'');
         return;
