@@ -5,8 +5,8 @@ namespace Projet_Web_parcours\Entities;
 class Activity
 {
     private $position;
-    private $typejeu;
-    private $gameId;
+    private $activiteType;
+    private $activite;
 
     //Constructeur
     function __construct($datas)
@@ -37,35 +37,35 @@ class Activity
         $this->position = $new_position;
     }
 
-    public function getTypeJeu()
+    public function getActiviteType()
     {
-        return $this->typejeu;
+        return $this->activiteType;
     }
-    public function setTypeJeu($new_typejeu)
+    public function setActiviteType($new_activiteType)
     {
-        $this->typejeu = $new_typejeu;
+        $this->activiteType = $new_activiteType;
     }
 
-    public function getGameId()
+    public function getActivite()
     {
-        return $this->gameId;
+        return $this->activite;
     }
-    public function setGameId($new_gameId)
+    public function setActivite($new_activite)
     {
-        $this->gameId = $new_gameId;
+        $this->activite = $new_activite;
     }
 
     //Methodes d'affichage de l'objet
     public function __toString(): string{
-        return 'Activite =>' . $this->getPosition() . '/' . $this->getTypeJeu() . '/' . $this->getGameId();
+        return 'Activite =>' . $this->getPosition() . '/' . $this->getActiviteType() . '/' . $this->getActivite();
     }
 
     //Tranforme l'objet en tableau associatif (Equipe, default null)
     public function to_Array(): array{
         return array (
             'position' => $this->getPosition(),
-            'typejeu' => $this->getTypeJeu(),
-            'gameId' => $this->getGameId(),
+            'activiteType' => $this->getActiviteType(),
+            'activite' => $this->getActivite(),
         );
     }
     //Tranforme l'objet en tableau associatif en ne gardant que certains paramètres 

@@ -88,7 +88,7 @@ class Model extends Connexion{
                                 $sql .= "AND ".$champ." ".$operator."? ";
                             } 
                         }else{
-                            $sql .= "= ? "; 
+                            $sql .= "= ?"; 
                             array_push($array_prepare, $values);
                         }                   
                     } 
@@ -113,6 +113,7 @@ class Model extends Connexion{
                     } 
                 }
             }
+            // if($table == 'parcour') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
             return self::launch($sql, $array_prepare);
         }
         
@@ -136,8 +137,6 @@ class Model extends Connexion{
         public static function insert($table, $params){
             $sql = "INSERT INTO ".$table." (" ;
             $values_prep = " VALUES (";
-            switch($table)  {
-                case "membre":
                     //KP incrémentation auto / equipe NULL par défaut
                     foreach(array_keys($params) as $key){
                         if($key != array_key_last($params)){
@@ -149,53 +148,15 @@ class Model extends Connexion{
                         }              
                     }
                     $sql .= $values_prep;
-                break;
-                case "parcour":
-                    foreach(array_keys($params) as $key){
-                        if($key != array_key_last($params)){
-                            $sql .= $key .", ";
-                            $values_prep .= "?, ";
-                        }else{
-                            $sql .= $key .")";
-                            $values_prep .= "?)";
-                        }              
-                    }
-                    $sql .= $values_prep;
-                break;
-                case "position":
-                    foreach(array_keys($params) as $key){
-                        if($key != array_key_last($params)){
-                            $sql .= $key .", ";
-                            $values_prep .= "?, ";
-                        }else{
-                            $sql .= $key .")";
-                            $values_prep .= "?)";
-                        }              
-                    }
-                    $sql .= $values_prep;
-                    //die("===========>".var_dump(array_values($params))."==========>".$sql);
-                break;
-                case "activite":
-                    foreach(array_keys($params) as $key){
-                        if($key != array_key_last($params)){
-                            $sql .= $key .", ";
-                            $values_prep .= "?, ";
-                        }else{
-                            $sql .= $key .")";
-                            $values_prep .= "?)";
-                        }              
-                    }
-                    $sql .= $values_prep;
-                break;
-            }
+            // if($table == "activite") die("REQUEST ==>". $sql . "=======>".var_dump(array_values($params)));
             self::launch($sql, array_values($params));
-            if($table === "parcour" || $table === "position") return self::launch("SELECT LAST_INSERT_ID()");
+            if($table === "parcour" || $table === "position" || explode('_',$table)[0] === "jeu") return self::launch("SELECT LAST_INSERT_ID()");
         }
 
 
         //Lance la requete préparée et retourne le résultat.
         public static function launch($request, $params = null) {
-            //die(var_dump($params));
+            // die(var_dump($params));
             $stmt = Connexion::getInstance()->prepare($request);
             try{
                 isset($params)? $stmt->execute($params): $stmt->execute();

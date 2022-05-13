@@ -1,21 +1,22 @@
-import {RACINE} from '../settings/Settings.js';
+// import {RACINE} from '../settings/Settings.js';
 let inputType = new Map([
     ['varchar', 'text'],
     ['int', 'number'],
 ]);
-let configData = new Map();
+let configData;
 
-$.ajax({url: RACINE+"Parcour/Parcour_controller/getListActivity", success: function(result){
-    configData = new Map(JSON.parse(result));
-    configData.forEach((config,activity)=>{
+$.ajax({url: RACINE+"Parcour/Parcour_controller/buildListActivity", success: function(gamedetails){
+    configData = JSON.parse(gamedetails);
+    configData.forEach((activity)=>{
         $('<a>', {
-            text: activity,
+            text: activity.nomAc,
             class: "dropdown-item",
-            click: function() {openConfig({name:activity},true)}
+            click: function() {openConfig({props : activity.attibuts, name: activity.nomAc},true)}
         }).appendTo("#activity-choice");
     });
 }});
 
+//On affiche la fenêtre 
 $(document).on('click', '#add-activity', function() { // show modal
     $("#myModal").css("display", "block");
     $("html").css("overflow","hidden");
@@ -31,7 +32,7 @@ const viewActivity = (actIndex) => {
     $("#myModal").css("display", "block");
     $("html").css("overflow","hidden");
     $("#select-activity").prop("disabled",true);
-    openConfig(parcour.positions[spotIndex].activity[actIndex],false);
+    openConfig({props :parcour.positions[spotIndex].activites[actIndex]},false);
     $("#create-activity").hide();
 };
 
@@ -39,10 +40,10 @@ const editActivity = (actIndex) => {
     $("#myModal").css("display", "block");
     $("html").css("overflow","hidden");
     $("#select-activity").prop("disabled",false);
-    openConfig(parcour.positions[spotIndex].activity[actIndex],true);
+    openConfig({props : parcour.positions[spotIndex].activites[actIndex]},true);
     $("#create-activity").show();
     $("#create-activity").html("Edit");
-    $('#create-activity').attr("onclick",`sendActivityData(${parcour.positions[spotIndex].activity[actIndex].id})`);
+    $('#create-activity').attr("onclick",`sendActivityData(${parcour.positions[spotIndex].activites[actIndex].id})`);
 };
 
 $(document).on('click', '.closeModal', function() { // close modal
@@ -58,60 +59,66 @@ const getInputType = (type) => {
 };
 
 const openConfig = (activity, canEdit) => {
+    let params = new Array()
     $("#select-activity").html(activity.name);
     $("#submit-activity").prop("disabled",false);
     $('form').empty();
-    console.log(configData)
-    console.log(activity)
-    configData.get(activity.name).slice(1).forEach((activity,index) => {
-        $('form').append(`
+    // console.log("EE====>"+JSON.stringify(Object.keys(activity.props)));
+    // console.log(Object.keys(activity.props)[0]+"EUYGKGKJHGK====>"+Number(Object.keys(activity.props)[0]));
+    params = !isNaN(Object.keys(activity.props)[0])? activity.props : Object.keys(activity.props);
+    params.forEach((prop)=>{
+        if(prop !== 'id') {
+            $('form').append(`
             <div class="form-group col-sm-6">
-                <label for="${activity.Field}">${activity.Field}</label>
-                <input type="${getInputType(activity.Type)}" class="form-control" id="${activity.Field}" placeholder="${activity.Field}" ${canEdit ? "" : "readonly"}>
+                <label for="${prop}">${prop}</label>
+                <input type="text" class="form-control" id="${prop}" placeholder="${prop}" ${canEdit ? "" : "readonly"}>
             </div>
         `);
+        }
+
     });
-    if (activity.data !== undefined)
+    //si parmis les values il y a l'id, j'affiche les valeurs dans les chans si non ca veux dire que c'est une premiere insertion
+    if (Object.keys(activity.props).includes("id"))
     {
-        console.log(activity)
         $("form").find(':input').each(function(index){
             let input = $(this); // This is the jquery object of the input, do what you will
-            input.val(activity.data[index].value);
+            if(Object.keys(activity.props)[index] !== 'id')
+                input.val(Object.values(activity.props)[index]);
         });
     }
 };
 
 
 const sendActivityData = (id) => {
-    let formData = $("form").find(':input').toArray().map((input)=>{
-        return {"name":input.id,"value":input.value};
-    }); // on fait un array quin contient toutes les données des champs
-
-    let allFilled = formData.every((field) => {
-        return field.value !== "";
-    }); // on vérifie si tous les champs sont remplis
-
-    let objectFieldInfo = {
-        "name": $("#select-activity").text(),
-        "data": formData
-    };
-
+    gameFieldInfo= new Object();
+    gameFieldInfo.nomAc = $("#select-activity").text();
+    //TODO ajouter l'activite a la position dans le tableau
+    //TODO enlever l'activite a la position dans le tableua dans object
+    $("form").find(':input').toArray().map((input)=>{
+        gameFieldInfo[input.id] = input.value; //TODO cahnger la forme du message, tester avec [input.id] :input.value
+    });
+    //TODO faire une fonction pour verifier si ya des champs vides (min 2) -> choix_1 et choix_2.
+    // let allFilled = formData.every((field) => {
+    //     return field.value !== "";
+    // });
+    console.log("====>gameFieldInfo"+JSON.stringify(gameFieldInfo));
+    let allFilled = true;
     if (allFilled) {
-        console.log(allFilled)
-        let currentSpotIndex = parcour.positions.findIndex((element)=>element.placeName === adress.innerText);
+        let currentSpotIndex = parcour.positions.findIndex((element)=>element.nomPo === adress.innerText);
         if (currentSpotIndex != -1)
         {
             if (id !== undefined) // si le paramètre id existe bel et bien alors on modifie l'activité
             {
-                let currentActivityIndex = parcour.positions[currentSpotIndex].activity.findIndex((activity)=>activity.id == id);
-                parcour.positions[currentSpotIndex].activity[currentActivityIndex].data = formData;
+                let currentActivityIndex = parcour.positions[currentSpotIndex].activites.findIndex((activity)=>activity.id == id);
+                gameFieldInfo.id = id;
+                parcour.positions[currentSpotIndex].activites[currentActivityIndex] = gameFieldInfo;
             }
             else
             {
-                objectFieldInfo.id = Math.floor(Math.random() * 100000).toString();
-                parcour.positions[currentSpotIndex].activity.push(objectFieldInfo);
+                gameFieldInfo.id = Math.floor(Math.random() * 100000).toString();
+                parcour.positions[currentSpotIndex].activites.push(gameFieldInfo);
             }
-            displayActivityList(parcour.positions[currentSpotIndex].activity);
+            displayActivityList(parcour.positions[currentSpotIndex].activites);
             $("form").find("input[type=text], textarea").val("");
         }
     }
@@ -119,12 +126,13 @@ const sendActivityData = (id) => {
     {
         console.log("nope");
     }
+    delete(gameFieldInfo);
 };
 
 const removeActivity = (index) => {
     activityList.removeChild(activityList.children[index]);
-    parcour.positions[spotIndex].activity.splice(index,1);
-    for (let i = 0; i < parcour.positions[spotIndex].activity.length; i++)
+    parcour.positions[spotIndex].activites.splice(index,1);
+    for (let i = 0; i < parcour.positions[spotIndex].activites.length; i++)
     {
         let activityElement = activityList.children[i];
         console.log(activityElement);
@@ -136,8 +144,8 @@ const removeActivity = (index) => {
     displayAddGamesButton();
 };
 
-export const displayActivityList = (actList) => { // affiche les activités dans la page
-    // console.log("On souhaite afficher la liste des activités de la position =>"+index);
+const displayActivityList = (actList) => { // affiche les activités dans la page <p class="m-1">${actList[i].nomAc} - ${actList[i].id}</p>
+    console.log("On souhaite afficher la liste des activités de la position => Et c'est ======>"+JSON.stringify(actList));
     activityList.innerHTML = "";
     for (let i = 0; i < actList.length; i++)
     {
@@ -146,7 +154,7 @@ export const displayActivityList = (actList) => { // affiche les activités dans
         div.innerHTML = `
             <div class="d-flex justify-content-between w-100 h-100" onclick="viewActivity(${i})">
                 <p class="font-weight-bold m-1">${i + 1}.</p>
-                <p class="m-1">${actList[i].name} - ${actList[i].id}</p>
+                <p class="m-1">${actList[i].nomAc}</p>
             </div>
             <div class="d-flex justify-content-center h-100">
                 <button type="button" class="btn btn-secondary text-center" onclick="editActivity(${i})"><i class="mdi mdi-border-color m-0"></i></button>

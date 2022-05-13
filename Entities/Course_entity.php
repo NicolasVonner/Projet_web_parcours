@@ -4,6 +4,7 @@ namespace Projet_Web_parcours\Entities;
 
 class Course
 {
+    private $codePa;
     private $createur;
     private $nomPa;
     private $descriptionPa;
@@ -31,6 +32,15 @@ class Course
      }
 
     //Acesseurs / Mutateurs
+    public function getCodePa()
+    {
+        return $this->codePa;
+    }
+    public function setCodePa($new_codePa)
+    {
+        $this->codePa = $new_codePa;
+    }
+
     public function getCreateur()
     {
         return $this->createur;
@@ -96,19 +106,30 @@ class Course
 
     //Methodes d'affichage de l'objet
     public function __toString(): string{
-        return 'Parcour =>' . $this->getCreateur() . '/' . $this->getNomPa() . '/' . $this->getDescriptionPa() . '/' . $this->getDateCreation() . '/' . $this->getDateDerniereModif() . '/' .$this->getHashCode();
+        return !isset($this->codePa)? 'Parcour =>' . $this->getCreateur() . '/' . $this->getNomPa() . '/' . $this->getDescriptionPa() . '/' . $this->getDateCreation() . '/' . $this->getDateDerniereModif() . '/' .$this->getHashCode():
+            'Parcour =>' . $this->getCodePa() . '/' .$this->getCreateur() . '/' . $this->getNomPa() . '/' . $this->getDescriptionPa() . '/' . $this->getDateCreation() . '/' . $this->getDateDerniereModif() . '/' .$this->getHashCode();
     }
 
     //Tranforme l'objet en tableau associatif (Equipe, default null)
     public function to_Array(): array{
-        return array (
-            'createur' => $this->getCreateur(),
-            'nomPa' => $this->getNomPa(),
-            'descriptionPa' =>$this->getDescriptionPa(),
-            'dateCreation' => $this->getDateCreation(),
-            'dateDerniereModif' => $this->getDateDerniereModif(),
-            'hashCode' => $this->getHashCode(),
-        );
+        return !isset($this->codePa)?
+            array (
+                'createur' => $this->getCreateur(),
+                'nomPa' => $this->getNomPa(),
+                'descriptionPa' =>$this->getDescriptionPa(),
+                'dateCreation' => $this->getDateCreation(),
+                'dateDerniereModif' => $this->getDateDerniereModif(),
+                'hashCode' => $this->getHashCode(),
+            ):
+            array (
+                'id' => $this->getCodePa(),
+                'createur' => $this->getCreateur(),
+                'nomPa' => $this->getNomPa(),
+                'descriptionPa' =>$this->getDescriptionPa(),
+                'dateCreation' => $this->getDateCreation(),
+                'dateDerniereModif' => $this->getDateDerniereModif(),
+                'hashCode' => $this->getHashCode(),
+            );
     }
     //Tranforme l'objet en tableau associatif en ne gardant que certains paramètres 
     public function reduceCourseArray($offset, $length): array{

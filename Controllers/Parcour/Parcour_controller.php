@@ -3,17 +3,20 @@
 use Projet_Web_parcours\Models\Utilisateur;
 use Projet_Web_parcours\Models\Parcour;
 use Projet_Web_parcours\Models\Position;
+use Projet_Web_parcours\Models\Activite;
 use Projet_Web_parcours\Entities\User;
 use Projet_Web_parcours\Entities\Course;
 use Projet_Web_parcours\Entities\Point;
 use Projet_Web_parcours\Entities\Activity;
+use Projet_Web_parcours\Entities\Jeu_texte;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
 use Projet_Web_parcours\Assets\enums\game\Type;
 use Projet_Web_parcours\Assets\settings\Settings;
 
 
 //TODO mettre un namespace et appeler la classe par cette intermediaire
-//problème avec l'index.
+//problème avec l'index..
+
 //use Projet_Web_parcours\Controllers\Index_controller;
 require('Controllers/Main/Index_controller.php');
 class Parcour_controller extends Index_controller{  
@@ -35,7 +38,6 @@ class Parcour_controller extends Index_controller{
     //Crée un parcour
     function createParcour(){
       $course = json_decode($_POST["parcours"]);
-
       //On récupère le créateur
       $utilisateur = Utilisateur::existUser(array('username' => $_SESSION['username']), array('codeM'));
       $codeUser = (int)$utilisateur->fetch(Fetch::_ASSOC)['codeM'];
@@ -65,23 +67,57 @@ class Parcour_controller extends Index_controller{
        $idPosition = Position::persistPosition($position);
        $idPosition = (int)$idPosition->fetch(Fetch::_ASSOC)["LAST_INSERT_ID()"];
        //TODO faire en sorte d'ajouter les activités correctement sur le JS.
-       //On ajoute les activités
-       if(empty($point->activity))continue;
-       foreach($point->activity as $activity){
-         //TODO inserer l'activité dans le type dédié --> 'enigme image'  ou 'enigme...'.
-         //TODO Retourner l'id auto généré qui resulte de l'insertion pour le "gameId".
-         $idGame = null;
-        //On crée l'activité
-        $activite_params = array("position"=>$idPosition,
-        "typejeu"=>'type::',
-        "gameId"=>$idGame,
-        ); 
-        $position = new Activity($activite_params);
+       //On ajoute les activités.
+       if(empty($point->activites))continue;
+       foreach($point->activites as $activity){
+          $activ_params = (array)$activity;
+          //On récupèrte le nom du jeu.
+          $typeActiv = array_shift($activ_params);
+          //On crée l'objet.
+          $typeActivObj = 'Projet_Web_parcours\Entities\\'.ucfirst($typeActiv);
+          $activ = new $typeActivObj($activ_params);
+          //On insère l'activ dans sa table respective et on récupère l'id.
+          $idactiv = Activite::persistActiviteGame($typeActiv, $activ);
+          $idactiv = (int)$idactiv->fetch(Fetch::_ASSOC)["LAST_INSERT_ID()"];
+          //On créee le tableau pour l'hydrateur de l'activité rescencement.
+          $activite_params = array("position"=>$idPosition,
+          "activiteType"=>$typeActiv,
+          "activite"=>$idactiv,
+          );          
+          $activite = new Activity($activite_params);
+          //On insère l'activité.
+          Activite::persistActivite($activite);
        }
       }
     }
-    function getListActivity(){
-      
+    function buildListActivity(){       
+      $activityMap = array();
+      $paramList = [];
+
+      $activType = Activite::existActivityType(where : null, what : array('nomAc'));
+      while ($type = $activType->fetch(Fetch::_ASSOC))
+      {
+          $games = new stdClass();
+          //On récupère les noms des activités existantes.
+          $activityNameList = $type["nomAc"];
+          //On ajoute le nom de l'activité.
+          $games->nomAc = $type["nomAc"];
+
+          //On récupère les attributs des tables des types d'activité existantes.
+          $activityParams = Activite::getActivityGameParams($activityNameList);
+          while ($params = $activityParams->fetch(Fetch::_ASSOC))
+          {
+            $params["Field"] === "id"? false : array_push($paramList,$params["Field"]);
+          } 
+          //On ajoute les parametres.
+          $games->attibuts = $paramList;
+          //On ajoute l'objet dans le tableau de type de jeux.
+          array_push($activityMap, $games); 
+           //On vide les variables à chaque fin d'itération.
+          $paramList = []; 
+          unset($games);  
+      }
+      echo empty($activityMap)? "There are no activity" : json_encode($activityMap);
     }
     
     //TODO verifier qu'on à bien 2 possibilités avec 1 bit vue qu'il y a convertion. -> Des milliers de parcours pourraient avoir un code trop important pour rien.

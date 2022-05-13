@@ -1,4 +1,5 @@
-import {RACINE} from '../settings/Settings.js';
+// import {RACINE} from '../settings/Settings.js';
+// import {displayActivityList} from './activity';
 let adress = document.getElementById("adress");
 let longitude = document.getElementById("longitude");
 let altitude = document.getElementById("latitude");
@@ -45,7 +46,7 @@ map.on('click',function(e){
             "pays":country,
             "coord":coordTab,
             //TODO Remplir ce tableau de cette position dans cette objet, quand on ajoute des activités.
-            "activity": []
+            "activites": []
         };
         markerList.push(markerData);
         //On ajoute les positions à l'objet
@@ -67,7 +68,7 @@ const displaySpotInfo = (index) => {
     map.setView(marker.coord, 13);
     if ($(".spot.bg-primary").length > 0) {$(".spot.bg-primary").toggleClass("bg-secondary").toggleClass("bg-primary");}
     $('.spot:eq('+index+')').toggleClass("bg-secondary").toggleClass("bg-primary");
-    displayActivityList(parcour.positions[spotIndex].activity);
+    displayActivityList(parcour.positions[spotIndex].activites);
 };
 
 const displayMarkerInfo = (marker) => { // affiche dans la partie droite les infos du marker
@@ -141,6 +142,15 @@ const displayAddGamesButton = () => {
     gameButton.disabled = parcour.positions.length < 1;
 };
 
+const deleteIdActivity = (parcour) => {
+    parcour.positions.forEach((item) => {
+        item.activites.forEach((activ) => {
+            delete(activ.id);
+        });
+    });
+    return parcour;
+};
+
 $(document).on('click', '#create-parcours', function() { // close modal
     if(parcour.positions.length == 0){
         let retour  = confirm("Ajouter un parcour sans étapes n'est pas autorisé, voulez vous continuer la contruction de votre parcour ?");
@@ -151,6 +161,7 @@ $(document).on('click', '#create-parcours', function() { // close modal
     parcour.nomPa = document.querySelector("#parcourName").textContent;
     parcour.descriptionPa = document.querySelector("#parcourDescription").textContent;
     parcour.descriptionPa = parcour.descriptionPa.substr(0, 64000);
+    parcour = deleteIdActivity(parcour);
     let response = confirm("Etes vous sur de vouloir envoyer : "+ JSON.stringify(parcour));
     if(response){
         $.post(RACINE+"Parcour/Parcour_controller/createParcour","parcours="+JSON.stringify(parcour) , function(result){

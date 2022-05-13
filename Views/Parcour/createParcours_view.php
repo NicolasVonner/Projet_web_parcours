@@ -37,7 +37,8 @@
     <script src="../../template/assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="../../template/assets/js/misc.js"></script>
     <!-- endinject -->
-    <script type="module" src="../../Assets/Js/parcour.js"></script>
-    <script src="../../Assets/Js/activity.js" type="module"></script>
+    <script src="../../Assets/settings/Settings.js"></script>
+    <script src="../../Assets/Js/parcour.js"></script>
+    <script src="../../Assets/Js/activity.js"></script>
   </body>
 </html>

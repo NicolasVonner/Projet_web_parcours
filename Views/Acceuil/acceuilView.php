@@ -41,5 +41,6 @@
   </head>
   <body>
      <?php include './Views/Acceuil/acceuilCenter.php';?>
+     <script src="../../Assets/Js/parcourboard.js"></script>
   </body>
 </html>

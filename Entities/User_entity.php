@@ -4,6 +4,7 @@ namespace Projet_Web_parcours\Entities;
 
 class User
 {
+    private $codeM;
     private $nomM;
     private $prenomM;
     private $username;
@@ -34,6 +35,15 @@ class User
      }
 
     //Acesseurs / Mutateurs
+    public function getCodeM()
+    {
+        return $this->codeM;
+    }
+    public function setCodeM($new_codeM)
+    {
+        $this->codeM = $new_codeM;
+    }
+
     public function getNomM()
     {
         return $this->nomM;
@@ -117,22 +127,35 @@ class User
 
     //Methodes d'affichage de l'objet
     public function __toString(): string{
-        return 'Utilisateur =>' . $this->getNomM() . '/' . $this->getPrenomM() . '/' . $this->getUsername() . '/' . $this->getAdresseMail() . '/' .$this->getPassword() . '/' . $this->getDateInscription() . '/' . $this->getDateNaissance() . '/' . $this->getAvatar() . '/' . $this->getEquipe();
+        return !isset($this->codeM)? 'Utilisateur =>' . $this->getNomM() . '/' . $this->getPrenomM() . '/' . $this->getUsername() . '/' . $this->getAdresseMail() . '/' .$this->getPassword() . '/' . $this->getDateInscription() . '/' . $this->getDateNaissance() . '/' . $this->getAvatar() . '/' . $this->getEquipe():
+                                     'Utilisateur =>' . $this->getCodeM() . '/'. $this->getNomM() . '/' . $this->getPrenomM() . '/' . $this->getUsername() . '/' . $this->getAdresseMail() . '/' .$this->getPassword() . '/' . $this->getDateInscription() . '/' . $this->getDateNaissance() . '/' . $this->getAvatar() . '/' . $this->getEquipe();
     }
 
     //Tranforme l'objet en tableau associatif (Equipe, default null)
     public function to_Array(): array{
-        return array (
-            'nomM' => $this->getNomM(),
-            'prenomM' => $this->getPrenomM(),
-            'username' => $this->getUsername(),
-            'adresseMail' => $this->getAdresseMail(),
-            'password' => $this->getPassword(),
-            'dateInscription' => $this->getDateInscription(),
-            'dateNaissance' => $this->getDateNaissance(),
-            'avatar' => $this->getAvatar(),
-            'equipe' => $this->getEquipe(),
-        );
+        return !isset($this->codeM)? array (
+                                        'nomM' => $this->getNomM(),
+                                        'prenomM' => $this->getPrenomM(),
+                                        'username' => $this->getUsername(),
+                                        'adresseMail' => $this->getAdresseMail(),
+                                        'password' => $this->getPassword(),
+                                        'dateInscription' => $this->getDateInscription(),
+                                        'dateNaissance' => $this->getDateNaissance(),
+                                        'avatar' => $this->getAvatar(),
+                                        'equipe' => $this->getEquipe(),
+                                    ):
+                                    array (
+                                        'codeMM' => $this->getCodeM(),
+                                        'nomM' => $this->getNomM(),
+                                        'prenomM' => $this->getPrenomM(),
+                                        'username' => $this->getUsername(),
+                                        'adresseMail' => $this->getAdresseMail(),
+                                        'password' => $this->getPassword(),
+                                        'dateInscription' => $this->getDateInscription(),
+                                        'dateNaissance' => $this->getDateNaissance(),
+                                        'avatar' => $this->getAvatar(),
+                                        'equipe' => $this->getEquipe(),
+                                    );
     }
     //Tranforme l'objet en tableau associatif en ne gardant que certains paramètres 
     public function reduceUserArray($offset, $length): array{

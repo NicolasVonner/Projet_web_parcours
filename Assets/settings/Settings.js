@@ -1,1 +1,1 @@
-export const RACINE = "http://fastadventure/";
+const RACINE = "http://fastadventure/";

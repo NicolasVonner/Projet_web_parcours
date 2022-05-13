@@ -11,8 +11,11 @@ spl_autoload_register(function ($class_name) {
     //TODO Gérer la disection pour les vues, pour l'instant elles sont required comme ça 
     //On vérifie le type du fichier à charger pour le nom de classe qui diffère du nom de fichier.
     $path = explode('\\',$class_name);
+    if(!isset($path[1]))
+    die("=====>".var_dump($class_name));
     //On retire le nom du projet. 
     $path = array_slice($path, 1);
+
     if($path[0] == 'Entities'){
         $path[1] .= '_entity';
     }else if($path[0] == 'Models'){
@@ -23,6 +26,7 @@ spl_autoload_register(function ($class_name) {
           $path[3] .= '_enum';
           else if($path[1] == 'settings'){
             $path[2] .= '_conf';
+            //die("===>".var_dump($path));
           }
     }
     else if($path[0] == 'Controllers'){
@@ -31,7 +35,6 @@ spl_autoload_register(function ($class_name) {
     }
     //Assemblage du chemin complet et appel du fichier.
     $file = implode("\\",$path).'.php';
-    //die(var_dump($file ));
     if (file_exists($file)) {
         require $file;
         return true;
