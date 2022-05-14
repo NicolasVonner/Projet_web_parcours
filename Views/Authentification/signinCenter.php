@@ -31,7 +31,7 @@
                     <button class="btn btn-google col">
                       <i class="mdi mdi-google-plus"></i> Google plus </button>
                   </div>
-                  <p class="sign-up">Don't have an Account?<a href=""> Sign Up</a></p>
+                  <p class="sign-up">Don't have an Account?<a href="<?php echo Settings::RACINE ?>Authentification/Authentification_controller/displaySignup"> Sign Up</a></p>
                 </form>
                 <?php
                   //Affiche les oublies

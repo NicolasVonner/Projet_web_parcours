@@ -8,12 +8,12 @@ verifySize()
 window.addEventListener('resize', verifySize);
 
 function verifySize(){
-    window.innerWidth < 780?
+    if(document.getElementById('addButton') != null){
+        window.innerWidth < 780?
         document.getElementById('addButton').innerHTML  = "+":
         document.getElementById('addButton').innerHTML = "+ Add parcour";
-    window.innerWidth < 780?
-        document.getElementById('addButton').innerHTML  = "+":
-        document.getElementById('addButton').innerHTML = "+ Add parcour";
+    }
+
 }
 
 

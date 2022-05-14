@@ -36,7 +36,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
                                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
                                           <h6 class="p-3 mb-0">Projects</h6>
                                           <div class="dropdown-divider"></div>
-                                          <a class="dropdown-item preview-item">
+                                          <a class="dropdown-item preview-item" id="searchGame">
                                             <div class="preview-thumbnail">
                                               <div class="preview-icon bg-dark rounded-circle">
                                                 <i class=" mdi mdi-view-list text-primary"></i>
@@ -46,6 +46,9 @@ use Projet_Web_parcours\Assets\settings\Settings;
                                               <p class="preview-subject ellipsis mb-1">Search parcour</p>
                                             </div>
                                           </a>
+                                          <form id="test" action="le_lien_vers_ta_page">
+                                          <input type="hidden" name="a_recup" value="tu_mets_ta_variable_ici"/>
+                                          </form>
                                           <div class="dropdown-divider"></div>
                                           <a class="dropdown-item preview-item">
                                             <div class="preview-thumbnail">

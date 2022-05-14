@@ -30,18 +30,32 @@ function verifySize(){
     if(window.innerWidth < 780){
         for (i = 0; i < x.children.length; i++) { 
             x.children[i].getElementsByTagName('button')[0].innerHTML = '<i class="mdi mdi-play btn-icon-prepend"></i>';
-            x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>';
+            if(x.children[i].getElementsByTagName('button')[1] != undefined) x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>';
         }
     }else{
         for (i = 0; i < x.children.length; i++) { 
             x.children[i].getElementsByTagName('button')[0].innerHTML = '<i class="mdi mdi-play btn-icon-prepend"></i>Jouer';
-            x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>Edit';
+           if(x.children[i].getElementsByTagName('button')[1] != undefined) x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>Edit';
         }
     }
 
 }
 let x =  document.getElementById('list');
-x.children[0].getElementsByTagName('button')[0].addEventListener('click', (e)=>{
-console.log("L'ID est ====>"+e.target.id)
-//Appeler la fonciton launch play game avec id du parcour.
-});
+for (i = 0; i < x.children.length; i++) { 
+    //Le boutton PLay de chaque ligne du tableau de parcour.
+    x.children[i].getElementsByTagName('button')[0].addEventListener('click', (e)=>{
+        if(e.target.id == ""){//Si le non membre veux jouer à un parcour du board
+            let singupInvit = confirm("Seul les membres peuvent lancer un parcour, voulez vous être rediriger vers le menu d'authentification?");
+            singupInvit? location.href = RACINE+'Authentification/Authentification_controller/displaySignin' : false;
+        }else{//Si le membre veux jouer à un parcour du board
+                location.href = RACINE+'Game/Game_controller/launchParcourGame/'+e.target.id;
+        }
+    });
+    //Le boutton Edit de chaque ligne du tableau de parcour.
+    if(x.children[i].getElementsByTagName('button')[1] != null){
+        x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
+                let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour ?");
+                //editInvit? location.href = RACINE+'Game/Game_controller/launchParcourGame/'+e.target.id : false; //TODO
+        });
+    } 
+}
