@@ -4,6 +4,7 @@ namespace Projet_Web_parcours\Entities;
 
 class Activity
 {
+    private $codeAct;
     private $position;
     private $activiteType;
     private $activite;
@@ -28,6 +29,15 @@ class Activity
      }
 
     //Acesseurs / Mutateurs
+    public function getCodeAct()
+    {
+        return $this->codeAct;
+    }
+    public function setCodeAct($new_codeAct)
+    {
+        $this->codeAct = $new_codeAct;
+    }
+
     public function getPosition()
     {
         return $this->position;
@@ -57,12 +67,19 @@ class Activity
 
     //Methodes d'affichage de l'objet
     public function __toString(): string{
-        return 'Activite =>' . $this->getPosition() . '/' . $this->getActiviteType() . '/' . $this->getActivite();
+        return !isset($this->codeAct)? 'Activite =>' . $this->getPosition() . '/' . $this->getActiviteType() . '/' . $this->getActivite()
+        :'Activite =>' . $this->getCodeAct() . '/' . $this->getPosition() . '/' . $this->getActiviteType() . '/' . $this->getActivite();
     }
 
     //Tranforme l'objet en tableau associatif (Equipe, default null)
     public function to_Array(): array{
-        return array (
+        return !isset($this->codeAct)? array (
+            'position' => $this->getPosition(),
+            'activiteType' => $this->getActiviteType(),
+            'activite' => $this->getActivite(),
+        )
+        :array (
+            'codeAct' => $this->getCodeAct(),
             'position' => $this->getPosition(),
             'activiteType' => $this->getActiviteType(),
             'activite' => $this->getActivite(),

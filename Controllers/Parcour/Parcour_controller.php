@@ -21,7 +21,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
 require('Controllers/Main/Index_controller.php');
 class Parcour_controller extends Index_controller{  
      //Appel le formulaire de création d'un parcour
-    function displayParcourCreatePage($errors = null){ //TODO c'est ici qu'on vas rentrer pour modifier les parcours.
+    function displayParcourCreatePage(){ //TODO c'est ici qu'on vas rentrer pour modifier les parcours.
       if(!$this->is_session_started()){
         header('Location: '.Settings::RACINE.'');
         return;
@@ -30,14 +30,72 @@ class Parcour_controller extends Index_controller{
         if($correspondance_array->rowCount() != 0){
             $utilisateur_params = $correspondance_array->fetch(Fetch::_ASSOC);
             $utilisateur = new User($utilisateur_params); 
-        }
+        }      
+        //On vérifie si c'est une modification.
+        $editId = isset($_POST['idParcour'])? $_POST['idParcour']:null;
       }
       require('Views/Parcour/createParcours_view.php');
     }
 
-    //Crée un parcour
+    //Renvoie l'objet à modifier à l'ajax
+    function createObjetEdit($elementPa){  
+          $idParcour = $elementPa[0];
+           $course = new stdClass();
+           //On construit toutes les infos concernant le parcour, object pour js.
+           //On vas chercher les infos du parcour.
+           $parcour_request = Parcour::existParcour(array('codePa' => $idParcour));
+           $parcour_array =  $parcour_request->fetch(Fetch::_ASSOC);
+           //On crée le parcour.
+           $parcour = new stdClass();
+           foreach($parcour_array as $parcourAttribute => $value)
+               $parcour->$parcourAttribute = $value;
+           //On implemente parcour dans l'objet à renvoyer au js.
+           $course = $parcour;
+           //On vas chercher les positions du parcour.
+           $course->positions = array();
+           $position_request = Position::existPosition(array('parcour' => $course->codePa));
+
+           while($point = $position_request->fetch(Fetch::_ASSOC)){
+             //On crée la position.
+            $position = new stdClass();
+            $coordonnees = array();
+            foreach($point as $pointAttribute => $value){             
+              if($pointAttribute == "latitude" || $pointAttribute == "longitude"){
+                array_push($coordonnees, $value);
+                continue;
+              }
+              $position->$pointAttribute = $value;
+            }
+            //On ajoute les coordonées.
+            $position->coord = $coordonnees;
+            
+            //On vas chercher les activités de la positions.
+            $position->activites = array();
+            $activites_request = Activite::existActivity(array('position' => $position->codePo));
+            while($activity = $activites_request->fetch(Fetch::_ASSOC)){
+              $activite = new Activity($activity);
+              //On vas chercher le vrai jeu
+              $game_request = Activite::existActiviteGame($activite->getActiviteType(), array('id' => $activite->getActivite()));
+              $game_array = $game_request->fetch(Fetch::_ASSOC);
+              //On ajoute le jeu dans l'activité dans la position.
+              $game = new stdClass();
+              $game->nomAc = $activite->getActiviteType();
+              foreach($game_array as $gameAttribute => $value)
+                $game->$gameAttribute =  $value;
+              array_push($position->activites, $game);
+            }
+            //On ajoute la position dans le parcour.
+            array_push($course->positions, $position);
+           }
+          //die("L'objet que l'on vas envoyer au js est ==>".json_encode($course));
+          echo json_encode($course);
+          unset($course);
+    }
+
+    //Crée un parcour.
     function createParcour(){
       $course = json_decode($_POST["parcours"]);
+
       //On récupère le créateur
       $utilisateur = Utilisateur::existUser(array('username' => $_SESSION['username']), array('codeM'));
       $codeUser = (int)$utilisateur->fetch(Fetch::_ASSOC)['codeM'];
@@ -47,7 +105,7 @@ class Parcour_controller extends Index_controller{
         "descriptionPa"=>substr(htmlspecialchars($course->descriptionPa), 0, 64000),
         "dateCreation"=>htmlspecialchars(date('Y-m-d')),
         "dateDerniereModif"=>htmlspecialchars(date('Y-m-d')),
-        "hashCode"=>$this->generatehash(),
+        "hashCode"=>htmlspecialchars($this->generatehash()),
       ); 
       $parcour = new Course($course_params);  
 
@@ -71,7 +129,7 @@ class Parcour_controller extends Index_controller{
        if(empty($point->activites))continue;
        foreach($point->activites as $activity){
           $activ_params = (array)$activity;
-          //On récupèrte le nom du jeu.
+          //On récupère le nom du jeu.
           $typeActiv = array_shift($activ_params);
           //On crée l'objet.
           $typeActivObj = 'Projet_Web_parcours\Entities\\'.ucfirst($typeActiv);
@@ -90,6 +148,144 @@ class Parcour_controller extends Index_controller{
        }
       }
     }
+
+        //Met à jour un parcour.
+        function updateParcour(){ //TODO ajouter les activités qui n'ont pas d'id. ajouter? quels positions/ ajouter les parcour qui n'ont pas d'id
+          $course = json_decode($_POST["parcours"]);
+
+          //toto on vérifie si il y à des éléments à supprimer 
+          if(isset($course->rem)) $this->deleteElements($course->rem);
+          //TODO mettre à jour le parcour qui est une entités
+          //On crée le parcour
+          $course_params = array("codePa"=>htmlspecialchars($course->codePa),
+            "createur"=>htmlspecialchars($course->createur),
+            "nomPa"=>htmlspecialchars($course->nomPa),
+            "descriptionPa"=>substr(htmlspecialchars($course->descriptionPa), 0, 64000),
+            "dateCreation"=>htmlspecialchars($course->dateCreation),
+            "dateDerniereModif"=>htmlspecialchars(date('Y-m-d')),
+            "hashCode"=>htmlspecialchars($course->hashCode),
+          ); 
+          $parcour = new Course($course_params);  
+          //TODO ON met à jour le parcour.
+          Parcour::updateParcour($parcour,array("codePa" => $parcour->getCodePa()));
+
+          foreach($course->positions as $point){ 
+            //TODO est ce que la position est nouvelle ou pas
+            isset($point->parcour)?
+              //On crée la position
+              $position_params = array("codePo"=>htmlspecialchars($point->codePo),
+              "parcour"=>htmlspecialchars($point->parcour),
+              "nomPo"=>htmlspecialchars($point->nomPo),
+              "pays"=>htmlspecialchars($point->pays),
+              "latitude"=>(float)$point->coord[0],
+              "longitude"=>(float)$point->coord[1],
+             ) 
+            :  //On crée la position
+                $position_params = array("parcour"=>htmlspecialchars($course->codePa),
+                  "nomPo"=>htmlspecialchars($point->nomPo),
+                  "pays"=>htmlspecialchars($point->pays),
+                  "latitude"=>(float)$point->coord[0],
+                  "longitude"=>(float)$point->coord[1],
+                )
+            ;
+           $position = new Point($position_params);
+           //On récupère l'id de la position insérée pour l'insertion des activités.  
+           if($position->getCodePo()!==null){
+            Position::updatePosition($position, array("codePo"=>$position->getCodePo()));
+            $idPosition = $position->getCodePo();
+           }else{
+            $idPosition = Position::persistPosition($position);
+            $idPosition = (int)$idPosition->fetch(Fetch::_ASSOC)["LAST_INSERT_ID()"];
+           }
+           //On ajoute les activités.
+           if(empty($point->activites))continue;
+           foreach($point->activites as $activity){
+              $activ_params = (array)$activity;
+              //On récupère le nom du jeu.
+              $typeActiv = array_shift($activ_params);
+              //On crée l'objet.
+              $typeActivObj = 'Projet_Web_parcours\Entities\\'.ucfirst($typeActiv);
+              $activ = new $typeActivObj($activ_params);
+              if($activ ->getId()!==null){
+                Activite::updateActiviteGame($typeActiv, $activ, array("id"=>$activ ->getId()));//TODO On met à jour le parcour et on à son id, faire le crud du cote model parent.
+              }else{
+                //On insère l'activ dans sa table respective et on récupère l'id.
+                $idactiv = Activite::persistActiviteGame($typeActiv, $activ);
+                $idactiv = (int)$idactiv->fetch(Fetch::_ASSOC)["LAST_INSERT_ID()"];
+                
+                //On créee le tableau pour l'hydrateur de l'activité rescencement.
+                $activite_params = array("position"=>$idPosition,
+                "activiteType"=>$typeActiv,
+                "activite"=>$idactiv,
+                );          
+                $activite = new Activity($activite_params);
+                //On insère l'activité.
+                Activite::persistActivite($activite);
+              }
+           }
+          }
+        }
+        function deleteParcour(){
+          // die("Nous voulons supprimer le parcour =>".$_POST['idDeleteParcour']);
+          $idparcour =isset($_POST['idDeleteParcour'])?$_POST['idDeleteParcour']:null;
+          if(!isset($idparcour))return;
+          //On vas chercher toutes les positions du parcour et on contruit l'objet avec true.
+          
+          $deleteTab = array();
+          //On vas chercher toutes les positions tu parcour.
+          $position_request = Position::existPosition(array("parcour"=>$idparcour), array('codePo'));
+          while ($positionCodes = $position_request->fetch(Fetch::_ASSOC)){
+            $deleteObj = new stdClass();
+            $deleteObj->delete = true;
+            $deleteObj->codePo = $positionCodes['codePo'];
+            array_push($deleteTab, $deleteObj);
+          }
+          $this->deleteElements($deleteTab);
+          Parcour::deleteParcour(array("codePa"=>$idparcour));
+          unset($deleteObj);
+          unset($deleteTab);
+          header('Location: '.Settings::RACINE.'');
+        }
+
+        function deleteElements($remove){
+          // die("Le tableau des éléments à supprimer est =>" .var_dump($remove));
+          if(sizeof($remove) > 0){
+            foreach($remove as $element){
+              if($element->delete){
+                //On supprimer tous les elements de la position.
+                $codePosition = $element->codePo;
+                //1 On récupère les id des activite à supprimer pour historique activite.
+                $activites_request_Histo = Activite::existActivity(array('position' => $codePosition), what: array("codeAct"));
+                $idsactiv = $activites_request_Histo->fetchAll();
+                //On supprime les historique de l'activite.
+                foreach($idsactiv as $activiteCode){
+                  Activite::deleteActiviteHisto(array("activite"=>$activiteCode->codeAct));
+                }
+                //2 On récupère les id des activiteGame à supprimer.
+                $activites_request_game = Activite::existActivity(array('position' => $codePosition), what: array("activite", "activiteType"));
+                $idsactivGame = $activites_request_game->fetchAll();
+                //3 On supprimer toutes les activités recensées.
+                Activite::deleteActivite(array("position"=>$codePosition));       
+                //4 On supprime les activiteGame.
+                foreach($idsactivGame as $idactGame){
+                  Activite::deleteActiviteGame($idactGame->activiteType, array("id"=>$idactGame->activite));
+                }
+                //5 On supprime la position.
+                Position::deletePosition(array("codePo"=>$codePosition));
+              }else{
+                //On supprime activité par activité, dabord dans la tabla activité, puis dans la table respective de chaque jeu.
+                foreach($element->activites as $activite){
+                  $codeActivite = $activite->id;
+                  $nomActivite = $activite->nomAc;
+                  Activite::deleteActivite(array("activite"=>$codeActivite));  
+                  Activite::deleteActiviteGame($nomActivite, array("id"=>$codeActivite));
+                }
+              }
+            }
+          }
+          //TODO Modifier le crud pour pouvoir suprimer les éléments et itérer sur l'objet -> Model + Model spécialisés.
+        }
+
     function buildListActivity(){       
       $activityMap = array();
       $paramList = [];

@@ -122,7 +122,8 @@ require('Controllers/Main/Index_controller.php');
                //On crée la session utilisateur
                $_SESSION['username'] = $utilisateur->getUsername();
                //On renvoie l'utilisateur sur l'acceuil
-               $this->rootDirection(utilisateur: $utilisateur);
+               //$this->rootDirection(utilisateur: $utilisateur);
+               header("Location: /");
             }else{
                $this->displaySignin(array( "Password" => $session->getIdentifiant()));
             }

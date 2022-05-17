@@ -1,3 +1,4 @@
+<?php use Projet_Web_parcours\Assets\settings\Settings;?>
 <div class="container-scroller">
       <?php include './Views/navSide.php';?>
       <!-- partial -->
@@ -21,6 +22,6 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
-    <script src="../../template/assets/vendors/js/vendor.bundle.base.js"></script>
-    <script src="../../template/assets/js/misc.js"></script>
+    <script src= <?php echo Settings::RACINE."template/assets/vendors/js/vendor.bundle.base.js"?>></script>
+    <script src= <?php echo Settings::RACINE."template/assets/js/misc.js"?>></script>
     

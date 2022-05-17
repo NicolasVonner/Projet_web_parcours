@@ -4,6 +4,7 @@ namespace Projet_Web_parcours\Entities;
 
 class Point
 {
+    private $codePo;
     private $parcour;
     private $nomPo;
     private $pays;
@@ -30,6 +31,15 @@ class Point
      }
 
     //Acesseurs / Mutateurs
+    public function getCodePo()
+    {
+        return $this->codePo;
+    }
+    public function setCodePo($new_codePo)
+    {
+        $this->codePo = $new_codePo;
+    }
+
     public function getParcour()
     {
         return $this->parcour;
@@ -77,12 +87,21 @@ class Point
 
     //Methodes d'affichage de l'objet
     public function __toString(): string{
-        return 'Position =>'. $this->getParcour() . '/' . $this->getNomPo() . '/' . $this->getPays() . '/' . $this->getLatitude() . '/' . $this->getLongitude();
+        return !isset($this->codePo)? 'Position =>'. $this->getParcour() . '/' . $this->getNomPo() . '/' . $this->getPays() . '/' . $this->getLatitude() . '/' . $this->getLongitude()
+        :'Position =>'. $this->getCodePo() . '/' . $this->getParcour() . '/' . $this->getNomPo() . '/' . $this->getPays() . '/' . $this->getLatitude() . '/' . $this->getLongitude();
     }
 
     //Tranforme l'objet en tableau associatif
     public function to_Array(): array{
-        return array (
+        return !isset($this->codePo)? array (
+            'parcour' => $this->getParcour(),
+            'nomPo' => $this->getNomPo(),
+            'pays' => $this->getPays(),
+            'latitude' => $this->getLatitude(),
+            'longitude' => $this->getLongitude(),
+        )
+        :array (
+            'codePo' => $this->getCodePo(),
             'parcour' => $this->getParcour(),
             'nomPo' => $this->getNomPo(),
             'pays' => $this->getPays(),

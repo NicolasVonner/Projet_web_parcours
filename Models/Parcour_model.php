@@ -14,4 +14,14 @@ namespace Projet_Web_parcours\Models;
            return isset($what)? Model::select(table: "parcour", param_what: $what, param_where: $where):
            Model::select(table: "parcour", param_where: $where);        
         }
+
+        //Met à jour un parcour.
+        public static function updateParcour($what, $where){ 
+           Model::update(table: "parcour", params_what: $what->to_Array(), params_where: $where);       
+        }
+
+         //Supprime un parcour.
+        public static function deleteParcour($where){ 
+           Model::delete("parcour", params_where: $where);       
+        }
     }

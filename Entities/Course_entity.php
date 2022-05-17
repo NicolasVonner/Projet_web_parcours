@@ -122,7 +122,7 @@ class Course
                 'hashCode' => $this->getHashCode(),
             ):
             array (
-                'id' => $this->getCodePa(),
+                'codePa' => $this->getCodePa(),
                 'createur' => $this->getCreateur(),
                 'nomPa' => $this->getNomPa(),
                 'descriptionPa' =>$this->getDescriptionPa(),
@@ -131,6 +131,7 @@ class Course
                 'hashCode' => $this->getHashCode(),
             );
     }
+    
     //Tranforme l'objet en tableau associatif en ne gardant que certains paramètres 
     public function reduceCourseArray($offset, $length): array{
         return array_slice($this->to_Array(),$offset,$length);

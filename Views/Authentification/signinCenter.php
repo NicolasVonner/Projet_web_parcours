@@ -6,7 +6,7 @@
             <div class="card col-lg-4 mx-auto">
               <div class="card-body px-5 py-5">
                 <h3 class="card-title text-left mb-3">Login</h3>
-                <form method="POST" action="<?php echo Settings::RACINE?>Authentification/Authentification_controller/verify_signin">
+                <form method="POST" action= <?php echo Settings::RACINE."Authentification/Authentification_controller/verify_signin"?>>
                   <div class="form-group">
                     <label>Username or email *</label>
                     <input type="text" placeholder="Username or email" name="usernameoremail" class="form-control p_input">
@@ -31,7 +31,7 @@
                     <button class="btn btn-google col">
                       <i class="mdi mdi-google-plus"></i> Google plus </button>
                   </div>
-                  <p class="sign-up">Don't have an Account?<a href="<?php echo Settings::RACINE ?>Authentification/Authentification_controller/displaySignup"> Sign Up</a></p>
+                  <p class="sign-up">Don't have an Account?<a href= <?php echo Settings::RACINE."Authentification/Authentification_controller/displaySignup"?>> Sign Up</a></p>
                 </form>
                 <?php
                   //Affiche les oublies
@@ -48,5 +48,5 @@
         </div>
       </div>
     </div>
-    <script src="../../template/assets/vendors/js/vendor.bundle.base.js"></script>
-    <script src="../../template/assets/js/misc.js"></script>
+    <script src= <?php echo Settings::RACINE."template/assets/vendors/js/vendor.bundle.base.js"?>></script>
+    <script src= <?php echo Settings::RACINE."template/assets/js/misc.js"?>></script>

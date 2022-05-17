@@ -28,7 +28,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
                 //On vas chercher les infos du user par rapport à la session en cour.
             }
             //On charge tous ses parcours
-            $parcour_board = $this->getParcourBoardDatas($utilisateur, $gameSearch); //TODO variables même nom, change ça.
+            $parcour_board = $this->getParcourBoardDatas($utilisateur, $gameSearch); //TODO variables même nom, changer ça.
 
             require('Views/Acceuil/acceuilView.php'); 
         }

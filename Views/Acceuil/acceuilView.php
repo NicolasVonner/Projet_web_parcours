@@ -1,3 +1,4 @@
+<?php use Projet_Web_parcours\Assets\settings\Settings;?>
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -6,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Acceuil</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="../../template/assets/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="../../template/assets/css/style.css">
+    <link rel="stylesheet" href= <?php echo Settings::RACINE."template/assets/vendors/mdi/css/materialdesignicons.min.css"?>>
+    <link rel="stylesheet" href= <?php echo Settings::RACINE."template/assets/css/style.css"?>>
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="../../template/assets/images/favicon.png" />
+    <link rel="shortcut icon" href= <?php echo Settings::RACINE."template/assets/images/favicon.png"?>/>
     <style>   
       #dropdown {
         position: relative;
@@ -41,8 +42,8 @@
   </head>
   <body>
      <?php include './Views/Acceuil/acceuilCenter.php';?>
-     <script src="../../Assets/settings/Settings.js"></script>
-     <script src="../../Assets/Js/parcourboard.js"></script>
-     <script src="../../Assets/Js/acceuil.js"></script>
+     <script src= <?php echo Settings::RACINE."Assets/settings/Settings.js"?>></script>
+     <script src= <?php echo Settings::RACINE."Assets/Js/parcourboard.js"?>></script>
+     <script src= <?php echo Settings::RACINE."Assets/Js/acceuil.js"?>></script>
   </body>
 </html>

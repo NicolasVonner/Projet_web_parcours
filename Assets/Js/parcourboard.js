@@ -54,8 +54,30 @@ for (i = 0; i < x.children.length; i++) {
     //Le boutton Edit de chaque ligne du tableau de parcour.
     if(x.children[i].getElementsByTagName('button')[1] != null){
         x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
-                let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour ?");
-                //editInvit? location.href = RACINE+'Game/Game_controller/launchParcourGame/'+e.target.id : false; //TODO
+                let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+e.target.id+" ?");
+                // editInvit? location.href = RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/'+e.target.id : false; //TODO
+                if(editInvit){  
+                    sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: e.target.id})
+                }
         });
-    } 
+    }    
+}
+
+
+function sendParams(path, parameters, method='post') {
+
+    const form = document.createElement('form');
+    form.method = method;
+    form.action = path;
+    document.body.appendChild(form);
+  
+    for (const key in parameters) {
+        const formField = document.createElement('input');
+        formField.type = 'hidden';
+        formField.name = key;
+        formField.value = parameters[key];
+  
+        form.appendChild(formField);
+    }
+    form.submit();
 }

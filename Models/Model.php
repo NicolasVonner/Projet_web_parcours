@@ -120,10 +120,39 @@ class Model extends Connexion{
         //TODO A completer -> crud update.
         //@Param => String $request la requete
         //=> Array $params preparation de la requete
-        public static function update($request, $params){
-            $stmt = Connexion::getInstance()->prepare($request);
-            $stmt->execute($params);
-            return $stmt;
+        public static function update($table, $params_what, $params_where){
+            $sql = "UPDATE ".$table ;
+            $values_prep = " SET ";
+            //KP incrémentation auto / equipe NULL par défaut what
+            foreach(array_keys($params_what) as $key){
+                $key != array_key_last($params_what)?$values_prep .= $key."=?, ":$values_prep .= $key."=? ";           
+            }
+            //Where
+            $values_prep .= 'WHERE ';
+            foreach (array_keys($params_where) as $key) { 
+                $values_prep .= $key."=?";
+            } 
+            $sql .= $values_prep;
+            //On récupère les paramètres.
+            $valuesSet = array_values($params_what);
+            $valueWhere = array_values($params_where)[0];
+
+            array_push($valuesSet, $valueWhere);
+            self::launch($sql, $valuesSet);
+        }
+
+        public static function delete($table, $params_where){
+            $sql = "DELETE FROM ".$table ;
+            //Where
+            $values_prep = ' WHERE ';
+            foreach(array_keys($params_where) as $key){
+                $key != array_key_last($params_where)?$values_prep .= $key."=?, ": $values_prep .= $key."=? ";           
+            }
+            $sql .= $values_prep;
+            //On récupère les paramètres.
+            $valuesSet = array_values($params_where);
+            // die("La request update est =>".var_dump($sql)." et les paramètres sont =>".var_dump($valuesSet)); //TODO tester la fonciton et faire l'envoie
+            self::launch($sql, $valuesSet);
         }
 
         // $sql = "INSERT INTO membre (pass, nomM, prenomM, username, adresseMail, dateInscrition, dateNaissance, equipe) VALUES (?,?,?,?,?,?,?,?,?)";

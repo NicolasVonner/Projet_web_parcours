@@ -11,7 +11,7 @@ $.ajax({url: RACINE+"Parcour/Parcour_controller/buildListActivity", success: fun
         $('<a>', {
             text: activity.nomAc,
             class: "dropdown-item",
-            click: function() {openConfig({props : activity.attibuts, name: activity.nomAc},true)}
+            click: function() {openConfig({props : activity.attibuts, nomAc: activity.nomAc},true)}
         }).appendTo("#activity-choice");
     });
 }});
@@ -32,7 +32,7 @@ const viewActivity = (actIndex) => {
     $("#myModal").css("display", "block");
     $("html").css("overflow","hidden");
     $("#select-activity").prop("disabled",true);
-    openConfig({props :parcour.positions[spotIndex].activites[actIndex]},false);
+    openConfig({props :parcour.positions[spotIndex].activites[actIndex], nomAc: parcour.positions[spotIndex].activites[actIndex].nomAc},false);
     $("#create-activity").hide();
 };
 
@@ -40,7 +40,7 @@ const editActivity = (actIndex) => {
     $("#myModal").css("display", "block");
     $("html").css("overflow","hidden");
     $("#select-activity").prop("disabled",false);
-    openConfig({props : parcour.positions[spotIndex].activites[actIndex]},true);
+    openConfig({props : parcour.positions[spotIndex].activites[actIndex], nomAc: parcour.positions[spotIndex].activites[actIndex].nomAc},true);
     $("#create-activity").show();
     $("#create-activity").html("Edit");
     $('#create-activity').attr("onclick",`sendActivityData(${parcour.positions[spotIndex].activites[actIndex].id})`);
@@ -59,63 +59,72 @@ const getInputType = (type) => {
 };
 
 const openConfig = (activity, canEdit) => {
-    let params = new Array()
-    $("#select-activity").html(activity.name);
+    let params = new Array();
+    let values = new Array();
+
+    $("#select-activity").html(activity.nomAc);//TODO ajouter le nomAc plus tôt !!!
     $("#submit-activity").prop("disabled",false);
     $('form').empty();
-    // console.log("EE====>"+JSON.stringify(Object.keys(activity.props)));
-    // console.log(Object.keys(activity.props)[0]+"EUYGKGKJHGK====>"+Number(Object.keys(activity.props)[0]));
+
     params = !isNaN(Object.keys(activity.props)[0])? activity.props : Object.keys(activity.props);
-    params.forEach((prop)=>{
-        if(prop !== 'id') {
-            $('form').append(`
-            <div class="form-group col-sm-6">
-                <label for="${prop}">${prop}</label>
-                <input type="text" class="form-control" id="${prop}" placeholder="${prop}" ${canEdit ? "" : "readonly"}>
-            </div>
-        `);
-        }
+    values = !isNaN(Object.keys(activity.props)[0])? null : Object.values(activity.props);
 
-    });
-    //si parmis les values il y a l'id, j'affiche les valeurs dans les chans si non ca veux dire que c'est une premiere insertion
-    if (Object.keys(activity.props).includes("id"))
-    {
-        $("form").find(':input').each(function(index){
-            let input = $(this); // This is the jquery object of the input, do what you will
-            if(Object.keys(activity.props)[index] !== 'id')
-                input.val(Object.values(activity.props)[index]);
+    //On crée les inputs selon le nombre de paramètres du jeu.
+    if (!params.includes("id")){
+        params.forEach((prop)=>{
+            if(prop !== 'id' && prop !== 'nomAc') {
+                $('form').append(`
+                    <div class="form-group col-sm-6">
+                        <label for="${prop}">${prop}</label>
+                        <input type="text" class="form-control" id="${prop}" placeholder="${prop}" ${canEdit ? "" : "readonly"}>
+                    </div>
+                `);
+            }
         });
-    }
+    }else{
+        params.forEach((prop, index)=>{
+            if(prop !== 'id' && prop !== 'nomAc') {
+                $('form').append(`
+                    <div class="form-group col-sm-6">
+                        <label for="${prop}">${prop}</label>
+                        <input type="text" value="${values[index]}" class="form-control" id="${prop}" placeholder="${prop}" ${canEdit ? "" : "readonly"}>
+                    </div>
+                `);
+            }
+        });
+    } 
 };
-
 
 const sendActivityData = (id) => {
     gameFieldInfo= new Object();
     gameFieldInfo.nomAc = $("#select-activity").text();
-    //TODO ajouter l'activite a la position dans le tableau
-    //TODO enlever l'activite a la position dans le tableua dans object
     $("form").find(':input').toArray().map((input)=>{
-        gameFieldInfo[input.id] = input.value; //TODO cahnger la forme du message, tester avec [input.id] :input.value
+        gameFieldInfo[input.id] = input.value;
     });
-    //TODO faire une fonction pour verifier si ya des champs vides (min 2) -> choix_1 et choix_2.
+    console.log("Les valeurs d'input sont ( SendActivityData() ) =>"+JSON.stringify(gameFieldInfo));
+
+    //TODO faire une fonction pour verifier si ya des champs vides (min 2) -> choix_1 et choix_2.Ou Réactiver al fonction au minimum
     // let allFilled = formData.every((field) => {
     //     return field.value !== "";
     // });
-    console.log("====>gameFieldInfo"+JSON.stringify(gameFieldInfo));
+    //console.log("====>gameFieldInfo"+JSON.stringify(gameFieldInfo));
     let allFilled = true;
+
     if (allFilled) {
         let currentSpotIndex = parcour.positions.findIndex((element)=>element.nomPo === adress.innerText);
         if (currentSpotIndex != -1)
         {
-            if (id !== undefined) // si le paramètre id existe bel et bien alors on modifie l'activité
+            if (id !== undefined) // si le paramètre id existe bel et bien alors on modifie l'activité.
             {
+                console.log("C'est une modification de l'activité "+ id +" de la position => "+currentSpotIndex);
                 let currentActivityIndex = parcour.positions[currentSpotIndex].activites.findIndex((activity)=>activity.id == id);
-                gameFieldInfo.id = id;
+                gameFieldInfo.id = id;//todo ->le but ?
                 parcour.positions[currentSpotIndex].activites[currentActivityIndex] = gameFieldInfo;
             }
             else
             {
-                gameFieldInfo.id = Math.floor(Math.random() * 100000).toString();
+                gameFieldInfo.id = "p_"+Math.floor(Math.random() * 100000).toString();
+                console.log("ID test===>"+gameFieldInfo.id);
                 parcour.positions[currentSpotIndex].activites.push(gameFieldInfo);
             }
             displayActivityList(parcour.positions[currentSpotIndex].activites);
@@ -124,12 +133,58 @@ const sendActivityData = (id) => {
     }
     else
     {
-        console.log("nope");
+        console.log("Il y à des champs vide, vous voulez que je m'énerve c'est ça ?");
     }
     delete(gameFieldInfo);
 };
 
 const removeActivity = (index) => {
+    let codePoDel = parcour.positions[spotIndex].codePo != null? parcour.positions[spotIndex].codePo : null;
+    let codeActDel = null;
+    //On vérifie qu'on souhaite supprimer une activité déjà dans la base.
+   if(parcour.positions[spotIndex].activites[index].id != null && String(parcour.positions[spotIndex].activites[index].id).split("")[0] !== "p"){
+        codeActDel =  parcour.positions[spotIndex].activites[index].id;
+   } 
+
+    if(codePoDel != null && codeActDel!= null){
+        if(parcour.rem != undefined){
+            let flag = false;
+            parcour.rem.forEach((element)=>{
+                if(element.codePo == codePoDel){
+                    let act = new Object();
+                    act.id = codeActDel;
+                    act.nomAc = parcour.positions[spotIndex].activites[index].nomAc;
+                    element.activites.push(act);
+                    flag = true;
+                }
+            });
+            if(!flag){
+                //Si l'objet n'existe pas 
+                let parc = new Object();               
+                let act = new Object();
+                parc.codePo = codePoDel;
+                parc.delete = false;
+                parc.activites = new Array();
+                act.id = codeActDel;
+                act.nomAc = parcour.positions[spotIndex].activites[index].nomAc;
+                parc.activites.push(act);
+                parcour.rem.push(parc);
+            }
+        }else{
+                 //Si l'objet n'existe pas 
+                 let parc = new Object();
+                 let act = new Object();
+                 parc.codePo = codePoDel;
+                 parc.delete = false;
+                 parc.activites = new Array();
+                 act.id = codeActDel;
+                 act.nomAc = parcour.positions[spotIndex].activites[index].nomAc;
+                 parc.activites.push(act);
+                 parcour.rem = new Array();
+                 parcour.rem.push(parc);
+        }
+    }
+
     activityList.removeChild(activityList.children[index]);
     parcour.positions[spotIndex].activites.splice(index,1);
     for (let i = 0; i < parcour.positions[spotIndex].activites.length; i++)

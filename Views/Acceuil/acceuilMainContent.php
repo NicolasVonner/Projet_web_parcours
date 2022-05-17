@@ -25,7 +25,7 @@
                               </div>';
                           }              
                           include './Views/Acceuil/parcourBoard.php';
-                        if(isset($utilisateur) || !empty($utilisateur)){
+                        if(isset($utilisateur) && !$gameSearch || !empty($utilisateur) && !$gameSearch){
                           echo '
                             <div class="row">
                                   <div class="col-2 col-sm-2 col-lg-2 grid-margin"></div>

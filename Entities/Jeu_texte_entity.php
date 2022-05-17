@@ -4,6 +4,7 @@ namespace Projet_Web_parcours\Entities;
 
 class Jeu_texte
 {
+    private $id;
     private $devinette;
     private $reponse;
     private $indice;
@@ -32,6 +33,15 @@ class Jeu_texte
      }
 
     //Acesseurs / Mutateurs
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function setId($new_id)
+    {
+        $this->id = $new_id;
+    }
+
     public function getDevinette()
     {
         return $this->devinette;
@@ -98,12 +108,23 @@ class Jeu_texte
 
     //Methodes d'affichage de l'objet
     public function __toString(): string{
-        return 'Gametext =>' . $this->getDevinette() . '/' . $this->getReponse(). '/' . $this->getIndice() . '/' . $this->getchoix_1() . '/' . $this->getchoix_2() . '/' . $this->getchoix_3() . '/' . $this->getchoix_4();
+        return !isset($this->id)? 'Jeu_text =>' . $this->getDevinette() . '/' . $this->getReponse(). '/' . $this->getIndice() . '/' . $this->getchoix_1() . '/' . $this->getchoix_2() . '/' . $this->getchoix_3() . '/' . $this->getchoix_4()
+        :'Jeu_text =>' . $this->getId() . '/' . $this->getDevinette() . '/' . $this->getReponse(). '/' . $this->getIndice() . '/' . $this->getchoix_1() . '/' . $this->getchoix_2() . '/' . $this->getchoix_3() . '/' . $this->getchoix_4();
     }
 
     //Tranforme l'objet en tableau associatif (Gametext, default null)
     public function to_Array(): array{
-        return array (
+        return !isset($this->id)? array (
+            'devinette' => $this->getDevinette(),
+            'reponse' => $this->getReponse(),
+            'indice' => $this->getIndice(),
+            'choix_1' => $this->getchoix_1(),
+            'choix_2' => $this->getchoix_2(),
+            'choix_3' => $this->getchoix_3(),
+            'choix_4' => $this->getchoix_4(),
+        )
+        :array (
+            'id' => $this->getId(),
             'devinette' => $this->getDevinette(),
             'reponse' => $this->getReponse(),
             'indice' => $this->getIndice(),

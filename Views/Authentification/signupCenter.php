@@ -6,7 +6,7 @@
             <div class="card col-lg-4 mx-auto">
               <div class="card-body px-5 py-5">
                 <h3 class="card-title text-left mb-3">Register</h3>
-                <form method="POST" action="<?php echo Settings::RACINE ?>Authentification/Authentification_controller/verify_signup">
+                <form method="POST" action=<?php echo Settings::RACINE."Authentification/Authentification_controller/verify_signup"?>>
                  <div class="form-group">
                     <label>First name</label>
                     <input type="text" placeholder="First name" name="firstname" class="form-control p_input">
@@ -46,14 +46,14 @@
                                     if ($dh = opendir($dir)) {
                                         while (($file = readdir($dh)) !== false) {
                                           if($file != "." && $file != "..")
-                                          echo "<img class='img-sm avatar' src='../../Assets/Images/faces/".$file."' alt=''>";
+                                          echo "<img class='img-sm avatar' src= '".Settings::RACINE."Assets/Images/faces/".$file."' alt=''>";
                                         }
                                         closedir($dh);
                                     }
                                   }
                               ?>                  
                             </div>
-                          <img src="../../Assets/Images/faces/face8.jpg" alt="image" id="avatar-preview" class="rounded-circle"/>
+                          <img src= <?php echo Settings::RACINE."Assets/Images/faces/face8.jpg"?> alt="image" id="avatar-preview" class="rounded-circle"/>
                           
                     </div>
                     <input type="text" id="form-avatar" value="face8.jpg" name="avatar" hidden>
@@ -74,7 +74,7 @@
                     <button class="btn btn-google col">
                       <i class="mdi mdi-google-plus"></i> Google plus </button>
                   </div>
-                  <p style="font-style: italic;" class="sign-up text-center">Already have an Account?<a href="<?php echo Settings::RACINE ?>Authentification/Authentification_controller/displaySignin"> Sign In</a></p>
+                  <p style="font-style: italic;" class="sign-up text-center">Already have an Account?<a href=<?php echo Settings::RACINE."Authentification/Authentification_controller/displaySignin"?>> Sign In</a></p>
                   <p class="terms">By creating an account you are accepting our<a href="#"> Terms & Conditions</a></p>
                 </form>
                 <?php
@@ -101,6 +101,6 @@
         </div>
       </div>
     </div>
-    <script src="../../template/assets/vendors/js/vendor.bundle.base.js"></script>
-    <script src="../../template/assets/js/misc.js"></script>
-    <script src="/Assets/Js/signup.js"></script>
+    <script src= <?php echo Settings::RACINE."template/assets/vendors/js/vendor.bundle.base.js"?>></script>
+    <script src= <?php echo Settings::RACINE."template/assets/js/misc.js"?>></script>
+    <script src= <?php echo Settings::RACINE."Assets/Js/signup.js"?>></script>
