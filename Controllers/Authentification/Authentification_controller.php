@@ -22,14 +22,14 @@ require('Controllers/Main/Index_controller.php');
       //Appel le formulaire d'authentification
      function displaySignin($errors = null){
       $this->is_session_started()? 
-      $this->rootDirection() : //TODO
+      header("Location: /") :
       require('Views/Authentification/signin_view.php');
      }
 
      //Appel le formulaire d'inscription
      function displaySignup($errors = null){
       $this->is_session_started()? 
-      $this->rootDirection() : //TODO
+      header("Location: /") :
       require('Views/Authentification/signup_view.php');
      }
 

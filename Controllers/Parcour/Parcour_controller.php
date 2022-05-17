@@ -55,7 +55,7 @@ class Parcour_controller extends Index_controller{
            $course->positions = array();
            $position_request = Position::existPosition(array('parcour' => $course->codePa));
 
-           while($point = $position_request->fetch(Fetch::_ASSOC)){
+          while($point = $position_request->fetch(Fetch::_ASSOC)){
              //On crée la position.
             $position = new stdClass();
             $coordonnees = array();
@@ -86,7 +86,7 @@ class Parcour_controller extends Index_controller{
             }
             //On ajoute la position dans le parcour.
             array_push($course->positions, $position);
-           }
+          }
           //die("L'objet que l'on vas envoyer au js est ==>".json_encode($course));
           echo json_encode($course);
           unset($course);
@@ -153,7 +153,7 @@ class Parcour_controller extends Index_controller{
         function updateParcour(){ //TODO ajouter les activités qui n'ont pas d'id. ajouter? quels positions/ ajouter les parcour qui n'ont pas d'id
           $course = json_decode($_POST["parcours"]);
 
-          //toto on vérifie si il y à des éléments à supprimer 
+          //toto on vérifie si il y à des éléments à supprimer.
           if(isset($course->rem)) $this->deleteElements($course->rem);
           //TODO mettre à jour le parcour qui est une entités
           //On crée le parcour

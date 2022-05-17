@@ -46,11 +46,8 @@ use Projet_Web_parcours\Assets\settings\Settings;
                                               <p class="preview-subject ellipsis mb-1">Search parcour</p>
                                             </div>
                                           </a>
-                                          <form id="test" action="le_lien_vers_ta_page">
-                                          <input type="hidden" name="a_recup" value="tu_mets_ta_variable_ici"/>
-                                          </form>
                                           <div class="dropdown-divider"></div>
-                                          <a class="dropdown-item preview-item">
+                                          <a class="dropdown-item preview-item" id="searchHashGame">
                                             <div class="preview-thumbnail">
                                               <div class="preview-icon bg-dark rounded-circle">
                                                 <i class="mdi mdi-qrcode text-info"></i>
