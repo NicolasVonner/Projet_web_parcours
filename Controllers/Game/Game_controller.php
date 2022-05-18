@@ -46,7 +46,7 @@ require('Controllers/Main/Index_controller.php');
       }else{
         $gameParam = isset($hashcode)? $hashcode : $codePa;
       }
-      require('./Views/Game/mainjeu_view.php');
+      require('./Views/Game/maingame_view.php');
      }
 
      //Vérifie si l'utilisateur à déjà une partie en cour

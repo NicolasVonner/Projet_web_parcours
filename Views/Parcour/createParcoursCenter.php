@@ -62,7 +62,7 @@
                     <div class="row">
                       <div class="col grid-margin stretch-card d-flex justify-content-center">
                         <div class="card-body text-center">
-                          <h1 contenteditable="true">Activity List</h1>
+                          <h1>Activity List</h1>
                           <div id="activity-list" class="list-group">
       
                           </div>
@@ -77,7 +77,7 @@
               <div class="col grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body text-center">
-                    <h1 contenteditable="true">Spots List</h1>
+                    <h1>Spots List</h1>
                     <div id="parcours-list" class="list-group"></div>
                   </div>
                 </div>
