@@ -48,16 +48,34 @@ for (i = 0; i < x.children.length; i++) {
             let singupInvit = confirm("Seul les membres peuvent lancer un parcour, voulez vous être rediriger vers le menu d'authentification?");
             singupInvit? location.href = RACINE+'Authentification/Authentification_controller/displaySignin' : false;
         }else{//Si le membre veux jouer à un parcour du board
-                location.href = RACINE+'Game/Game_controller/launchParcourGame/'+e.target.id;
+                var codePa = "codePa_"+e.target.id;
+                $.ajax({url: RACINE+'Game/Game_controller/verifyParcourStep/'+codePa, success: function(histo){
+                    console.log("=====>"+histo);
+                    if(histo == "non exist"){
+                        alert("Aucun parcour ne correspond à votre hascode, veuillez réessayer");//todo afficher un message sur le formulaire.
+                        inputHash.value = "";
+                        return;
+                    }else if(histo == false){
+                        console.log("L'utilisateur doit commencer dès le début");
+                        sendParams(RACINE+'Game/Game_controller/displayGame', {codePa: codePa})
+                    }else{
+                        var histoData = JSON.parse(histo); 
+                        let response  = confirm("Une partie pour le parcour "+ histoData.nomPa +" datant du "+histoData.time+" est déjà en cour. Voulez vous reprendre à l'étape "+histoData.step+ " : " +histoData.nomPo);
+                        if(response){
+                            sendParams(RACINE+'Game/Game_controller/displayGame', {codePa: codePa, step: histoData.step})
+                        }else{
+                            sendParams(RACINE+'Game/Game_controller/displayGame', {codePa: codePa})
+                        }
+                    }
+                }}); 
         }
     });
     //Le boutton Edit de chaque ligne du tableau de parcour.
     if(x.children[i].getElementsByTagName('button')[1] != null){
         x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
                 let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+e.target.id+" ?");
-                // editInvit? location.href = RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/'+e.target.id : false; //TODO
                 if(editInvit){  
-                    sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: e.target.id})
+                    sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: e.target.id});
                 }
         });
     }    

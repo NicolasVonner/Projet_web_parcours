@@ -68,5 +68,5 @@ method_exists($controller,$action)? paramVerifier($controller, $params, $action)
 //TODO Nimporte quelle fonction peut recevoir nimporte quels params
 // Vérifier pour paramètres 
 function paramVerifier($controller, $parameters, $method){
-    empty(array_slice($parameters,3))? $controller->$method(): $controller->$method(array_slice($parameters,3));
+    empty(array_slice($parameters, 3))? $controller->$method(): $controller->$method(array_slice($parameters,3));
 }

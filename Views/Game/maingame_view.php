@@ -26,7 +26,7 @@
       <div class="container-fluid">
         <?php // include './Views/userNavBar.php';?>
         <!-- partial -->
-        <div class="main-panel">
+        <div class="main-panel" id=<?php echo isset($gameParam)?$gameParam:""?>>
            <?php include './Views/Game/gameCenter.php';?>
         </div>
       </div>
@@ -36,5 +36,6 @@
     <!-- endinject -->
     <script src="../../../Assets/settings/Settings.js"></script>
     <script src="../../../Assets/Js/game.js"></script>
+    <script src="../../Assets/Js/game.js"></script>
   </body>
 </html>
