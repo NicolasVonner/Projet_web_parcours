@@ -29,21 +29,108 @@ require('Controllers/Main/Index_controller.php');
       header("Location: /") :
       require('./Views/Game/hash_view.php');
      }
-    //Vérifie si l'inscription de l'utilidateur est conforme
-   function verify_hascode(){
-    $GameObject = null;
-    $hascode = $_POST['hascode'];
-    if(!isset($hascode) || empty($hascode)){
-        $this->displayHashForm(error:"Vous devez entrer un hascode");
-        return;
-    }
-    //On vas chercher toutes les informations pour la game dans la base, et on fait un objet avec pour tout condenser.
 
-    //D'abord on vérifie que le parcour existe
-    $parcour_request = Parcour::existParcour(array("hashCode"=> $hascode));
-    $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
-    //Le parcour existe alors
-    if($parcour_array != false){   
+    function displayGame(){
+      $gameParam = null;
+      if(!$this->is_session_started()) 
+        header("Location: /");
+      $hashcode = isset($_POST['hashcode'])?$_POST['hashcode']:null;
+      $codePa = isset($_POST['codePa'])?$_POST['codePa']:null;
+      //Si les deux codes sont nulles on return vers l'acceuil.
+      if(!isset($hashcode) && !isset($codePa)) header("Location: /");
+      //On récupère le step si il y en à un.
+      $step = isset($_POST['step'])?$_POST['step']:null;
+      
+      if(isset($step)){
+        $gameParam = isset($hashcode)? $hashcode."_".$step : $codePa."_".$step;
+      }else{
+        $gameParam = isset($hashcode)? $hashcode : $codePa;
+      }
+      require('./Views/Game/mainjeu_view.php');
+     }
+
+     //Vérifie si l'utilisateur à déjà une partie en cour
+    function verifyParcourStep($code){
+      $hash = null;
+      $codePa = null;
+
+      //On récupère la nature de la clé et la clé.
+      $natureKey = explode('_', $code[0])[0];
+      $key = explode('_', $code[0])[1];
+      if($natureKey == "hash"){
+        $hash = $key;
+      }else{
+        $codePa = $key;
+      }
+      
+      $user_params = Utilisateur::existUser(array("username" =>$_SESSION['username']), array("codeM"));
+      $user =(int)$user_params->fetch(Fetch::_ASSOC)["codeM"];
+
+      if(isset($hash)){
+        //D'abord on vérifie que le parcour existe
+        $parcour_request = Parcour::existParcour(array("hashCode"=> $hash));
+        $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
+      }else{
+        //D'abord on vérifie que le parcour existe
+        $parcour_request = Parcour::existParcour(array("codePa"=> $codePa));
+        $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
+      }
+      //Le parcour existe alors
+      if($parcour_array != false){ 
+        $parcour = new Course($parcour_array);
+        //On cherche le nombre de position qu'il y a dans le parcour
+        $nombrePoints = Position::existPosition(array("parcour"=>$parcour->getCodePa()), array("COUNT(*) as points"));
+        $nombrePoints = (int)$nombrePoints->fetch(Fetch::_ASSOC)['points'];
+        //On vérifie si le user est déja en game.
+        $histo_request = Parcour::existParcourHisto(array("parcour"=>$parcour->getCodePa(),"joueur"=>$user), array('step', 'time'));
+        $histo_array= $histo_request->fetchAll();
+        //die('===>Nombre points :'.$nombrePoints.'====> step detected'.(int)end($histo_array)->step);
+        if($histo_array != false && $nombrePoints != (int)end($histo_array)->step){
+          $histo = new stdClass();
+          $step = (int)end($histo_array)->step;
+          $time = end($histo_array)->time;
+        //On commence à remplir l'objet.
+          $histo->nomPa = $parcour->getNomPa();         
+          $histo->step = $step;
+          $histo->time = $time;         
+          //On vas chercher la $step ième position.
+          $position_request = Position::existPosition(array("parcour"=>$parcour->getCodePa()));
+          $point = $position_request->fetchAll();
+          $position = new Point((array)$point[$step - 1]);
+          $histo->nomPo = $position->getNomPo(); 
+          echo json_encode($histo);
+          return;
+        }else{
+          echo false;
+          return;
+        }
+      }else{
+        echo "non exist";
+      }
+    }
+
+   //On construit le gameObject.
+   function buildGameObject($gameParams){ //todo gérer les steps et le fait que on prenne pas toutes les positions.
+    $hashcode = null;
+    $codePa = null;
+    $typeId = explode('_',$gameParams[0])[0];
+    $valueId = explode('_',$gameParams[0])[1];
+    if($typeId == 'codePa'){
+        $codePa = $valueId;
+    }else{
+        $hashcode = $valueId;
+    }
+    $step = isset($gameParams[1])?$gameParams[1]:null;
+    if(isset($hashcode)){
+      //D'abord on vérifie que le parcour existe
+      $parcour_request = Parcour::existParcour(array("hashCode"=> $hashcode));
+      $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
+    }else{
+      //D'abord on vérifie que le parcour existe
+      $parcour_request = Parcour::existParcour(array("codePa"=> $codePa));
+      $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
+    }
+    //Le parcour existe alors 
         $GameObject = new stdClass();
         $GameObject->positions = array();  
         //On crée le parcour.
@@ -51,7 +138,9 @@ require('Controllers/Main/Index_controller.php');
             $GameObject->$parcourAttribute = $value;
         //On vas chercher toutes les positions du parcour.
         $position_request = Position::existPosition(array("parcour"=>$GameObject->codePa));
-       while($point = $position_request->fetch(Fetch::_ASSOC)){
+        $points =  isset($step)?array_slice($position_request->fetchAll(), $step-1):$position_request->fetchAll();
+      //  while($point = $position_request->fetch(Fetch::_ASSOC)){
+        foreach($points as $point){
          //On crée la position.
          $position = new stdClass();
          $coordonnees = array();
@@ -84,13 +173,6 @@ require('Controllers/Main/Index_controller.php');
          //On ajoute la position dans le parcour.
          array_push($GameObject->positions, $position);
        }
-       die("Le parcour que l'on vas lancer est ==>".json_encode($GameObject));
-       //echo json_encode($GameObject);
-      // unset($GameObject);
-    }else{
-        $this->displayHashForm(error:"Aucun parcour ne correspond à votre hascode, veuillez réessayer");
-        return; 
-    }
-
+       echo json_encode($GameObject);
    }
  }

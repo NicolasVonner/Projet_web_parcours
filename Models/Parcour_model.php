@@ -24,4 +24,12 @@ namespace Projet_Web_parcours\Models;
         public static function deleteParcour($where){ 
            Model::delete("parcour", params_where: $where);       
         }
+
+        //Historique parcour
+
+         //Vérifie si le parcour existe dans la base, et le renvoie.
+        public static function existParcourHisto($where, $what = null){ 
+           return isset($what)? Model::select(table: "historique_parcour", param_what: $what, param_where: $where):
+           Model::select(table: "historique_parcour", param_where: $where);        
+        }
     }
