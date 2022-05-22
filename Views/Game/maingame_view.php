@@ -1,18 +1,19 @@
+<?php use Projet_Web_parcours\Assets\settings\Settings;?>
 <!DOCTYPE html>
 <html lang="fr">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Corona Admin</title>
+    <title>Game</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="../../../template/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href=<?php echo Settings::RACINE."template/assets/vendors/mdi/css/materialdesignicons.min.css"?>>
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="../../../template/assets/css/style.css">
-    <link rel="stylesheet" href="../../../Assets/Css/game.css">
+    <link rel="stylesheet" href=<?php echo Settings::RACINE."template/assets/css/style.css"?>>
+    <link rel="stylesheet" href=<?php echo Settings::RACINE."Assets/Css/game.css"?>>
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="../../../template/assets/images/favicon.png" />
+    <link rel="shortcut icon" href=<?php echo Settings::RACINE."template/assets/images/favicon.png" ?>/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
     crossorigin=""/>
@@ -31,10 +32,10 @@
         </div>
       </div>
     </div>   
-    <script src="../../../template/assets/vendors/js/vendor.bundle.base.js"></script>
-    <script src="../../../template/assets/js/misc.js"></script>
+    <script src=<?php echo Settings::RACINE."template/assets/vendors/js/vendor.bundle.base.js"?>></script>
+    <script src=<?php echo Settings::RACINE."template/assets/js/misc.js"?>></script>
     <!-- endinject -->
-    <script src="../../../Assets/settings/Settings.js"></script>
-    <script src="../../../Assets/Js/game.js"></script>
+    <script src=<?php echo Settings::RACINE."Assets/settings/Settings.js"?>></script>
+    <script src=<?php echo Settings::RACINE."Assets/Js/game.js"?>></script>
   </body>
 </html>

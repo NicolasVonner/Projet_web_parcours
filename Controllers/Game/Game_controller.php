@@ -198,7 +198,7 @@ require('Controllers/Main/Index_controller.php');
     $historique = new HistoParcour($historique_params);
     //On envoie l'historique
     Parcour::persistParcourHisto($historique);
-    //On incrémante la sessoin de jeu.
+    //On incrémante la session de jeu.
      if(isset($_POST['gameStep'])){
       $_SESSION['game'] = (int)$game->step + 1;
      }else{

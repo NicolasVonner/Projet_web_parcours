@@ -2,13 +2,13 @@
   <div class="row">
       <div class="col grid-margin stretch-card">
         <div class="card">
-            <div class="card-body text-center map-bg rounded p-2">
+            <div class="card-body text-center map-bg rounded p-2"> 
                 <div class="card-body text-center pos-bg rounded">
                     <h1 id="parcourName"></h1>
                     <p id="parcourDescription"></p>
                     <div class="d-flex justify-content-around">
                         <p>Next step : <span id="nextStep"></span></p>
-                        <p>Time : <span id="longitude"></span></p>
+                        <p>Start time : <span id="time"></span></p>
                     </div>
                 </div>
                 <div id="map">
@@ -42,6 +42,14 @@
             </div>
         </div>
       </div>
+  </div>
+  <div class="row">
+        <div class="col grid-margin stretch-card">
+
+            <div class="text-center">
+            <div class="col"><button type="button" class="btn btn-primary" id="valideStep" >Valide step</button></div>
+            </div>
+        </div>
   </div>
   <?php include './Views/footer.php';?>
 </div>

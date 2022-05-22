@@ -2,7 +2,9 @@ let mainPanel = document.getElementsByClassName("main-panel")[0];
 let gametype = document.getElementById("gametype");
 let gameproblem = document.getElementById("gameproblem");
 let choices = document.getElementById("choices");
-let indice = document.getElementById("indicea");
+let indice = document.getElementById("indice");
+let valideStep = document.getElementById("valideStep");
+
 
 let accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 let gameObject = null;
@@ -12,6 +14,7 @@ let step = null;
 let currentStep = null;
 let actStep = null;
 
+let spotCount = 0;
 //geoloc();
 
 let map = L.map('map').setView([51.505, -0.09], 13);
@@ -57,8 +60,14 @@ const displayGamePoints = () =>{
             //     iconAnchor: [25, 50],
             //     popupAnchor: [-3, -76],
             // });
-           L.marker(element.coord).addTo(markerGroup).bindPopup(element.nomPo + "<br>" + `spot n°${index +1}`).on('click',(e)=>{displaySpotInfo(index)});
+            if(currentStep != null){
+                L.marker(element.coord).addTo(markerGroup).bindPopup(element.nomPo + "<br>" + `spot n°${step + spotCount}`).on('click',(e)=>{displaySpotInfo(index)});
             displaySpotInfo(index);
+                spotCount ++;
+            }else{
+                L.marker(element.coord).addTo(markerGroup).bindPopup(element.nomPo + "<br>" + `spot n°${index+1}`).on('click',(e)=>{displaySpotInfo(index)});
+                displaySpotInfo(index);
+            }    
         })
         if (index > 0 && index == localStep - 1) {
             L.polyline([gameObject.positions[index-1].coord,gameObject.positions[index].coord], {color: 'orange'}).addTo(lineGroup);
@@ -83,6 +92,11 @@ const openGamePoints = () =>{
         displayActivity();
     }
 };
+
+//L'utilisateur valide 
+valideStep.addEventListener("click", (e)=>{
+    openGamePoints();
+});
 
 //On affiche la prochaine activité.
 const displayActivity = () => { 
@@ -118,6 +132,14 @@ const displayActivity = () => {
         }
 };
 
+//On vide l'espace d'affichage de enigmes.
+const cleanActivityZone = () => { 
+    choices.innerHTML = "";
+    indice.textContent = "";
+    gametype.textContent = "";
+    gameproblem.textContent = "";
+}
+
 //On active les listeners sur les boutons de réponse.
 const activListenerActivity = (localStep) => { 
             document.querySelectorAll('#choices .btn').forEach(item => {
@@ -132,15 +154,20 @@ const activListenerActivity = (localStep) => {
                         return;
                     }else{
                         actStep = null;
+                        //On vide l'espace d'affichage de enigmes.
+                        cleanActivityZone();
+                        alert("Pallié suivant débloqué, enjoy !!! ");
                         validGamePoints();
                     }
                   }else{//Si l'utilisateur donne une mauvaise réponse.
                     //On vérifie si il y a déja un indice qui est affiché.
-                    if(indice.target.textContent == ""){
+                    if(indice.textContent == ""){
                         let resultIndice =  confirm("Mauvaise réponse, voulez vous un petit indice ?");
                         if(resultIndice){
-                           indice.textContent = gameObject.positions[localStep].activites[actStep].indice;
+                           indice.textContent = 'Indice : '+gameObject.positions[localStep].activites[actStep].indice;
                         }
+                    }else{
+                        alert("Mauvais reponse, réessayez");
                     }
                   }
                 })
@@ -151,8 +178,7 @@ const activListenerActivity = (localStep) => {
 const verifyActivity = (response) => {
     //Todo on enregistre la réponse dans la bdd historique_activ en ajax. 
     let localStep = currentStep == null? step : currentStep;
-    let rep = gameObject.positions[localStep].activites[actStep].response;
-    
+    let rep = gameObject.positions[localStep].activites[actStep].reponse;
     return rep == response? true:false;
 };
 
@@ -179,22 +205,23 @@ const validGamePoints = () =>{
                 if(localStep == gameObject.positions.length){
                     alert("C'est la fin du parcour, bien joué, vous allez être redirigé vers l'acceuil");//todo Système de note parcour.
                     location.href = RACINE;
+                    return;
                 }
-            }else if(currentStep != null){
+                actStep = gameObject.positions[step].activites.length != 0? 0 : null;//Si on est sur un début de game.
+                document.querySelector("#nextStep").textContent = step  == gameObject.positions.length? "Arrivée" : step; 
+                console.log("===>On est sur un debut de game classique avec Step =>"+step);
+
+            }else{// if(currentStep != null)
                 if(localStep+1 == gameObject.positions.length){
                     alert("C'est la fin du parcour, bien joué, vous allez être redirigé vers l'acceuil");//todo Système de note parcour.
                     location.href = RACINE;
+                    return;
                 }
-            }else{
-                //On passe au point suivant, de l'avant dernier au dernier que l'on viens de valider ou du premier vers le deuxieme.
-                if(currentStep != null) {
-                    currentStep ++;
-                    actStep = gameObject.positions[currentStep].activites.length != 0? 0 : null; //Si on est sur un reprise et que la partie continue.
-                }else{
-                    actStep = gameObject.positions[state].activites.length != 0? 0 : null;//Si on est sur un début de game.
-                }
-                displayGamePoints();
+                currentStep ++;
+                actStep = gameObject.positions[currentStep].activites.length != 0? 0 : null; //Si on est sur un reprise et que la partie continue.
+                document.querySelector("#nextStep").textContent = currentStep + 1 == gameObject.positions.length? "Arrivée" : currentStep;
             }
+            displayGamePoints();
         });
         delete(game);
 };
@@ -251,13 +278,17 @@ const displaySpotInfo = (index) => {
 
         //On implémente la vue pour le démarrage du jeu.  
 
+        var today = new Date();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         if(currentStep == null){ //Si c'est un début de partie normal.
             document.querySelector("#nextStep").textContent = step + 1 == gameObject.positions.length? "Arrivée" : "Départ"; 
         }else{//si c'est une reprise de partie, on se base sur la taille du morceau de tableau que l'on reçois.
             document.querySelector("#nextStep").textContent = currentStep + 1 == gameObject.positions.length? "Arrivée" : step + 1; 
         } 
+        document.querySelector("#time").textContent = time;
         document.querySelector("#parcourName").textContent = gameObject.nomPa;
         document.querySelector("#parcourDescription").textContent = gameObject.descriptionPa;
+
         displayGamePoints();
 
         //Les activités
@@ -281,5 +312,8 @@ const displaySpotInfo = (index) => {
         //Si c'est le départ on lance le jeux du départ durectement, si non on à déja validé le jeu du step 
     }
 
-    //TODO C'EST ICI QUI A L'OBJET QUI CONTIENT LES INFOS DE LA GAME => gameObject (oui juste au dessus la )
-    //TODO REGARDER DANS MODIFIER POUR LA MAP, PAREIL
+    //TODO On enregistre la session pour dernier step mais quand on reprend, c'est la merde, pas possible de reprendre dernier step.
+    //TODO Afficher les parcour d'avant et pas que les n derniers?
+    //TODO quand c'est le dernier ne pas enregistrer
+
+//TODO pour les Reprise prendre le tuple avec la date la plus vieille.
