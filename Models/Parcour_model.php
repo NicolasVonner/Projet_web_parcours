@@ -32,4 +32,14 @@ namespace Projet_Web_parcours\Models;
            return isset($what)? Model::select(table: "historique_parcour", param_what: $what, param_where: $where):
            Model::select(table: "historique_parcour", param_where: $where);        
         }
+
+         //Supprime un historique parcour.
+        public static function deleteParcourHisto($where){ 
+           Model::delete("historique_parcour", params_where: $where);       
+        }
+        
+        //Insert un historique parcour.
+        public static function persistParcourHisto($historique){ 
+         Model::insert("historique_parcour", $historique->to_Array());       
+      }
     }

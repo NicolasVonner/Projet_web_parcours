@@ -9,6 +9,7 @@ use Projet_Web_parcours\Entities\Course;
 use Projet_Web_parcours\Entities\Point;
 use Projet_Web_parcours\Entities\Activity;
 use Projet_Web_parcours\Entities\Jeu_texte;
+use Projet_Web_parcours\Entities\HistoParcour;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
 use Projet_Web_parcours\Assets\enums\game\Type;
 use Projet_Web_parcours\Assets\settings\Settings;
@@ -38,8 +39,14 @@ require('Controllers/Main/Index_controller.php');
       $codePa = isset($_POST['codePa'])?$_POST['codePa']:null;
       //Si les deux codes sont nulles on return vers l'acceuil.
       if(!isset($hashcode) && !isset($codePa)) header("Location: /");
-      //On récupère le step si il y en à un.
-      $step = isset($_POST['step'])?$_POST['step']:null;
+      //On récupère le step si il y en à un en post ou via la session de jeu.
+      if(isset($_SESSION['game'])){
+        $step = $_SESSION['game'];
+      }elseif(isset($_POST['step'])){
+        $step = $_POST['step'];
+      }else{
+        $step = null;
+      }
       
       if(isset($step)){
         $gameParam = isset($hashcode)? $hashcode."_".$step : $codePa."_".$step;
@@ -175,4 +182,27 @@ require('Controllers/Main/Index_controller.php');
        }
        echo json_encode($GameObject);
    }
+   
+   //Modifie la session de jeu courante (pour le step), met à jour la BDD sur l'avancement des activités et du parcour en cour.
+   //Recois objet
+  function incrementStepSession(){
+    $game = json_decode($_POST["gameStep"]);
+    //On récupère le joueur.
+    $utilisateur = Utilisateur::existUser(array('username' => $_SESSION['username']), array('codeM'));
+    $codeUser = (int)$utilisateur->fetch(Fetch::_ASSOC)['codeM'];
+    //ON récupère le datetime
+    date_default_timezone_set('Europe/Paris');
+    $date = date('d-m-y h:i:s');
+    //On contruit l'array hydrateur histo param.
+    $historique_params = array('joueur'=>$codeUser,'parcour'=>(int)$game->parcour,'step'=>(int)$game->step,'position'=>(int)$game->position,'time'=>$date);
+    $historique = new HistoParcour($historique_params);
+    //On envoie l'historique
+    Parcour::persistParcourHisto($historique);
+    //On incrémante la sessoin de jeu.
+     if(isset($_POST['gameStep'])){
+      $_SESSION['game'] = (int)$game->step + 1;
+     }else{
+       die("Pas d'incrémentation du step possible, error");//Ne devrait pas arriver.
+     }
+  }
  }

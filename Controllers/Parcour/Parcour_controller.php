@@ -154,7 +154,7 @@ class Parcour_controller extends Index_controller{
           $course = json_decode($_POST["parcours"]);
 
           //toto on vérifie si il y à des éléments à supprimer.
-          if(isset($course->rem)) $this->deleteElements($course->rem);
+          if(isset($course->rem)) $this->deleteElements($course->rem, null);
           //TODO mettre à jour le parcour qui est une entités
           //On crée le parcour
           $course_params = array("codePa"=>htmlspecialchars($course->codePa),
@@ -227,7 +227,7 @@ class Parcour_controller extends Index_controller{
         }
         function deleteParcour(){
           // die("Nous voulons supprimer le parcour =>".$_POST['idDeleteParcour']);
-          $idparcour =isset($_POST['idDeleteParcour'])?$_POST['idDeleteParcour']:null;
+          $idparcour = isset($_POST['idDeleteParcour'])?$_POST['idDeleteParcour']:null;
           if(!isset($idparcour))return;
           //On vas chercher toutes les positions du parcour et on contruit l'objet avec true.
           
@@ -240,6 +240,7 @@ class Parcour_controller extends Index_controller{
             $deleteObj->codePo = $positionCodes['codePo'];
             array_push($deleteTab, $deleteObj);
           }
+          //On ajoute le code du parcour
           $this->deleteElements($deleteTab);
           Parcour::deleteParcour(array("codePa"=>$idparcour));
           unset($deleteObj);
@@ -262,23 +263,28 @@ class Parcour_controller extends Index_controller{
                   Activite::deleteActiviteHisto(array("activite"=>$activiteCode->codeAct));
                 }
                 //2 On récupère les id des activiteGame à supprimer.
-                $activites_request_game = Activite::existActivity(array('position' => $codePosition), what: array("activite", "activiteType"));
+                $activites_request_game = Activite::existActivity(array('position' => $codePosition), what: array("activite", "activiteType", "codeAct"));
                 $idsactivGame = $activites_request_game->fetchAll();
-                //3 On supprimer toutes les activités recensées.
+                //3 On supprime toutes les activités recensées.
                 Activite::deleteActivite(array("position"=>$codePosition));       
-                //4 On supprime les activiteGame.
+                //4 On supprime les activiteGame et les historique activité.
                 foreach($idsactivGame as $idactGame){
                   Activite::deleteActiviteGame($idactGame->activiteType, array("id"=>$idactGame->activite));
+                  Activite::deleteActiviteHisto(array("activite"=>$idactGame->codeAct));
                 }
-                //5 On supprime la position.
+                //5 On supprime les historique de parcour faisant reference à cette position.
+                Parcour::deleteParcourHisto(array("position"=>$codePosition));
+                //6 On supprime la position.
                 Position::deletePosition(array("codePo"=>$codePosition));
+                
               }else{
-                //On supprime activité par activité, dabord dans la tabla activité, puis dans la table respective de chaque jeu.
+                //On supprime activité par activité, dabord dans la table activité, puis dans la table respective de chaque jeu.
                 foreach($element->activites as $activite){
                   $codeActivite = $activite->id;
                   $nomActivite = $activite->nomAc;
                   Activite::deleteActivite(array("activite"=>$codeActivite));  
                   Activite::deleteActiviteGame($nomActivite, array("id"=>$codeActivite));
+                  Activite::deleteActiviteHisto(array("activite"=>$codeActivite));
                 }
               }
             }

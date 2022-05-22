@@ -61,7 +61,7 @@ map.on('click',function(e){
             "nomPo":placeName.toString(),
             "pays":country,
             "coord":coordTab,
-            //TODO Remplir ce tableau de cette position dans cette objet, quand on ajoute des activités.
+
             "activites": []
         };
         //markerList.push(markerData);
@@ -258,7 +258,6 @@ if(document.getElementsByClassName("main-panel")[0].id !== ""){
          $.ajax({url: RACINE+'Parcour/Parcour_controller/createObjetEdit/'+idParcour, async: false, success: function(course){
             var  parcourData = JSON.parse(course); 
             parcour = parcourData;
-            console.log("l'objet parcour que lon vas afficher pour modifier est  ==> "+parcour);
         }});  
     document.querySelector("#parcourName").textContent = parcour.nomPa;
     document.querySelector("#parcourDescription").textContent = parcour.descriptionPa;  

@@ -65,4 +65,9 @@ use \Exception;
         public static function deleteActiviteHisto($where){ 
             Model::delete("historique_activ", params_where: $where);       
          }
+
+        //Insert un historique.
+        public static function persistActiviteHisto($historique){ 
+            Model::insert("historique_activ", $historique->to_Array());       
+         }
     }

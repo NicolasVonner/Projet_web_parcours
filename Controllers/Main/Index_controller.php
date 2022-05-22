@@ -13,6 +13,11 @@ use Projet_Web_parcours\Assets\settings\Settings;
  class Index_controller{
 
     function rootDirection($utilisateur = null){
+        
+        //On supprime l'éventuel step sauvegardé
+        if(isset($_SESSION['game'])){
+            $_SESSION['game'] = null;
+        }
         //Si c'est une recherche de parcour de la par d'un user.
         $gameSearch = isset($_POST['gameSearch']) ? true: false;
 

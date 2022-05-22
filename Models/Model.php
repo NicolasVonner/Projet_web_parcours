@@ -177,7 +177,7 @@ class Model extends Connexion{
                         }              
                     }
                     $sql .= $values_prep;
-            // if($table == "activite") die("REQUEST ==>". $sql . "=======>".var_dump(array_values($params)));
+            //if($table == "historique_activ") die("REQUEST ==>". $sql . "=======>".var_dump(array_values($params)));
             self::launch($sql, array_values($params));
             if($table === "parcour" || $table === "position" || explode('_',$table)[0] === "jeu") return self::launch("SELECT LAST_INSERT_ID()");
         }
