@@ -14,7 +14,7 @@ class Model extends Connexion{
         //$table => String ou Array(membre => null, join => Join::INNER_JOIN->value, parcours => array(IdM, NomCreateur), historique_jeu => array(IdM, joueur))
         //$param_where => Array(name => nicolas, surname => nico, adress => 55 chemin des framboises)
         //$param_group => String, membre
-        public static function select($request = null, $table = "null", $param_what = "*", $param_where = null, $param_group = null, $param_having = null){
+        public static function select($request = null, $table = "null", $param_what = "*", $param_where = null, $param_group = null, $param_having = null, $param_order = null ){
             $array_prepare = [];
             if(isset($request)){
                 //TODO Peut etre faire une préparée quand meme.
@@ -74,7 +74,7 @@ class Model extends Connexion{
                             $sql .= $champ." ";  
                             $flag = true; 
                         }else{
-                            $sql .= "AND ".$champ." ";
+                            $sql .= " AND ".$champ." ";
                         }
                         if(is_array($values)){
                             foreach ($values as $val=> $operator) {
@@ -112,8 +112,16 @@ class Model extends Connexion{
                         $sql .= "AND ".$champ. " =? ";                             
                     } 
                 }
+                
+                //On concatène les order by
+                if(isset($param_order)){
+                    $sql .= " ORDER BY "; 
+                    foreach ($param_order as $key => $value) {
+                        $key != sizeof($param_order)-1? $sql .= "$value, " : $sql .= "$value ASC "; 
+                    }
+                }
             }
-            // if($table == 'parcour') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
+            //if($table == 'historique_parcour') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
             return self::launch($sql, $array_prepare);
         }
         

@@ -258,12 +258,13 @@ if(document.getElementsByClassName("main-panel")[0].id !== ""){
          $.ajax({url: RACINE+'Parcour/Parcour_controller/createObjetEdit/'+idParcour, async: false, success: function(course){
             var  parcourData = JSON.parse(course); 
             parcour = parcourData;
-        }});  
-    document.querySelector("#parcourName").textContent = parcour.nomPa;
-    document.querySelector("#parcourDescription").textContent = parcour.descriptionPa;  
-    //On affiche les positions que l'on à récupéré.
-   displayList();   
-    // console.log("PARCOUR ====>"+JSON.stringify(parcour)); 
+        }}).then(res => {
+        document.querySelector("#parcourName").textContent = parcour.nomPa;
+        document.querySelector("#parcourDescription").textContent = parcour.descriptionPa;  
+        //On affiche les positions que l'on à récupéré.
+        displayList();   
+        // console.log("PARCOUR ====>"+JSON.stringify(parcour)); 
+        });  
 }
 
 

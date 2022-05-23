@@ -28,9 +28,14 @@ namespace Projet_Web_parcours\Models;
         //Historique parcour
 
          //Vérifie si le parcour existe dans la base, et le renvoie.
-        public static function existParcourHisto($where, $what = null){ 
-           return isset($what)? Model::select(table: "historique_parcour", param_what: $what, param_where: $where):
-           Model::select(table: "historique_parcour", param_where: $where);        
+        public static function existParcourHisto($where, $what = null, $order = null){ 
+         if(isset($what) && isset($order) ){
+            return Model::select(table: "historique_parcour", param_what: $what, param_where: $where, param_order: $order);
+           }elseif(isset($what)){
+            return Model::select(table: "historique_parcour", param_what: $what, param_where: $where);
+           }else{
+            return Model::select(table: "historique_parcour", param_where: $where);   
+           }          
         }
 
          //Supprime un historique parcour.

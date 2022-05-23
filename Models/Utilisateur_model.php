@@ -25,8 +25,13 @@ use \Exception;
            Model::select(table: "membre", param_where: $where);        
         }
 
-        //Ajoute un utilisateur dans la base.
+        //Ajoute un utilisateur.
         public static function persistUser($user){  
            Model::insert("membre", $user->to_Array());          
+        }
+
+        //Met à jour un utilisateur.
+        public static function updateUser($what, $where){ 
+           Model::update(table: "membre", params_what: $what, params_where: $where);       
         }
     }

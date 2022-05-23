@@ -15,7 +15,7 @@ let currentStep = null;
 let actStep = null;
 
 let spotCount = 0;
-//geoloc();
+// geoloc();
 
 let map = L.map('map').setView([51.505, -0.09], 13);
 L.tileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${accessToken}`, {

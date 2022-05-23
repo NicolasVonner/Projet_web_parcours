@@ -9,6 +9,7 @@ use Projet_Web_parcours\Models\Utilisateur;
 use Projet_Web_parcours\Assets\enums\request\Join;
 use Projet_Web_parcours\Assets\enums\request\Operator;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
+use Projet_Web_parcours\Assets\settings\Settings;
 
 //TODO mettre un namespace et appeler la classe par cette intermediaire
 //problème avec l'index.
@@ -19,18 +20,42 @@ require('Controllers/Main/Index_controller.php');
 
  class Authentification_controller extends Index_controller {
 
-      //Appel le formulaire d'authentification
+      //Appel le formulaire d'authentification.
      function displaySignin($errors = null){
       $this->is_session_started()? 
       header("Location: /") :
       require('Views/Authentification/signin_view.php');
      }
 
-     //Appel le formulaire d'inscription
+     //Appel le formulaire d'inscription.
      function displaySignup($errors = null){
       $this->is_session_started()? 
       header("Location: /") :
       require('Views/Authentification/signup_view.php');
+     }
+
+   //Appel le formulaire de récupération du mot de passe.
+     function displayForgot($errors = null){
+      // $this->is_session_started()? 
+      // header("Location: /") :
+      require('Views/Authentification/forgot_view.php');
+     }
+
+      //Appel le formulaire de changement de mot de passe.
+     function displayPassChange($token, $errors = null){
+      // $this->is_session_started()? 
+      // header("Location: /") :
+      //Si on reçois un token de récupération, on vérifie si il existe dans la base.
+      if(isset($token[0]) && $token[0] != ''){
+         $token = $token[0];
+         $utilisateur_stmt = Utilisateur::existUser(array('token' => $token), array('adresseMail'));
+         $email = $utilisateur_stmt->fetch(Fetch::_ASSOC)['adresseMail'];
+       
+         if($email){
+            //die("EMail qui vas etre implanté sur la vue =>".$email);
+            require('Views/Authentification/passChange_view.php');
+         }
+      }
      }
 
    //Vérifie si l'inscription de l'utilidateur est conforme
@@ -134,6 +159,56 @@ require('Controllers/Main/Index_controller.php');
          //die( "Le resultat final est =>".var_dump($correspondance_array->fetchObject('Projet_Web_parcours\Entities\User', )));  
 
          unset($session);
+   }
+
+   //Vérification du reset du mot de passe, envoie du mail de changement.
+   function verify_forgot(){ //todo vérifier que c'est bien une adresse mail -> js pour les erreurs en temps réel ?.
+      if(isset($_POST['email']) && $_POST['email'] != ''){
+         $mail = $_POST['email'];
+         $utilisateur = null;
+         //On vérifie que l'email est un bon email.
+         $correspondance_array = Utilisateur::existUser(array('adresseMail' => $mail));
+         if($correspondance_array->rowCount() != 0){
+            $utilisateur_params = $correspondance_array->fetch(Fetch::_ASSOC);
+            $utilisateur = new User($utilisateur_params);
+         }else{ //Mauvais email.
+            $this->displayForgot("L'email entré ne correspond à aucun utilisateur.");
+         }
+         $token = uniqid();
+         // $url = Settings::RACINE."Authentification/Authentification_controller/displayPassChange?token=$token";
+         $url = Settings::RACINE."Authentification/Authentification_controller/displayPassChange/$token";
+         // $message = "Bonjour".$utilisateur->getPrenomM().", voici votre lien pour la réinitialisation de votre mot de passe :". $url .".  Bonne continuation.  L'équipe de fastadventure.";
+         $message = "Bonjour, voici votre lien pour la réinitialisation de votre mot de passe : $url ";
+         $headers = 'Content-type: text/plain; charset="utf-8"'." ";
+         if(mail($mail, 'TeamFastaventure : Mot de passe oublié', $message, $headers)){
+            Utilisateur::updateUser(array('token' =>$token), array('adresseMail' => $mail));
+            echo 'Mail envoyé. Veuillez consulter vos mails pour récupérer votre mot de passe. ';
+            header("Location: /");
+         }else{
+            die("Une erreure est survenue ...");
+         }
+      }else{
+         $this->displayForgot("Veuillez saisir, une adresse mail");
+      }
+   }
+
+   //Vérification du changement de mot de passe.
+   function verify_change(){
+      if(isset($_POST['passwordConfirm']) && isset($_POST['passwordConfirm']) && isset($_POST['email']) && $_POST['passwordConfirm'] != '' && $_POST['passwordConfirm'] != ''){
+         $password = $_POST['password'];
+         $passwordConfirm = $_POST['passwordConfirm'];
+         $email = $_POST['email'];
+          if($password == $passwordConfirm){
+            $password = password_hash(htmlspecialchars($this->removeAccent($password)),PASSWORD_DEFAULT);
+            Utilisateur::updateUser(array('password' => $password,'token' => NULL), array('adresseMail' => $email));
+            echo 'Mot de passe modifié avec succès';
+            header("Location: /Authentification/Authentification_controller/displaySignin");
+          }else{
+            $this->displayPassChange("Confirmation échouée. Vouis avez saisis des mots de passe différents");
+          }
+      }else {
+         $this->displayPassChange("Vous devez saisir un mot de passe.");
+      }
    }
 
       public function convertObj($obj): string{

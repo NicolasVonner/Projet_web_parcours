@@ -41,7 +41,7 @@ spl_autoload_register(function ($class_name) {
     }
     return false;
 });
-//die("===>".$_GET['p']);
+// die("===>".$_GET['p']);
 //TODO A modifier, ici on met les valeurs à null si on désire taper sur la racine.
 if(sizeof(explode('/',$_GET['p'])) == 1){
     $params = ["", null, null, null, null, null];

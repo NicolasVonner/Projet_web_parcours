@@ -89,7 +89,7 @@ require('Controllers/Main/Index_controller.php');
         $nombrePoints = Position::existPosition(array("parcour"=>$parcour->getCodePa()), array("COUNT(*) as points"));
         $nombrePoints = (int)$nombrePoints->fetch(Fetch::_ASSOC)['points'];
         //On vérifie si le user est déja en game.
-        $histo_request = Parcour::existParcourHisto(array("parcour"=>$parcour->getCodePa(),"joueur"=>$user), array('step', 'time'));
+        $histo_request = Parcour::existParcourHisto(array("parcour"=>$parcour->getCodePa(),"joueur"=>$user), array('step', 'time'), array('time'));
         $histo_array= $histo_request->fetchAll();
         //die('===>Nombre points :'.$nombrePoints.'====> step detected'.(int)end($histo_array)->step);
         if($histo_array != false && $nombrePoints != (int)end($histo_array)->step){
@@ -192,15 +192,16 @@ require('Controllers/Main/Index_controller.php');
     $codeUser = (int)$utilisateur->fetch(Fetch::_ASSOC)['codeM'];
     //ON récupère le datetime
     date_default_timezone_set('Europe/Paris');
-    $date = date('d-m-y h:i:s');
+    $date = date('Y-m-d H:i:s');
     //On contruit l'array hydrateur histo param.
     $historique_params = array('joueur'=>$codeUser,'parcour'=>(int)$game->parcour,'step'=>(int)$game->step,'position'=>(int)$game->position,'time'=>$date);
     $historique = new HistoParcour($historique_params);
     //On envoie l'historique
     Parcour::persistParcourHisto($historique);
+    // die("======> Le step session est =>".(int)$game->step);
     //On incrémante la session de jeu.
      if(isset($_POST['gameStep'])){
-      $_SESSION['game'] = (int)$game->step + 1;
+      $_SESSION['game'] = (int)$game->step;
      }else{
        die("Pas d'incrémentation du step possible, error");//Ne devrait pas arriver.
      }

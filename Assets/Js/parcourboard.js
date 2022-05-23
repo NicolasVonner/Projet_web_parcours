@@ -73,6 +73,7 @@ for (i = 0; i < x.children.length; i++) {
     //Le boutton Edit de chaque ligne du tableau de parcour.
     if(x.children[i].getElementsByTagName('button')[1] != null){
         x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
+            console.log("Êtes vous sur de vouloir modifier le parcour "+e.target.id+" ?");
                 let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+e.target.id+" ?");
                 if(editInvit){  
                     sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: e.target.id});
