@@ -1,7 +1,7 @@
 
 //SEARCHBAR listener.
 document.getElementById("searchbar").addEventListener("keyup", (e)=>{
-    search_parcour(e.target.value) ;
+    search_parcour(e.currentTarget.value) ;
 })
 
 //REDIMENTIONNEMENT du contenu des bouttons.
@@ -43,12 +43,12 @@ function verifySize(){
 let x =  document.getElementById('list');
 for (i = 0; i < x.children.length; i++) { 
     //Le boutton PLay de chaque ligne du tableau de parcour.
-    x.children[i].getElementsByTagName('button')[0].addEventListener('click', (e)=>{
-        if(e.target.id == ""){//Si le non membre veux jouer à un parcour du board
+    x.children[i].getElementsByTagName('button')[0].addEventListener('click', (e)=> {
+        if(e.currentTarget.id == ""){//Si le non membre veux jouer à un parcour du board
             let singupInvit = confirm("Seul les membres peuvent lancer un parcour, voulez vous être rediriger vers le menu d'authentification?");
             singupInvit? location.href = RACINE+'Authentification/Authentification_controller/displaySignin' : false;
         }else{//Si le membre veux jouer à un parcour du board
-                var codePa = "codePa_"+e.target.id;
+                var codePa = "codePa_" + e.currentTarget.id;
                 $.ajax({url: RACINE+'Game/Game_controller/verifyParcourStep/'+codePa, success: function(histo){
                     console.log("=====>"+histo);
                     if(histo == "non exist"){
@@ -73,11 +73,11 @@ for (i = 0; i < x.children.length; i++) {
     //Le boutton Edit de chaque ligne du tableau de parcour.
     if(x.children[i].getElementsByTagName('button')[1] != null){
         x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
-            console.log("Êtes vous sur de vouloir modifier le parcour "+e.target.id+" ?");
-                let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+e.target.id+" ?");
-                if(editInvit){  
-                    sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: e.target.id});
-                }
+            let id = e.currentTarget.id;
+            let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+id+" ?");
+            if(editInvit){  
+                sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: id});
+            }
         });
     }    
 }
