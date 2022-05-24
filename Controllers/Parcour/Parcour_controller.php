@@ -9,6 +9,7 @@ use Projet_Web_parcours\Entities\Course;
 use Projet_Web_parcours\Entities\Point;
 use Projet_Web_parcours\Entities\Activity;
 use Projet_Web_parcours\Entities\Jeu_texte;
+use Projet_Web_parcours\Entities\HistoParcour;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
 use Projet_Web_parcours\Assets\enums\game\Type;
 use Projet_Web_parcours\Assets\settings\Settings;
@@ -53,7 +54,7 @@ class Parcour_controller extends Index_controller{
            $course = $parcour;
            //On vas chercher les positions du parcour.
            $course->positions = array();
-           $position_request = Position::existPosition(array('parcour' => $course->codePa));
+           $position_request = Position::existPosition(array('parcour' => $course->codePa), order: array('codePo'));
 
           while($point = $position_request->fetch(Fetch::_ASSOC)){
              //On crée la position.
@@ -155,7 +156,6 @@ class Parcour_controller extends Index_controller{
 
           //toto on vérifie si il y à des éléments à supprimer.
           if(isset($course->rem)) $this->deleteElements($course->rem, null);
-          //TODO mettre à jour le parcour qui est une entités
           //On crée le parcour
           $course_params = array("codePa"=>htmlspecialchars($course->codePa),
             "createur"=>htmlspecialchars($course->createur),
@@ -166,9 +166,18 @@ class Parcour_controller extends Index_controller{
             "hashCode"=>htmlspecialchars($course->hashCode),
           ); 
           $parcour = new Course($course_params);  
-          //TODO ON met à jour le parcour.
+          //On met à jour le parcour.
           Parcour::updateParcour($parcour,array("codePa" => $parcour->getCodePa()));
-
+          //On bloque l'historique pour ce parcour pour éviter les reprises qui ne fonctionnent pas.
+            //On récupère le datetime.
+          date_default_timezone_set('Europe/Paris');
+          $date = date('Y-m-d H:i:s');
+            //On contruit l'array hydrateur histo param.
+          $historique_params = array('joueur'=>htmlspecialchars($course->createur),'parcour'=>htmlspecialchars($course->codePa),'step'=>0,'position'=>NULL,'time'=>htmlspecialchars($date));
+          $historique = new HistoParcour($historique_params);
+            //On envoie l'historique de rupture.
+          Parcour::persistParcourHisto($historique);
+          //On met à jour les points.
           foreach($course->positions as $point){ 
             //TODO est ce que la position est nouvelle ou pas
             isset($point->parcour)?
@@ -233,7 +242,7 @@ class Parcour_controller extends Index_controller{
           
           $deleteTab = array();
           //On vas chercher toutes les positions tu parcour.
-          $position_request = Position::existPosition(array("parcour"=>$idparcour), array('codePo'));
+          $position_request = Position::existPosition(array("parcour"=>$idparcour), array('codePo'), order: array('codePo'));
           while ($positionCodes = $position_request->fetch(Fetch::_ASSOC)){
             $deleteObj = new stdClass();
             $deleteObj->delete = true;
@@ -289,7 +298,6 @@ class Parcour_controller extends Index_controller{
               }
             }
           }
-          //TODO Modifier le crud pour pouvoir suprimer les éléments et itérer sur l'objet -> Model + Model spécialisés.
         }
 
     function buildListActivity(){       

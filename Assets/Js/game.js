@@ -4,6 +4,7 @@ let gameproblem = document.getElementById("gameproblem");
 let choices = document.getElementById("choices");
 let indice = document.getElementById("indice");
 let valideStep = document.getElementById("valideStep");
+let quitGame = document.getElementById("quitGame");
 
 
 let accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
@@ -100,6 +101,8 @@ valideStep.addEventListener("click", (e)=>{
 
 //On affiche la prochaine activité.
 const displayActivity = () => { 
+    //On nettoie la zone avant d'afficher à nouveau, notement pour les indices.
+    cleanActivityZone();
     //Element qui vas populer le front.
     let out  = [];
     //Compteur pour l'affichage d'un séparateur.
@@ -140,6 +143,15 @@ const cleanActivityZone = () => {
     gameproblem.textContent = "";
 }
 
+//On vide l'espace d'affichage de enigmes.
+const quitParcour = () => { 
+    let confirmQuit =  confirm("Voulez vous vraiment stopper le parcour en cour ? (Vous pourrez Toujours reprendre votre chemin au même stade plus tard)");
+    if(confirmQuit){
+        location.href = RACINE;
+    }
+}
+quitGame.addEventListener("click",quitParcour);
+
 //On active les listeners sur les boutons de réponse.
 const activListenerActivity = (localStep) => { 
             document.querySelectorAll('#choices .btn').forEach(item => {
@@ -161,7 +173,7 @@ const activListenerActivity = (localStep) => {
                     }
                   }else{//Si l'utilisateur donne une mauvaise réponse.
                     //On vérifie si il y a déja un indice qui est affiché.
-                    if(indice.textContent == ""){
+                    if(indice.textContent == "" && gameObject.positions[localStep].activites[actStep].indice != ""){
                         let resultIndice =  confirm("Mauvaise réponse, voulez vous un petit indice ?");
                         if(resultIndice){
                            indice.textContent = 'Indice : '+gameObject.positions[localStep].activites[actStep].indice;

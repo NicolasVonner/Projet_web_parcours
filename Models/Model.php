@@ -121,7 +121,7 @@ class Model extends Connexion{
                     }
                 }
             }
-            //if($table == 'historique_parcour') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
+            //if($table == 'position') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
             return self::launch($sql, $array_prepare);
         }
         

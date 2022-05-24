@@ -20,3 +20,7 @@
 .map-bg {
     background: linear-gradient(rgb(0, 200, 255), rgba(0, 200, 255,0.5));
 }
+
+#valideStep{
+    margin-bottom: 10%;
+}

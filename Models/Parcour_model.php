@@ -10,11 +10,18 @@ namespace Projet_Web_parcours\Models;
         }
 
         //Vérifie si le parcour existe dans la base, et le renvoie.
-        public static function existParcour($where, $what = null){ 
-           return isset($what)? Model::select(table: "parcour", param_what: $what, param_where: $where):
-           Model::select(table: "parcour", param_where: $where);        
+        public static function existParcour($where, $what = null, $order = null){       
+           if(isset($what) && isset($order) ){
+            return Model::select(table: "parcour", param_what: $what, param_where: $where, param_order: $order);
+           }elseif(isset($what)){
+            return Model::select(table: "parcour", param_what: $what, param_where: $where);
+           }elseif(isset($order)){
+            return Model::select(table: "position", param_what: $what, param_order: $order);
+           }else{
+            return Model::select(table: "parcour", param_where: $where);   
+           }   
         }
-
+        
         //Met à jour un parcour.
         public static function updateParcour($what, $where){ 
            Model::update(table: "parcour", params_what: $what->to_Array(), params_where: $where);       
@@ -27,12 +34,14 @@ namespace Projet_Web_parcours\Models;
 
         //Historique parcour
 
-         //Vérifie si le parcour existe dans la base, et le renvoie.
+        //Vérifie si le parcour existe dans la base, et le renvoie.
         public static function existParcourHisto($where, $what = null, $order = null){ 
          if(isset($what) && isset($order) ){
             return Model::select(table: "historique_parcour", param_what: $what, param_where: $where, param_order: $order);
            }elseif(isset($what)){
             return Model::select(table: "historique_parcour", param_what: $what, param_where: $where);
+           }elseif(isset($order)){
+            return Model::select(table: "historique_parcour", param_what: $what, param_order: $order);
            }else{
             return Model::select(table: "historique_parcour", param_where: $where);   
            }          

@@ -89,10 +89,10 @@ require('Controllers/Main/Index_controller.php');
         $nombrePoints = Position::existPosition(array("parcour"=>$parcour->getCodePa()), array("COUNT(*) as points"));
         $nombrePoints = (int)$nombrePoints->fetch(Fetch::_ASSOC)['points'];
         //On vérifie si le user est déja en game.
-        $histo_request = Parcour::existParcourHisto(array("parcour"=>$parcour->getCodePa(),"joueur"=>$user), array('step', 'time'), array('time'));
+        $histo_request = Parcour::existParcourHisto(array("parcour"=>$parcour->getCodePa(),"joueur"=>$user), array('step', 'position', 'time'), array('time'));
         $histo_array= $histo_request->fetchAll();
-        //die('===>Nombre points :'.$nombrePoints.'====> step detected'.(int)end($histo_array)->step);
-        if($histo_array != false && $nombrePoints != (int)end($histo_array)->step){
+        //die('===>Nombre points :'.$nombrePoints.'====> step detected'.(int)end($histo_array)->step.'====> position detected'.(int)end($histo_array)->position);
+        if($histo_array != false && $nombrePoints != (int)end($histo_array)->step && (int)end($histo_array)->step != 0){
           $histo = new stdClass();
           $step = (int)end($histo_array)->step;
           $time = end($histo_array)->time;
@@ -101,7 +101,7 @@ require('Controllers/Main/Index_controller.php');
           $histo->step = $step;
           $histo->time = $time;         
           //On vas chercher la $step ième position.
-          $position_request = Position::existPosition(array("parcour"=>$parcour->getCodePa()));
+          $position_request = Position::existPosition(array("parcour"=>$parcour->getCodePa()), order: array('codePo'));
           $point = $position_request->fetchAll();
           $position = new Point((array)$point[$step - 1]);
           $histo->nomPo = $position->getNomPo(); 
@@ -144,7 +144,7 @@ require('Controllers/Main/Index_controller.php');
         foreach($parcour_array as $parcourAttribute => $value)
             $GameObject->$parcourAttribute = $value;
         //On vas chercher toutes les positions du parcour.
-        $position_request = Position::existPosition(array("parcour"=>$GameObject->codePa));
+        $position_request = Position::existPosition(array("parcour"=>$GameObject->codePa), order: array('codePo'));
         $points =  isset($step)?array_slice($position_request->fetchAll(), $step-1):$position_request->fetchAll();
       //  while($point = $position_request->fetch(Fetch::_ASSOC)){
         foreach($points as $point){
@@ -190,7 +190,7 @@ require('Controllers/Main/Index_controller.php');
     //On récupère le joueur.
     $utilisateur = Utilisateur::existUser(array('username' => $_SESSION['username']), array('codeM'));
     $codeUser = (int)$utilisateur->fetch(Fetch::_ASSOC)['codeM'];
-    //ON récupère le datetime
+    //On récupère le datetime
     date_default_timezone_set('Europe/Paris');
     $date = date('Y-m-d H:i:s');
     //On contruit l'array hydrateur histo param.

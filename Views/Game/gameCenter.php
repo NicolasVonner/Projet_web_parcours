@@ -18,6 +18,11 @@
       </div>
   </div>
   <div class="row">
+    <div class="text-center">
+        <div class="col"><button type="button" class="btn btn-primary" id="valideStep" >Valide step</button></div>
+    </div>
+  </div>
+  <div class="row">
       <div class="col grid-margin stretch-card">
         <div class="card">
             <div class="card-body text-center">
@@ -47,7 +52,7 @@
         <div class="col grid-margin stretch-card">
 
             <div class="text-center">
-            <div class="col"><button type="button" class="btn btn-primary" id="valideStep" >Valide step</button></div>
+            <div class="col"><button type="button" class="btn btn-danger" id="quitGame" >Quit</button></div>
             </div>
         </div>
   </div>
