@@ -23,12 +23,14 @@
                     <button type="submit" class="btn btn-primary btn-block enter-btn">Confirm</button>
                   </div>
                 </form>
-                <?php
-                  //Affiche les oublies.
-                  if(isset($errors) && !empty($errors)){
-                    echo '<p style="color:darkred;font-style: italic;">'.$errors.'</p>';
-                }
-                ?>
+                <p style="color:darkred;font-style: italic;" id="err">
+                  <?php
+                    //Affiche les oublies.
+                    if(isset($errors) && !empty($errors)){
+                      echo $errors;
+                    }
+                  ?>
+                </p>
               </div>
             </div>
           </div>

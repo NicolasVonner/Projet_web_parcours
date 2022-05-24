@@ -9,6 +9,7 @@
     <!-- plugins:css -->
     <link rel="stylesheet" href= <?php echo Settings::RACINE."template/assets/vendors/mdi/css/materialdesignicons.min.css"?>>
     <link rel="stylesheet" href= <?php echo Settings::RACINE."template/assets/css/style.css"?>>
+    <link rel="stylesheet" href= <?php echo Settings::RACINE."Assets/Css/navbar.css"?>>
     <!-- End layout styles -->
     <link rel="shortcut icon" href= <?php echo Settings::RACINE."template/assets/images/favicon.png"?>/>
     <style>   

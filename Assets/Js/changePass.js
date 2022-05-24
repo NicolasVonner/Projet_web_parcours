@@ -3,22 +3,28 @@ const BORDER_FOCUS = "darkorange";
 const BORDER_ERROR = "red";
 const BORDER_OK = "#2c2e33";
 
-//PASSWORD listener
+let errorMsg = document.querySelector('#err');
+
+//PASSWORD listener.
 //TODO Faire en sorte que les entrées espace ne passent pas, désactiver la touche space.
 document.getElementById("password").addEventListener("keyup", (e)=>{
     e.target.value != undefined ? managePasswordInput(e.target.value, 0) : console.log("Password form undefined");
     
 });
 
-//PASSWORD CONFIRM listener
+//PASSWORD CONFIRM listener.
 //TODO Faire en sorte que les entrées espace ne passent pas, désactiver la touche space.
 document.getElementById("passwordConfirm").addEventListener("keyup", (e)=>{
     e.target.value != undefined ? managePasswordInput(e.target.value, 1) : console.log("Password form undefined");
-    
 });
+//todo afficher avec js en temps réel si les mots de passe ne sont pas les mêmes.
+
+//ERROR MESSAGE cleanner
+setInterval(()=> errorMsg.innerHTML = "", 4000);
 
 
-//#Functions
+
+//#Functions.
 function managePasswordInput(value, wich){
     let id = wich == 0?'password':'passwordConfirm';
     let idError = wich == 0?'password-error':'password-error_confirm';

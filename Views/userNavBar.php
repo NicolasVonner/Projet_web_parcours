@@ -102,5 +102,5 @@ use Projet_Web_parcours\Assets\settings\Settings;
                     </ul>
                   </div>
             </nav>        
-            <script src="/Assets/Js/navbar.js"></script>'; 
+            <script src="'.Settings::RACINE.'/Assets/Js/navbar.js"></script>'; 
 ?>      

@@ -20,7 +20,7 @@ require('Controllers/Main/Index_controller.php');
 
  class Authentification_controller extends Index_controller {
 
-      //Appel le formulaire d'authentification.
+     //Appel le formulaire d'authentification.
      function displaySignin($errors = null){
       $this->is_session_started()? 
       header("Location: /") :
@@ -34,17 +34,21 @@ require('Controllers/Main/Index_controller.php');
       require('Views/Authentification/signup_view.php');
      }
 
-   //Appel le formulaire de récupération du mot de passe.
+     //Appel le formulaire de récupération du mot de passe.
      function displayForgot($errors = null){
-      // $this->is_session_started()? 
-      // header("Location: /") :
       require('Views/Authentification/forgot_view.php');
      }
 
-      //Appel le formulaire de changement de mot de passe.
+     //Appel le formulaire de changement de mot de passe.
      function displayPassChange($token, $errors = null){
-      // $this->is_session_started()? 
-      // header("Location: /") :
+      //   die("======> Errors".var_dump($errors));
+      if(isset($errors)){
+         $email = $errors->email;
+         $errors = $errors->msg;
+         require('Views/Authentification/passChange_view.php');
+         return;
+
+      }
       //Si on reçois un token de récupération, on vérifie si il existe dans la base.
       if(isset($token[0]) && $token[0] != ''){
          $token = $token[0];
@@ -52,7 +56,6 @@ require('Controllers/Main/Index_controller.php');
          $email = $utilisateur_stmt->fetch(Fetch::_ASSOC)['adresseMail'];
        
          if($email){
-            //die("EMail qui vas etre implanté sur la vue =>".$email);
             require('Views/Authentification/passChange_view.php');
          }
       }
@@ -174,15 +177,15 @@ require('Controllers/Main/Index_controller.php');
          }else{ //Mauvais email.
             $this->displayForgot("L'email entré ne correspond à aucun utilisateur.");
          }
+         //On crée le token de récupération.
          $token = uniqid();
          // $url = Settings::RACINE."Authentification/Authentification_controller/displayPassChange?token=$token";
          $url = Settings::RACINE."Authentification/Authentification_controller/displayPassChange/$token";
-         // $message = "Bonjour".$utilisateur->getPrenomM().", voici votre lien pour la réinitialisation de votre mot de passe :". $url .".  Bonne continuation.  L'équipe de fastadventure.";
-         $message = "Bonjour, voici votre lien pour la réinitialisation de votre mot de passe : $url ";
+         $message = "Bonjour".$utilisateur->getPrenomM().",\n Veuillez cliquer sur le lien ci-dessous pour réinitialiser votre mot de passe : $url .\n Bonne continuation. \n L'équipe de fastadventure.";
          $headers = 'Content-type: text/plain; charset="utf-8"'." ";
-         if(mail($mail, 'TeamFastaventure : Mot de passe oublié', $message, $headers)){
+         if(mail($mail, 'TeamFastaventure : Mot de passe oublie', $message, $headers)){
             Utilisateur::updateUser(array('token' =>$token), array('adresseMail' => $mail));
-            echo 'Mail envoyé. Veuillez consulter vos mails pour récupérer votre mot de passe. ';
+            echo 'Mail envoyé. Veuillez consulter vos mails pour récupérer votre mot de passe. ';//todo mettre un set time pour afficher l'écho.
             header("Location: /");
          }else{
             die("Une erreure est survenue ...");
@@ -194,20 +197,51 @@ require('Controllers/Main/Index_controller.php');
 
    //Vérification du changement de mot de passe.
    function verify_change(){
-      if(isset($_POST['passwordConfirm']) && isset($_POST['passwordConfirm']) && isset($_POST['email']) && $_POST['passwordConfirm'] != '' && $_POST['passwordConfirm'] != ''){
+      //Si on reçois bine l'email.
+      if( isset($_POST['email'])){
+         //On vérifie si les mots de passe existe.
+         if(!isset($_POST['passwordConfirm']) || !isset($_POST['password'])){
+            //On crée l'ojet d'erreur.
+            $erros_obj = new stdClass();
+            $erros_obj->msg = "Vous devez saisir un mot de passe.";
+            $erros_obj->email =  $_POST['email'];
+            $this->displayPassChange(null, errors: $erros_obj);
+            // unset($erros_obj);
+            return;
+         } 
+         //On vérifie si ils ne sont pas vide.
+         if($_POST['passwordConfirm'] == '' || $_POST['password'] == ''){
+            //On crée l'ojet d'erreur.
+            $erros_obj = new stdClass();
+            $erros_obj->msg = "Vous devez saisir un mot de passe.";
+            $erros_obj->email =  $_POST['email'];
+            $this->displayPassChange(null, errors: $erros_obj);
+            // unset($erros_obj);
+            return;
+            
+         } 
+
+         //On récupère les éléments
          $password = $_POST['password'];
          $passwordConfirm = $_POST['passwordConfirm'];
-         $email = $_POST['email'];
+         $email = htmlspecialchars($this->removeAccent($_POST['email']));
+         //On vérifie si les deux mots de passe 
           if($password == $passwordConfirm){
             $password = password_hash(htmlspecialchars($this->removeAccent($password)),PASSWORD_DEFAULT);
+            //On met à jour l'utilisateur par rapport à son email.
             Utilisateur::updateUser(array('password' => $password,'token' => NULL), array('adresseMail' => $email));
             echo 'Mot de passe modifié avec succès';
             header("Location: /Authentification/Authentification_controller/displaySignin");
           }else{
-            $this->displayPassChange("Confirmation échouée. Vouis avez saisis des mots de passe différents");
+             //On crée l'ojet d'erreur.
+             $erros_obj = new stdClass();
+             $erros_obj->msg = "Confirmation échouée. Les mots de passe ne sont pas identique";
+             $erros_obj->email =  $email;
+            $this->displayPassChange(null, errors: $erros_obj);
+            unset($erros_obj);
           }
       }else {
-         $this->displayPassChange("Vous devez saisir un mot de passe.");
+         die("Error -> Il n'y à pas d'email utilisateur");
       }
    }
 
