@@ -1,5 +1,6 @@
 let searchGameButton = document.getElementById('searchGame');
 let searchHashGameButton = document.getElementById('searchHashGame');
+let settingsUserButton = document.getElementById('settings');
 //On appel la fonction pour la premiere fois
 verifySize();
 window.addEventListener('resize', verifySize);
@@ -12,13 +13,16 @@ function verifySize(){
     }
 }
 //Listener mode de recherche de parcour.
-if(searchGameButton!= null && searchHashGameButton != null) {
+if(searchGameButton != null && searchHashGameButton != null ) {
     searchGameButton.addEventListener('click', (e)=>{     
         sendData(RACINE, {gameSearch: 'true'});    
-  })
-  searchHashGameButton.addEventListener('click', (e)=>{     
-    location.href = RACINE+"Game/Game_controller/displayHashForm";  
-})
+    })
+    searchHashGameButton.addEventListener('click', (e)=>{     
+        location.href = RACINE+"Game/Game_controller/displayHashForm";  
+    })
+    settingsUserButton.addEventListener('click',(e)=>{
+        location.href = RACINE+"Settings/Settings_controller/displaySettings";
+    })
 }
 
 //TODO modifier la fonction et les envoies.
