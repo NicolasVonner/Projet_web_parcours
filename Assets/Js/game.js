@@ -16,6 +16,7 @@ let currentStep = null;
 let actStep = null;
 
 let spotCount = 0;
+
 geoloc();
 
 let map = L.map('map').setView([51.505, -0.09], 13);

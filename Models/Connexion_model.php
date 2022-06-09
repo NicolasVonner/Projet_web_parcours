@@ -11,7 +11,7 @@ use \PDOException;
         private $pass;
         private $db;
         private static $connec;
-        private function __construct($db ='test2', $login ='root', $pass=''){
+        private function __construct($db ='fastadventure_cnam', $login ='271524', $pass='joseAimeLECN@N'){
             $this->login = $login;
             $this->pass = $pass;
             $this->db = $db;
@@ -23,7 +23,7 @@ use \PDOException;
             try
             {
                 self::$connec = new PDO(
-                                'mysql:host=localhost;dbname='.$this->db.';charset=utf8mb4', 
+                                'mysql:host=mysql-fastadventure.alwaysdata.net;dbname='.$this->db.';charset=utf8mb4', 
                                 $this->login, 
                                 $this->pass
                 );

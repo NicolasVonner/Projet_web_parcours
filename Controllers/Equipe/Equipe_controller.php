@@ -5,86 +5,48 @@
 use Projet_Web_parcours\Entities\User;
 use Projet_Web_parcours\Entities\Session;
 use Projet_Web_parcours\Controllers\Game\Game; //TODO éclaircir pour les vues 
-use Projet_Web_parcours\Models\Utilisateur;
+use Projet_Web_parcours\Models\Equipe;
 use Projet_Web_parcours\Assets\enums\request\Join;
 use Projet_Web_parcours\Assets\enums\request\Operator;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
 use Projet_Web_parcours\Assets\settings\Settings;
 
-//TODO mettre un namespace et appeler la classe par cette intermediaire
-//problème avec l'index.
+
 //use Projet_Web_parcours\Controllers\Index_controller;
 require('Controllers/Main/Index_controller.php');
 
+ class Equipe_controller extends Index_controller {
 
+     
 
- class Authentification_controller extends Index_controller {
-
-     //Appel le formulaire d'authentification.
-     function displaySignin($errors = null){
+     //Appel le formulaire de création d'équipe.
+     function displayEquipe($errors = null){   
       $this->is_session_started()? 
-      header("Location: ".Settings::RACINE) :
-      require('Views/Authentification/signin_view.php');
+      require('Views/Equipe/equipe_view.php'):
+      header("Location: /") ;
+      
+      
      }
 
-     //Appel le formulaire d'inscription.
-     function displaySignup($errors = null){
-      $this->is_session_started()? 
-      header("Location: ".Settings::RACINE) :
-      require('Views/Authentification/signup_view.php');
-     }
+     
 
-     //Appel le formulaire de récupération du mot de passe.
-     function displayForgot($errors = null){
-      require('Views/Authentification/forgot_view.php');
-     }
+      
 
-     //Appel le formulaire de changement de mot de passe.
-     function displayPassChange($token, $errors = null){
-      //   die("======> Errors".var_dump($errors));
-      if(isset($errors)){
-         $email = $errors->email;
-         $errors = $errors->msg;
-         require('Views/Authentification/passChange_view.php');
-         return;
-
-      }
-      //Si on reçois un token de récupération, on vérifie si il existe dans la base.
-      if(isset($token[0]) && $token[0] != ''){
-         $token = $token[0];
-         $utilisateur_stmt = Utilisateur::existUser(array('token' => $token), array('adresseMail'));
-         $email = $utilisateur_stmt->fetch(Fetch::_ASSOC)['adresseMail'];
-       
-         if($email){
-            require('Views/Authentification/passChange_view.php');
-         }
-      }
-     }
+     
 
    //Vérifie si l'inscription de l'utilidateur est conforme
    function verify_signup(){ 
           //Construction de l'array pour l'hydrateur du constructeur de la classe User =>>>
-         $utilisateur_params = array("nomM"=>htmlspecialchars($_POST['lastname']),
-           "prenomM"=>htmlspecialchars( $_POST['firstname']),
-           "username"=>htmlspecialchars($_POST['username']),
-           "password"=>htmlspecialchars($this->removeAccent($_POST['password'])),
-           "adresseMail"=>htmlspecialchars($_POST['email']),
-           "dateNaissance"=>htmlspecialchars($_POST['dateNaissance']),
+         $equipe_params = array("nomE"=>htmlspecialchars($_POST['lastname']),
            "dateInscription"=>htmlspecialchars(date('Y-m-d')),
-           "avatar"=>htmlspecialchars($_POST['avatar']),
+           //"logo"=>htmlspecialchars($_POST['avatar']),
          ); 
-         $utilisateur = new User($utilisateur_params);   
+         $equipe = new Equipe( $equipe_params);   
 
          //Vérification des champs vides
-         [$flag, $datasEmpty] = $this->emptyFields($utilisateur);
-         if($flag){
-            //Equipe est null quand on crée un utilisateur
-            in_array('equipe', $datasEmpty)? array_splice($datasEmpty, array_search('equipe', $datasEmpty),1) : true;
-            if(!empty($datasEmpty)){
-               $this->displaySignup(errors: $datasEmpty); 
-               return;
-            }
-         }
+         [$flag, $datasEmpty] = $this->emptyFields($equipe);
+      
+         
 
          //Vérification de l'username
           //TODO il manque l'interdiction de mettre des "\".
@@ -151,8 +113,7 @@ require('Controllers/Main/Index_controller.php');
                $_SESSION['username'] = $utilisateur->getUsername();
                //On renvoie l'utilisateur sur l'acceuil
                //$this->rootDirection(utilisateur: $utilisateur);
-               header("Location: ".Settings::RACINE);
-
+               header("Location: /");
             }else{
                $this->displaySignin(array( "Password" => $session->getIdentifiant()));
             }
@@ -182,12 +143,12 @@ require('Controllers/Main/Index_controller.php');
          $token = uniqid();
          // $url = Settings::RACINE."Authentification/Authentification_controller/displayPassChange?token=$token";
          $url = Settings::RACINE."Authentification/Authentification_controller/displayPassChange/$token";
-         $message = "Bonjour ".$utilisateur->getPrenomM().",\n Veuillez cliquer sur le lien ci-dessous pour réinitialiser votre mot de passe : $url .\n Bonne continuation. \n L'équipe de fastadventure.";
+         $message = "Bonjour".$utilisateur->getPrenomM().",\n Veuillez cliquer sur le lien ci-dessous pour réinitialiser votre mot de passe : $url .\n Bonne continuation. \n L'équipe de fastadventure.";
          $headers = 'Content-type: text/plain; charset="utf-8"'." ";
          if(mail($mail, 'TeamFastaventure : Mot de passe oublie', $message, $headers)){
             Utilisateur::updateUser(array('token' =>$token), array('adresseMail' => $mail));
             echo 'Mail envoyé. Veuillez consulter vos mails pour récupérer votre mot de passe. ';//todo mettre un set time pour afficher l'écho.
-            header("Location: ".Settings::RACINE);
+            header("Location: /");
          }else{
             die("Une erreure est survenue ...");
          }
@@ -232,7 +193,7 @@ require('Controllers/Main/Index_controller.php');
             //On met à jour l'utilisateur par rapport à son email.
             Utilisateur::updateUser(array('password' => $password,'token' => NULL), array('adresseMail' => $email));
             echo 'Mot de passe modifié avec succès';
-            header("Location: ".Settings::RACINE."Authentification/Authentification_controller/displaySignin");
+            header("Location: /Authentification/Authentification_controller/displaySignin");
           }else{
              //On crée l'ojet d'erreur.
              $erros_obj = new stdClass();

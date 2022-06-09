@@ -1,7 +1,5 @@
 <?php
-
 namespace Projet_Web_parcours\Models;
-
     class Parcour extends Model
     {
         //Ajoute un parcour dans la base.
