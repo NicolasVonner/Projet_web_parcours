@@ -153,6 +153,10 @@ const quitParcour = () => {
 }
 quitGame.addEventListener("click",quitParcour);
 
+ async function timerIndice () {
+    //TODO fonction asynchrone qui attend pour envoyer un indice.
+}
+
 //On active les listeners sur les boutons de réponse.
 const activListenerActivity = (localStep) => { 
             document.querySelectorAll('#choices .btn').forEach(item => {
