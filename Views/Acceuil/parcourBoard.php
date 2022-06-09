@@ -17,7 +17,6 @@
                       <div class="col-12" style="margin-bottom: 0; overflow: auto; height: 400px;">
                         <div class="preview-list" id="list">
                           <?php
-                          var_dump($parcour_board); 
                           foreach($parcour_board as $value){
                                     echo '
                                         <div class="preview-item border-bottom">
