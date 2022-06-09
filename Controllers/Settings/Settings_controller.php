@@ -78,7 +78,7 @@ class Settings_controller extends Index_controller {
       $_SESSION['username'] = $utilisateur->getUsername();
       //On renvoie l'utilisateur sur l'acceuil
       //$this->rootDirection(utilisateur: $utilisateur);
-      header("Location: /");
+      header("Location: ".Settings::RACINE);
     }
 
     //Vérifie si il y a des champs vides dans l'objet passé en paramètre

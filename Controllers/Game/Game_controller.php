@@ -27,18 +27,18 @@ require('Controllers/Main/Index_controller.php');
     //Appel le formulaire d'entrée de hash game.
     function displayHashForm($error = null){
       !$this->is_session_started()? 
-      header("Location: /") :
+      header("Location: ".Settings::RACINE) :
       require('./Views/Game/hash_view.php');
      }
 
     function displayGame(){
       $gameParam = null;
       if(!$this->is_session_started()) 
-        header("Location: /");
+      header("Location: ".Settings::RACINE);
       $hashcode = isset($_POST['hashcode'])?$_POST['hashcode']:null;
       $codePa = isset($_POST['codePa'])?$_POST['codePa']:null;
       //Si les deux codes sont nulles on return vers l'acceuil.
-      if(!isset($hashcode) && !isset($codePa)) header("Location: /");
+      if(!isset($hashcode) && !isset($codePa)) header("Location: ".Settings::RACINE);
       //On récupère le step si il y en à un en post ou via la session de jeu.
       if(isset($_SESSION['game'])){
         $step = $_SESSION['game'];

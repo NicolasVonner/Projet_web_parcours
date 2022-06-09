@@ -20,7 +20,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
 
 //use Projet_Web_parcours\Controllers\Index_controller;
 require('Controllers/Main/Index_controller.php');
-class Parcour_controller extends Index_controller{  
+class Classement_controller extends Index_controller{  
      //Appel le formulaire de création d'un parcour
     function displayParcourCreatePage(){ //TODO c'est ici qu'on vas rentrer pour modifier les parcours.
       if(!$this->is_session_started()){
@@ -36,6 +36,88 @@ class Parcour_controller extends Index_controller{
         $editId = isset($_POST['idParcour'])? $_POST['idParcour']:null;
       }
       require('Views/Parcour/createParcours_view.php');
+    }
+
+    function displayRankingPage(){
+      // die("On souhaite récupérer et afficher le classement des users pour ce parcour");
+      $rankId = isset($_POST['idParcour'])? $_POST['idParcour']:null;
+      //Si l'id est null, on renvoie l'utilisateur sur l'acceuil
+      if(!isset($rankId)) header('Location: '.Settings::RACINE);
+      $position_array = Position::existPosition(array("parcour" =>$rankId), array("COUNT(*) AS positions"));
+      $position_number = $position_array->fetch(Fetch::_ASSOC)['positions'];
+      // die("On a".$position_number."positions pour ce parcour");
+      //On récupère tout les joueurs
+      $player_request = Parcour::existParcourHisto(null,array("DISTINCT joueur") );
+      $players_array =  $player_request->fetchAll();
+
+      //On remplis le tableau des scores
+      $nombre = $position_number;
+      $currentStepSearch = 1;
+      $departureTime = 0;
+      $endTime = 0;
+      echo'$nombre 
+            '.$nombre ;
+      foreach($players_array as $player){
+        $joueur = $player->joueur;
+        //On récupère les historique parcour du joueur.
+        $histo_request = Parcour::existParcourHisto(array("parcour"=>$rankId),array("step", "time"));
+        while($histo = $histo_request->fetch(Fetch::_ASSOC)){
+          // echo"Les parcours pour ce joueur sont =>".var_dump($histo);
+          //On vérifie si on à récupéré toutes les positions en début de boucle.
+          if($nombre == 0){
+            $perf = new stdClass();
+            $date1=date_create($endTime);
+            $date2=date_create($departureTime);
+            $perf->time = date_diff($date1, $date2); //todo date diff.
+            // echo"Le joueur à mis : ".$perf->time."  ======> La date de début est ".var_dump($departureTime)." ===> La date de fin est".var_dump($endTime);
+            die("Le joueur à mis : ======> La date de début est ".var_dump($departureTime)." ===> La date de fin est".var_dump($endTime));
+            echo'Le nombre est à : '.$nombre;
+            $departureTime = 0;
+            $nombre = $position_number;
+            $currentStepSearch = 1;
+          }
+          $step = intval($histo["step"]);
+          //Si c'est un début de recherche.
+          echo'Nombre => '.$nombre.' ===> Posiiton number'.$position_number;
+          if($nombre == $position_number){
+            echo'On est au debut
+            ';
+            //Si c'est un milieu de parcour on passe au suivant.
+            if($step != 1){
+              echo'Step différent de 1';
+              continue;
+            }else{
+              echo'Step égal à 1';
+              $departureTime = $histo["time"];
+              $nombre--;
+              $currentStepSearch ++;
+              echo'Nombre => '.$nombre. 'currentStepdesire ===> '.$currentStepSearch.'==> step'.$step;
+              //todo convertir le diff time en timestamp ou quoi pour pouvoir comparer numériquement. -> jouer avec la valeur.
+              //todo ajouter objet dans tableau.
+            }
+          }else{
+            if($step != $currentStepSearch){
+              $departureTime = 0;
+              $nombre = $position_number;
+              $currentStepSearch = 1;
+            }else{
+              $nombre --;
+              $currentStepSearch ++;
+              $endTime = $histo["time"];
+            }
+          }
+        }
+        //   // die("Les parcours pour ce joueur sont =>".var_dump($histo_array));
+      
+        //   $time = $player->time;
+        //  die("Le premier historique est =>".var_dump($time));
+       
+      }
+
+
+      //On vas chercher les user les plus performants
+      //Liste de user suite à un select.
+      //require(Classement_view);
     }
 
     //Renvoie l'objet à modifier à l'ajax

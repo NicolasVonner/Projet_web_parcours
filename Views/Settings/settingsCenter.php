@@ -4,8 +4,6 @@
     header('Location: '.Settings::RACINE.'');
     return;
   }
-
-  echo $utilisateur->getCodeM();
 ?>
 <div class="container-scroller">
   <div class="container-fluid page-body-wrapper full-page-wrapper">
@@ -99,3 +97,4 @@
 </div>
 <script src= <?php echo Settings::RACINE."template/assets/vendors/js/vendor.bundle.base.js"?>></script>
 <script src= <?php echo Settings::RACINE."template/assets/js/misc.js"?>></script>
+<script src= <?php echo Settings::RACINE."Assets/Js/settings.js"?>></script>

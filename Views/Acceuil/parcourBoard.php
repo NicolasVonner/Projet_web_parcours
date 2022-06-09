@@ -40,7 +40,8 @@
                                                 <p class="text-muted mb-0">'.$value->steps.' étapes</p>
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                                <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>';
+                                                <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>';                          
+                                                echo '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
                                                 echo $value->parcour->getCreateur() == $utilisateur->getUsername()? '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-warning btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-border-color btn-icon-prepend"></i>Edit</button>':'';
                                             }else if(isset($utilisateur) && !$gameSearch){
                                               echo '
@@ -54,6 +55,7 @@
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                                 <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>
+                                                <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>
                                                 <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-warning btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-border-color btn-icon-prepend"></i>Edit</button>';
                                             }else{
                                               echo '
@@ -66,7 +68,8 @@
                                                 <p class="text-muted mb-0">'.$value->steps.' étapes</p>
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                                <button type="button" class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouerr</button>';
+                                                <button type="button" class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>
+                                                <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
                                             }
                                     echo '
                                               </div>

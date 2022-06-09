@@ -145,7 +145,7 @@ class User
                                         'equipe' => $this->getEquipe(),
                                     ):
                                     array (
-                                        'codeMM' => $this->getCodeM(),
+                                        'codeM' => $this->getCodeM(),
                                         'nomM' => $this->getNomM(),
                                         'prenomM' => $this->getPrenomM(),
                                         'username' => $this->getUsername(),

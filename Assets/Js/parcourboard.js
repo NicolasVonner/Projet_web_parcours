@@ -30,16 +30,20 @@ function verifySize(){
     if(window.innerWidth < 780){
         for (i = 0; i < x.children.length; i++) { 
             x.children[i].getElementsByTagName('button')[0].innerHTML = '<i class="mdi mdi-play btn-icon-prepend"></i>';
-            if(x.children[i].getElementsByTagName('button')[1] != undefined) x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>';
+            x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-crown btn-icon-prepend"></i>';
+            if(x.children[i].getElementsByTagName('button')[2] != undefined){
+                x.children[i].getElementsByTagName('button')[2].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>';
+            }
         }
     }else{
         for (i = 0; i < x.children.length; i++) { 
             x.children[i].getElementsByTagName('button')[0].innerHTML = '<i class="mdi mdi-play btn-icon-prepend"></i>Jouer';
-           if(x.children[i].getElementsByTagName('button')[1] != undefined) x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>Edit';
+            x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-crown btn-icon-prepend"></i>Rank';
+           if(x.children[i].getElementsByTagName('button')[2] != undefined) x.children[i].getElementsByTagName('button')[2].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>Edit';
         }
     }
-
 }
+
 let x =  document.getElementById('list');
 for (i = 0; i < x.children.length; i++) { 
     //Le boutton PLay de chaque ligne du tableau de parcour.
@@ -71,15 +75,23 @@ for (i = 0; i < x.children.length; i++) {
         }
     });
     //Le boutton Edit de chaque ligne du tableau de parcour.
-    if(x.children[i].getElementsByTagName('button')[1] != null){
-        x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
+    if(x.children[i].getElementsByTagName('button')[2] != null){
+        x.children[i].getElementsByTagName('button')[2].addEventListener('click', (e)=>{
             let id = e.currentTarget.id;
             let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+id+" ?");
             if(editInvit){  
                 sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: id});
             }
         });
-    }    
+    } 
+    //Le boutton Rank de chaque ligne du tableau de parcour.
+            x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
+                let id = e.currentTarget.id;
+                let editInvit = confirm("Êtes vous sur de vouloir consulter le classement du parcour "+id+" ?");
+                if(editInvit){  
+                    sendParams(RACINE+'Classement/Classement_controller/displayRankingPage/', {idParcour: id});
+                }
+            });    
 }
 
 

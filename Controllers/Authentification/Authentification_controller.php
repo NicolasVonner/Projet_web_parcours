@@ -23,14 +23,14 @@ require('Controllers/Main/Index_controller.php');
      //Appel le formulaire d'authentification.
      function displaySignin($errors = null){
       $this->is_session_started()? 
-      header("Location: /") :
+      header("Location: ".Settings::RACINE) :
       require('Views/Authentification/signin_view.php');
      }
 
      //Appel le formulaire d'inscription.
      function displaySignup($errors = null){
       $this->is_session_started()? 
-      header("Location: /") :
+      header("Location: ".Settings::RACINE) :
       require('Views/Authentification/signup_view.php');
      }
 
@@ -151,7 +151,7 @@ require('Controllers/Main/Index_controller.php');
                $_SESSION['username'] = $utilisateur->getUsername();
                //On renvoie l'utilisateur sur l'acceuil
                //$this->rootDirection(utilisateur: $utilisateur);
-               header("Location: /");
+               header("Location: ".Settings::RACINE);
             }else{
                $this->displaySignin(array( "Password" => $session->getIdentifiant()));
             }
@@ -181,12 +181,12 @@ require('Controllers/Main/Index_controller.php');
          $token = uniqid();
          // $url = Settings::RACINE."Authentification/Authentification_controller/displayPassChange?token=$token";
          $url = Settings::RACINE."Authentification/Authentification_controller/displayPassChange/$token";
-         $message = "Bonjour".$utilisateur->getPrenomM().",\n Veuillez cliquer sur le lien ci-dessous pour réinitialiser votre mot de passe : $url .\n Bonne continuation. \n L'équipe de fastadventure.";
+         $message = "Bonjour ".$utilisateur->getPrenomM().",\n Veuillez cliquer sur le lien ci-dessous pour réinitialiser votre mot de passe : $url .\n Bonne continuation. \n L'équipe de fastadventure.";
          $headers = 'Content-type: text/plain; charset="utf-8"'." ";
          if(mail($mail, 'TeamFastaventure : Mot de passe oublie', $message, $headers)){
             Utilisateur::updateUser(array('token' =>$token), array('adresseMail' => $mail));
             echo 'Mail envoyé. Veuillez consulter vos mails pour récupérer votre mot de passe. ';//todo mettre un set time pour afficher l'écho.
-            header("Location: /");
+            header("Location: ".Settings::RACINE);
          }else{
             die("Une erreure est survenue ...");
          }
@@ -231,7 +231,7 @@ require('Controllers/Main/Index_controller.php');
             //On met à jour l'utilisateur par rapport à son email.
             Utilisateur::updateUser(array('password' => $password,'token' => NULL), array('adresseMail' => $email));
             echo 'Mot de passe modifié avec succès';
-            header("Location: /Authentification/Authentification_controller/displaySignin");
+            header("Location: ".Settings::RACINE."Authentification/Authentification_controller/displaySignin");
           }else{
              //On crée l'ojet d'erreur.
              $erros_obj = new stdClass();

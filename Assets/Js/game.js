@@ -16,7 +16,7 @@ let currentStep = null;
 let actStep = null;
 
 let spotCount = 0;
-// geoloc();
+geoloc();
 
 let map = L.map('map').setView([51.505, -0.09], 13);
 L.tileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${accessToken}`, {
@@ -30,19 +30,19 @@ L.tileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 let markerGroup = L.layerGroup().addTo(map);
 let lineGroup = L.layerGroup().addTo(map);
 
-// function geoloc(){ // ou tout autre nom de fonction
-//     var geoSuccess = function(position) { // Ceci s'exécutera si l'utilisateur accepte la géolocalisation
-//         startPos = position;
-//         userlat = startPos.coords.latitude;
-//         userlon = startPos.coords.longitude;
-//         console.log("lat: "+userlat+" - lon: "+userlon);
-//     };
-//     var geoFail = function(){ // Ceci s'exécutera si l'utilisateur refuse la géolocalisation
-//         console.log("refus");
-//     };
-//     // La ligne ci-dessous cherche la position de l'utilisateur et déclenchera la demande d'accord
-//     navigator.geolocation.getCurrentPosition(geoSuccess,geoFail);
-// }
+function geoloc(){ // ou tout autre nom de fonction
+    var geoSuccess = function(position) { // Ceci s'exécutera si l'utilisateur accepte la géolocalisation
+        startPos = position;
+        userlat = startPos.coords.latitude;
+        userlon = startPos.coords.longitude;
+        console.log("lat: "+userlat+" - lon: "+userlon);
+    };
+    var geoFail = function(){ // Ceci s'exécutera si l'utilisateur refuse la géolocalisation
+        console.log("refus");
+    };
+    // La ligne ci-dessous cherche la position de l'utilisateur et déclenchera la demande d'accord
+    navigator.geolocation.getCurrentPosition(geoSuccess,geoFail);
+}
 
 const displayGamePoints = () =>{
     let localStep = currentStep == null? step : currentStep;
