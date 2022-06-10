@@ -18,6 +18,8 @@ use Projet_Web_parcours\Assets\settings\Settings;
 
      //On réagis au get.
      function getUser($arrayParams){
+   
+         if(isset($arrayParams[1]) && $arrayParams[1] == "") array_pop($arrayParams);
          if(empty($arrayParams)){
             $user_params = Utilisateur::existUserAll();
          }elseif(sizeof($arrayParams) == 1) {
@@ -29,7 +31,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
          $user_datas = $user_params->fetchAll();
          $value = json_encode($user_datas, JSON_PRETTY_PRINT);
          header("Content-Type: application/json, Content-Length:".strlen($value));
-         echo $value."-----------".$_SERVER;
+         echo $value;
         // die("======> JSON".json_encode($user_datas));
         // require('Views/api_data_view.php');//todo faire page de mise en forme, renvoie le donnée.
      }
