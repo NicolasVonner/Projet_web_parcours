@@ -6,6 +6,7 @@ session_start();
 define("WEBROOT", str_replace('index.php','',$_SERVER['SCRIPT_NAME']));
 define("ROOT", str_replace('index.php','',$_SERVER['SCRIPT_FILENAME']));
 
+$apiFlag = false;
 //Autoload
 spl_autoload_register(function ($class_name) {
     //TODO Gérer la disection pour les vues, pour l'instant elles sont required comme ça 
@@ -48,12 +49,30 @@ if(sizeof(explode('/',$_GET['p'])) == 1){
 }else{
     $params = explode('/',$_GET['p']);
 }
-$folder= empty(!$params[0])? $params[0] : 'Main';
-$controller= isset($params[1])? $params[1] : 'Index_controller';
-$action = isset($params[2])? $params[2] : 'rootDirection';
-$p1 = isset($params[3])? $params[3] : null;
-$p2 = isset($params[4])? $params[4] : null;
-$p3 = isset($params[5])? $params[5] : null;
+//Appel API
+if($params[0] == "api"){
+    $apiFlag = true;
+    $folder = ucfirst($params[0]);
+    $controller = $folder."_controller";
+    if(isset($params[1])){ //On tape sur la methode de l'entité evoquée, seulement get pour le moment.
+        $action = 'get'.ucfirst($params[1]);
+    }else{
+        $action = 'hahaha'; //Provoque une 404.
+    }
+    //On récupère les paramètres what si 1 et where si 2.
+    $p1 = isset($params[2])? $params[2] : null; 
+    $p2 = isset($params[3])? $params[3] : null;
+    $p3 = null; //pour affichage des données.
+}else{//Si ce n'est pas un appel API.
+    $folder= empty(!$params[0])? $params[0] : 'Main';
+    $controller= isset($params[1])? $params[1] : 'Index_controller';
+    $action = isset($params[2])? $params[2] : 'rootDirection';
+    $p1 = isset($params[3])? $params[3] : null;
+    $p2 = isset($params[4])? $params[4] : null;
+    $p3 = isset($params[5])? $params[5] : null;
+}
+
+
 // die('Les paramètres sont => '.$folder.' -- '.$controller.' -- '.$action.' -- '.$p1.'-- '.$p2.' -- '.$p3.' -- '.sizeof($params).' ');
 //On verifie si une mauvaise URL est rentrée
 file_exists('./Controllers/'.$folder.'/'.$controller.'.php')?
@@ -63,10 +82,18 @@ file_exists('./Controllers/'.$folder.'/'.$controller.'.php')?
 //On instancie le controller
 $controller = new $controller();
 
-method_exists($controller,$action)? paramVerifier($controller, $params, $action) : require('Views/Errors/404_view.php');
+method_exists($controller,$action)? paramVerifier($controller, $params, $action, $apiFlag) : require('Views/Errors/404_view.php');
+//Dans le doute, on repasse l'Api flag à false.
+$apiFlag = false; 
 
 //TODO Nimporte quelle fonction peut recevoir nimporte quels params
 // Vérifier pour paramètres 
-function paramVerifier($controller, $parameters, $method){
+function paramVerifier($controller, $parameters, $method, $api){
+if($api){
+    empty(array_slice($parameters, 2))? $controller->$method(): $controller->$method(array_slice($parameters,2));
+}
+
+else{
     empty(array_slice($parameters, 3))? $controller->$method(): $controller->$method(array_slice($parameters,3));
+}    
 }

@@ -22,17 +22,23 @@ class Model extends Connexion{
                 return Connexion::getInstance()->query($sql);
             }else{
                 $sql = "SELECT "; 
-                //On concatène les éléments à sélectionner. 
+                //On concatène les éléments à sélectionner.
                 if(isset($param_what)){
                     if(is_array($param_what)){
-                        foreach ($param_what as $key => $what) {
-                            $key != sizeof($param_what)-1? $sql .= $what.", " : $sql .= $what." ";   
+                        if(sizeof($param_what) == 1 && $param_what[0] == ""){
+                            $sql .= "* ";
+                        }else{
+                            foreach ($param_what as $key => $what) {
+                                $key != sizeof($param_what)-1? $sql .= $what.", " : $sql .= $what." ";   
+                            }
                         }
+
                     }else{
-                        $sql .= " * ";
+                        $sql .= " * "; //todo nettoyer le model.
                     }
+                   
                 }else{
-                    $sql .= "* "; 
+                    $sql .= " * "; 
                 }
                 //On concatène les jointures si jamais il y a plusieurs tables.
                 $sql .= "FROM ";
@@ -121,7 +127,7 @@ class Model extends Connexion{
                     }
                 }
             }
-            //if($table == 'position') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
+            // if($table == 'membre') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
             return self::launch($sql, $array_prepare);
         }
         

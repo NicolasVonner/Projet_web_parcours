@@ -25,6 +25,11 @@ use \Exception;
            Model::select(table: "membre", param_where: $where);        
         }
 
+        //Renvoie tous les utilisateurs.
+        public static function existUserAll(){  
+            return Model::select(table: "membre");        
+        }
+
         //Ajoute un utilisateur.
         public static function persistUser($user){  
            Model::insert("membre", $user->to_Array());          
