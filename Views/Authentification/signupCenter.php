@@ -33,6 +33,11 @@
                    <div id="password-error" class="zone-error"></div>
                   </div>
                   <div class="form-group">
+                    <label>Confirmation password</label>
+                    <input type="password" id="confirmPassword" placeholder="Password" name="confirmPassword" minlength="8" maxlength="40" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?!.*[()--+={}\[\]|&quot\\:;'<>,.?/_₹~`\s]).{8,40})" class="form-control p_input">
+                   <div id="password-error" class="zone-error"></div>
+                  </div>
+                  <div class="form-group">
                     <label>Birthday</label>
                     <input type="date" id="start" name="dateNaissance"
                     value="2018-07-22"

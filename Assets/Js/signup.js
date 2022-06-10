@@ -3,11 +3,19 @@ const BORDER_FOCUS = "darkorange";
 const BORDER_ERROR = "red";
 const BORDER_OK = "#2c2e33";
 
+//PASSWORD confirm down
+$("#confirmPassword").prop('disabled', true);
+
 //PASSWORD listener
 //TODO Faire en sorte que les entrées espace ne passent pas, désactiver la touche space.
 document.getElementById("password").addEventListener("keyup", (e)=>{
     e.target.value != undefined ? managePasswordInput(e.target.value) : console.log("Password form undefined");
-    
+    if(document.getElementById("password-error").innerText == ""){
+        console.log("l,lklk,lk,lk,lk");
+        $("#confirmPassword").prop('disabled', false);
+    }else{
+        $("#confirmPassword").prop('disabled', true);
+    }
 });
 
 //USERNAME listener

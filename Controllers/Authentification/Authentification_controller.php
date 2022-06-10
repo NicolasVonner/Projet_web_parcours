@@ -74,6 +74,7 @@ require('Controllers/Main/Index_controller.php');
            "avatar"=>htmlspecialchars($_POST['avatar']),
          ); 
          $utilisateur = new User($utilisateur_params);   
+         $password_confirm = htmlspecialchars($_POST['confirmPassword']);
 
          //Vérification des champs vides
          [$flag, $datasEmpty] = $this->emptyFields($utilisateur);
@@ -97,6 +98,11 @@ require('Controllers/Main/Index_controller.php');
           //TODO il manque l'interdiction de mettre des "\".Message erreur qui indique que mauvais regex.
          if(!preg_match("/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?!.*[()--+={}\[\]|\"\\:;'<>,.?\/_₹~`\s]).{8,40})/", $utilisateur->getPassword())){
             $this->displaySignup(array("Password (Format invalid)"));
+            return;
+         }
+         //On vérifie si les mots de passe sont identiques
+         if($password_confirm != $utilisateur->getPassword()){
+            $this->displaySignup(array("Les mots de passes ne correspondent pas"));
             return;
          }
          //On hash le mot de pass
