@@ -45,6 +45,7 @@ let markerGroup = L.layerGroup().addTo(map);
 let lineGroup = L.layerGroup().addTo(map);
 
 map.on('click',function(e){
+    // on récupére laltitude et la longitude à partir du point dans lesquel on vient de cliquer
 	let lat = e.latlng.lat;
 	let lon = e.latlng.lng;
 
@@ -69,6 +70,7 @@ map.on('click',function(e){
         parcour.positions.push(markerData);
         //Add a marker to show where you clicked.
         let index = parcour.positions.length-1;
+        // on crée le pims dans le groupe de pims avec en bonus une bulle d'info
         L.marker(coordTab).addTo(markerGroup).bindPopup(placeName + "<br>" + `spot n°${parcour.positions.length}`).on('click',(e)=>{displaySpotInfo(index)});
         displayMarkersList();
         displaySpotInfo(index);
@@ -76,22 +78,31 @@ map.on('click',function(e){
     })
 });
 
- const displaySpotInfo = (index) => { 
+// Permet de sélectionner un spot en bleu pour afficher les informations et centrer la carte
+const displaySpotInfo = (index) => { 
+    // on met l'index du spot actuelle à celui où on vient de cliquer
     spotIndex = index;
+    // on récupére l'objet marker correspondant à celui de notre index dans le tableau
     let marker = parcour.positions[index];
+    // on appelle la fonction displayMarkerInfo pour afficher des infos dans la fenêtre à droite
     displayMarkerInfo(marker);
+    // on centre la vue dans la carte vers le pims correspondant au spot qu'on a sélectionné
     map.setView(marker.coord, 13);
+    // si on déselectionne le bleu de l'ancien spot sélectionné et on le met en gris
     if ($(".spot.bg-primary").length > 0) {$(".spot.bg-primary").toggleClass("bg-secondary").toggleClass("bg-primary");}
+    // on met le spot sélectionné grâce à l'index en bleu.
     $('.spot:eq('+index+')').toggleClass("bg-secondary").toggleClass("bg-primary");
     displayActivityList(parcour.positions[spotIndex].activites);
 };
 
+// affiche les infos de la position dans la fenêtre à droite du tableau.
 const displayMarkerInfo = (marker) => { // affiche dans la partie droite les infos du marker
     adress.innerHTML = marker.nomPo;
     latitude.innerHTML = marker.coord[0];
 	longitude.innerHTML = marker.coord[1];
 };
 
+// permet d'enlever un marker de l'objet parcours et du DOM.
 const removeMarker = (index) => { // permet d'enlever un marker quand on click dans la croix d'un élément d'une liste.
     //On vérifie qu'on est sur une modification
     if(parcour.positions[index].codePo != null){      
@@ -122,40 +133,54 @@ const removeMarker = (index) => { // permet d'enlever un marker quand on click d
         }
     }
 
+    // on vérifie si on n'a pas supprimé le spot sélectionné par l'index et l'index actuelle de la liste du spot
     if (index == spotIndex) {spotIndex = -1;}
+    // on enlève de la liste du dom le spot
     parcoursList.removeChild(parcoursList.children[index]);
+    // si nom du spot que l'on veut supprimer est afficher dans la fenêtre à droite alors on nettoie les infos de la fenêtre à droite
     if (parcour.positions[index].nomPo == adress.innerHTML)
     {
         adress.innerHTML = "";
         latitude.innerHTML = "";
         longitude.innerHTML = "";
     }
+    // on enlève du tableau de l'objet parcours l'objet position correspondant au info du spot qu'on supprime
     parcour.positions.splice(index,1);
+    // on nettoie les pims et les lignes rouges
     markerGroup.clearLayers();
     lineGroup.clearLayers();
     //On vide l'affichage des activités qui sont supprimés en même temps que la position.
     activityList.innerHTML="";
 
+    // on redessine tous les pims, lignes et les informations des spots de la liste de l'objet parcour
     for (let i = 0; i < parcour.positions.length; i++)
     {
         //console.log(`index: ${i} | placeName: ${markerList[i].placeName}`);
+        // on crée le pims avec les nouvelles infos
         L.marker(parcour.positions[i].coord).addTo(markerGroup).bindPopup(parcour.positions[i].nomPo + "<br>" + `spot n°${i+1}`).on('click',(e)=>{displayMarkerInfo(parcour.positions[i])});;
         if (i > 0) {
+            // on crée les lignes si le spot est supérieur à 0 donc on crée une ligne entre le précédent spot et le spot actuelle de i
             L.polyline([parcour.positions[i-1].coord,parcour.positions[i].coord], {color: 'red'}).addTo(lineGroup);
         }
         let spotElement = parcoursList.children[i];
+        // on met à jour la fonction displaySpotInfo avec le i
         spotElement.firstElementChild.onclick = function() {displaySpotInfo(i)};
+        // on met à jour la fonction removeMarker avec le i
         spotElement.lastElementChild.onclick = function() {removeMarker(i)};
+        // on met à jour numéro avec le bon chiffre
         spotElement.firstElementChild.firstElementChild.innerText = i+1;
     }
     // console.log("===>"+JSON.stringify(parcour));
     displayAddGamesButton();
 };
 
-
+// on crée un nouveau spot dans la liste de spot
 const displayMarkersList = (marker) => { //undefined? marker
+    // on récupére l'index du dernier objet position ajouté qui le spot que l'on créer
     let index = marker == undefined? parcour.positions.length-1:marker;
+    // on met que l'index actuelle du spot est celui que l'on créé
     spotIndex = index;
+    // on crée un nouveau élément div qui est notre spot
     let div = document.createElement("div");
     div.className = "spot d-flex justify-content-between align-items-center bg-secondary rounded-3 mt-1 mb-1";
     div.innerHTML = `
@@ -165,20 +190,26 @@ const displayMarkersList = (marker) => { //undefined? marker
         </div>
         <button type="button" class="btn btn-danger text-center" onclick="removeMarker(${index})">X</button>
     `;
+    // on l'ajoute dans notre list de spot dans le DOM
     parcoursList.appendChild(div);
+    // si l'index supérieur à 0 alors on ajoute une ligne entre le précédent et le nouveau spot dans la carte
     if (index > 0) {
         L.polyline([parcour.positions[index-1].coord,parcour.positions[index].coord], {color: 'red'}).addTo(lineGroup);
     }
 };
 
 const search = document.getElementById('searchAdress');
+// lorsqu'on clique dans la touche entrer, on utilise la fonction
 search.addEventListener('keydown', function onEvent(event) {
     if (event.key === "Enter") {
+        // on cherche l'altitude et la longitude en fonction de l'adresse écrite
 		fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${accessToken}`)
 		.then(res => res.json())
 		.then(res => {
+            // si il y a des résultats dans la réponse
 			if (res.features.length > 0)
 			{
+                // on centre la vue de la carte sur les coordonnées de la première réponse.
 				map.setView(res.features[0].center.reverse(), 13);
 			}
 		})
