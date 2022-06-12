@@ -4,6 +4,8 @@ use Projet_Web_parcours\Models\Utilisateur;
 use Projet_Web_parcours\Models\Parcour;
 use Projet_Web_parcours\Models\Position;
 use Projet_Web_parcours\Models\Activite;
+use Projet_Web_parcours\Models\Note;
+use Projet_Web_parcours\Entities\Review;
 use Projet_Web_parcours\Entities\User;
 use Projet_Web_parcours\Entities\Course;
 use Projet_Web_parcours\Entities\Point;
@@ -29,7 +31,7 @@ require('Controllers/Main/Index_controller.php');
       !$this->is_session_started()? 
       header("Location: ".Settings::RACINE) :
       require('./Views/Game/hash_view.php');
-     }
+    }
 
     function displayGame(){
       $gameParam = null;
@@ -54,9 +56,9 @@ require('Controllers/Main/Index_controller.php');
         $gameParam = isset($hashcode)? $hashcode : $codePa;
       }
       require('./Views/Game/maingame_view.php');
-     }
+    }
 
-     //Vérifie si l'utilisateur à déjà une partie en cour
+    //Vérifie si l'utilisateur à déjà une partie en cour
     function verifyParcourStep($code){
       $hash = null;
       $codePa = null;
@@ -116,75 +118,75 @@ require('Controllers/Main/Index_controller.php');
       }
     }
 
-   //On construit le gameObject.
-   function buildGameObject($gameParams){ //todo gérer les steps et le fait que on prenne pas toutes les positions.
-    $hashcode = null;
-    $codePa = null;
-    $typeId = explode('_',$gameParams[0])[0];
-    $valueId = explode('_',$gameParams[0])[1];
-    if($typeId == 'codePa'){
-        $codePa = $valueId;
-    }else{
-        $hashcode = $valueId;
-    }
-    $step = isset($gameParams[1])?$gameParams[1]:null;
-    if(isset($hashcode)){
-      //D'abord on vérifie que le parcour existe
-      $parcour_request = Parcour::existParcour(array("hashCode"=> $hashcode));
-      $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
-    }else{
-      //D'abord on vérifie que le parcour existe
-      $parcour_request = Parcour::existParcour(array("codePa"=> $codePa));
-      $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
-    }
-    //Le parcour existe alors 
-        $GameObject = new stdClass();
-        $GameObject->positions = array();  
-        //On crée le parcour.
-        foreach($parcour_array as $parcourAttribute => $value)
-            $GameObject->$parcourAttribute = $value;
-        //On vas chercher toutes les positions du parcour.
-        $position_request = Position::existPosition(array("parcour"=>$GameObject->codePa), order: array('codePo'));
-        $points =  isset($step)?array_slice($position_request->fetchAll(), $step-1):$position_request->fetchAll();
-      //  while($point = $position_request->fetch(Fetch::_ASSOC)){
-        foreach($points as $point){
-         //On crée la position.
-         $position = new stdClass();
-         $coordonnees = array();
-         $position->activites = array();
-         foreach($point as $pointAttribute => $value){             
-           if($pointAttribute == "latitude" || $pointAttribute == "longitude"){
-             array_push($coordonnees, $value);
-             continue;
-           }
-           $position->$pointAttribute = $value;
-         }
-         //On ajoute les coordonnées.
-         $position->coord = $coordonnees;
-         
-         //On vas chercher les activités de la positions.        
-         $activites_request = Activite::existActivity(array('position' => $position->codePo));
-         while($activity = $activites_request->fetch(Fetch::_ASSOC)){
-           $game = new stdClass();
-           $activite = new Activity($activity);
-           //On vas chercher le vrai jeu
-           $game_request = Activite::existActiviteGame($activite->getActiviteType(), array('id' => $activite->getActivite()));
-           $game_array = $game_request->fetch(Fetch::_ASSOC);
-           //On ajoute le nom du jeu dans l'activité dans la position et l'id de l'activité de rescencement.     
-           $game->nomAc = $activite->getActiviteType();
-           $game->codeAct = $activite->getCodeAct();
-           foreach($game_array as $gameAttribute => $value)
-             $game->$gameAttribute =  $value;
-           array_push($position->activites, $game);
-         }
-         //On ajoute la position dans le parcour.
-         array_push($GameObject->positions, $position);
-       }
-       echo json_encode($GameObject);
-   }
-   
-   //Modifie la session de jeu courante (pour le step), met à jour la BDD sur l'avancement des activités et du parcour en cour.
-   //Recois objet
+    //On construit le gameObject.
+    function buildGameObject($gameParams){ //todo gérer les steps et le fait que on prenne pas toutes les positions.
+      $hashcode = null;
+      $codePa = null;
+      $typeId = explode('_',$gameParams[0])[0];
+      $valueId = explode('_',$gameParams[0])[1];
+      if($typeId == 'codePa'){
+          $codePa = $valueId;
+      }else{
+          $hashcode = $valueId;
+      }
+      $step = isset($gameParams[1])?$gameParams[1]:null;
+      if(isset($hashcode)){
+        //D'abord on vérifie que le parcour existe
+        $parcour_request = Parcour::existParcour(array("hashCode"=> $hashcode));
+        $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
+      }else{
+        //D'abord on vérifie que le parcour existe
+        $parcour_request = Parcour::existParcour(array("codePa"=> $codePa));
+        $parcour_array = $parcour_request->fetch(Fetch::_ASSOC); 
+      }
+      //Le parcour existe alors 
+      $GameObject = new stdClass();
+      $GameObject->positions = array();  
+      //On crée le parcour.
+      foreach($parcour_array as $parcourAttribute => $value)
+          $GameObject->$parcourAttribute = $value;
+      //On vas chercher toutes les positions du parcour.
+      $position_request = Position::existPosition(array("parcour"=>$GameObject->codePa), order: array('codePo'));
+      $points =  isset($step)?array_slice($position_request->fetchAll(), $step-1):$position_request->fetchAll();
+      //while($point = $position_request->fetch(Fetch::_ASSOC)){
+      foreach($points as $point){
+        //On crée la position.
+        $position = new stdClass();
+        $coordonnees = array();
+        $position->activites = array();
+        foreach($point as $pointAttribute => $value){             
+          if($pointAttribute == "latitude" || $pointAttribute == "longitude"){
+            array_push($coordonnees, $value);
+            continue;
+          }
+          $position->$pointAttribute = $value;
+        }
+        //On ajoute les coordonnées.
+        $position->coord = $coordonnees;
+        
+        //On vas chercher les activités de la positions.        
+        $activites_request = Activite::existActivity(array('position' => $position->codePo));
+        while($activity = $activites_request->fetch(Fetch::_ASSOC)){
+          $game = new stdClass();
+          $activite = new Activity($activity);
+          //On vas chercher le vrai jeu
+          $game_request = Activite::existActiviteGame($activite->getActiviteType(), array('id' => $activite->getActivite()));
+          $game_array = $game_request->fetch(Fetch::_ASSOC);
+          //On ajoute le nom du jeu dans l'activité dans la position et l'id de l'activité de rescencement.     
+          $game->nomAc = $activite->getActiviteType();
+          $game->codeAct = $activite->getCodeAct();
+          foreach($game_array as $gameAttribute => $value)
+            $game->$gameAttribute =  $value;
+          array_push($position->activites, $game);
+        }
+        //On ajoute la position dans le parcour.
+        array_push($GameObject->positions, $position);
+      }
+      echo json_encode($GameObject);
+  }
+  
+  //Modifie la session de jeu courante (pour le step), met à jour la BDD sur l'avancement des activités et du parcour en cour.
+  //Recois objet
   function incrementStepSession(){
     $game = json_decode($_POST["gameStep"]);
     //On récupère le joueur.
@@ -205,5 +207,26 @@ require('Controllers/Main/Index_controller.php');
      }else{
        die("Pas d'incrémentation du step possible, error");//Ne devrait pas arriver.
      }
+  }
+
+  function addNoteToParcours(){
+    $stars = json_decode($_POST["stars"]);
+    //D'abord on vérifie que le parcour existe
+    $note_request = Note::existNote(array("codePa"=> $stars->codePa,"codeM"=>$_SESSION['userID']));
+    $note_array = $note_request->fetch(Fetch::_ASSOC);
+    if (empty($note_array)) {
+      $note_params = array(
+        "codePa"=>htmlspecialchars($stars->codePa),
+        "codeM"=>htmlspecialchars($_SESSION['userID']),
+        "note"=>htmlspecialchars($stars->note),
+        "commentaire"=>htmlspecialchars($stars->commentaire),
+      ); 
+      $new_note = new Review($note_params); 
+      Note::persistNote($new_note);
+      echo "sended";
+    }
+    else {
+      echo "already send";
+    }
   }
  }

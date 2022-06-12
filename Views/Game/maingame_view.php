@@ -37,5 +37,6 @@
     <!-- endinject -->
     <script src=<?php echo Settings::RACINE."Assets/settings/Settings.js"?>></script>
     <script src=<?php echo Settings::RACINE."Assets/Js/game.js"?>></script>
+    <script src=<?php echo Settings::RACINE."Assets/Js/notes.js"?>></script>
   </body>
 </html>

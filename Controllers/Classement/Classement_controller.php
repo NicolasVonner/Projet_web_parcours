@@ -288,6 +288,7 @@ class Classement_controller extends Index_controller{
             "dateCreation"=>htmlspecialchars($course->dateCreation),
             "dateDerniereModif"=>htmlspecialchars(date('Y-m-d')),
             "hashCode"=>htmlspecialchars($course->hashCode),
+            "notes"=>htmlspecialchars($course->note)
           ); 
           $parcour = new Course($course_params);  
           //On met à jour le parcour.

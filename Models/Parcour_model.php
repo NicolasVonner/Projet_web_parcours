@@ -50,8 +50,8 @@ namespace Projet_Web_parcours\Models;
            Model::delete("historique_parcour", params_where: $where);       
         }
         
-        //Insert un historique parcour.
-        public static function persistParcourHisto($historique){ 
+      //Insert un historique parcour.
+      public static function persistParcourHisto($historique){ 
          Model::insert("historique_parcour", $historique->to_Array());       
       }
     }

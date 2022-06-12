@@ -155,6 +155,7 @@ require('Controllers/Main/Index_controller.php');
             if(password_verify($session->getPassword(), $utilisateur->getPassword())){
                //On crée la session utilisateur
                $_SESSION['username'] = $utilisateur->getUsername();
+               $_SESSION['userID'] = $utilisateur->getCodeM();
                //On renvoie l'utilisateur sur l'acceuil
                //$this->rootDirection(utilisateur: $utilisateur);
                header("Location: ".Settings::RACINE);
