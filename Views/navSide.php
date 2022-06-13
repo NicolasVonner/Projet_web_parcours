@@ -17,7 +17,17 @@ use Projet_Web_parcours\Assets\settings\Settings;
                         </span>
                         <span class="menu-title">Help</span>
                     </a>
-                </li>
-            </ul>
-        </nav> '        
+                </li>';
+                if(isset($_SESSION['username'])){
+                echo '<li class="nav-item menu-items">
+                <a class="nav-link" href="'.Settings::RACINE.'Equipe/Equipe_controller/displayEquipe">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-help"></i>
+                    </span>
+                    <span class="menu-title">Equipe</span>
+                </a>
+            </li>';
+            }   
+           echo '</ul>
+        </nav> ';      
 ?>      

@@ -31,4 +31,9 @@ namespace Projet_Web_parcours\Models;
         public static function deletePosition($where){ 
            Model::delete("position", params_where: $where);       
         }
+        
+         //Renvoie tous les utilisateurs.
+        public static function existPositionAll(){  
+            return Model::select(table: "position");        
+        }
     }

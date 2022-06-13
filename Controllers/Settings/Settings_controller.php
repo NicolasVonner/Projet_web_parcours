@@ -120,7 +120,7 @@ class Settings_controller extends Index_controller {
         //il faut suprimer les parcours et les équipe s'il en est le créateurs
 
 
-        Note::deleteNote(array("codeM"=>$utilisateur->getCodeM()));//on suprime les note que l'utilisateur a ajouter sur les parcours des autres
+        // Note::deleteNote(array("codeM"=>$utilisateur->getCodeM()));//on suprime les note que l'utilisateur a ajouter sur les parcours des autres
         //suprimer les parcours crée par l'utilisateur
         if(true){ //s'il est le créateur d'une équipe. on suprimer l'équipe en enlèvant tous c'est membre
           //Equipe::deleteEquipe($where=(array('codeE' => $equipe)));
@@ -130,7 +130,7 @@ class Settings_controller extends Index_controller {
         header("Location: ".Settings::RACINE);
     } else{
       echo "erreur dans l'identitifiant de l'utilisateur qu'il cherche a suprimer";
-      die();
+      die('pouette');
     }
 
    }

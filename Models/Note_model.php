@@ -22,5 +22,9 @@ use \Exception;
         public static function deleteNote($where){ 
          Model::delete("note", params_where: $where);       
       }
+         //Renvoie tous les utilisateurs.
+        public static function existNoteAll(){  
+            return Model::select(table: "note");        
+        }
 
     }

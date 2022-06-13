@@ -54,9 +54,6 @@ require('Controllers/Main/Index_controller.php');
       } else{
          header("Location: ".Settings::RACINE) ;
       }
-      
-     
-      
      }
 
      

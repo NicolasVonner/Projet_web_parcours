@@ -36,31 +36,31 @@ class Parcour_controller extends Index_controller{
         //On vérifie si c'est une modification.
           if(isset($_POST['idParcour'])){
             $editId =$_POST['idParcour'] ;
-            $noteData=Note::existNote(array("codePa"=>htmlspecialchars($_POST['idParcour'])));
-            $noteData=$noteData->fetchAll();
-            if(!empty($noteData)){
-              $graphValue=[0,0,0,0,0];
-              foreach($noteData as $value){
-                switch($value->note){
-                case 1:
-                  $graphValue[0]+=1;
-                  break;
-              case 2:
-                $graphValue[1]+=1;
-                  break;
-              case 3:
-                $graphValue[2]+=1;
-                  break;
-              case 4:
-                $graphValue[3]+=1;
-                  break;
-                case 5:
-                  $graphValue[4]+=1;
-                    break;
-                  }
+            // $noteData=Note::existNote(array("codePa"=>htmlspecialchars($_POST['idParcour'])));
+            // $noteData=$noteData->fetchAll();
+            // if(!empty($noteData)){
+            //   $graphValue=[0,0,0,0,0];
+            //   foreach($noteData as $value){
+            //       switch($value->note){
+            //         case 1:
+            //           $graphValue[0]+=1;
+            //             break;
+            //         case 2:
+            //           $graphValue[1]+=1;
+            //             break;
+            //         case 3:
+            //           $graphValue[2]+=1;
+            //             break;
+            //         case 4:
+            //           $graphValue[3]+=1;
+            //             break;
+            //           case 5:
+            //           $graphValue[4]+=1;
+            //               break;
+            //         }
                 
-              }
-          } 
+            //   }
+            // } 
         } 
         else {
           $editId=null;
@@ -266,6 +266,7 @@ class Parcour_controller extends Index_controller{
            }
           }
         }
+        
         function deleteParcour(){
           // die("Nous voulons supprimer le parcour =>".$_POST['idDeleteParcour']);
           $idparcour = isset($_POST['idDeleteParcour'])?$_POST['idDeleteParcour']:null;
