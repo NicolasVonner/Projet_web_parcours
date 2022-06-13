@@ -11,6 +11,7 @@ class Course
     private $dateCreation;
     private $dateDerniereModif;
     private $hashCode;
+    private $activation;
 
     //Constructeur
     function __construct($datas)
@@ -104,10 +105,19 @@ class Course
         $this->dateInscription = $new_dateInscription;
     }
 
+    public function getActivation()
+    {
+        return $this->activation;
+    }
+    public function setActivation($new_activation)
+    {
+        $this->activation = $new_activation;
+    }
+
     //Methodes d'affichage de l'objet
     public function __toString(): string{
         return !isset($this->codePa)? 'Parcour =>' . $this->getCreateur() . '/' . $this->getNomPa() . '/' . $this->getDescriptionPa() . '/' . $this->getDateCreation() . '/' . $this->getDateDerniereModif() . '/' .$this->getHashCode():
-            'Parcour =>' . $this->getCodePa() . '/' .$this->getCreateur() . '/' . $this->getNomPa() . '/' . $this->getDescriptionPa() . '/' . $this->getDateCreation() . '/' . $this->getDateDerniereModif() . '/' .$this->getHashCode();
+            'Parcour =>' . $this->getCodePa() . '/' .$this->getCreateur() . '/' . $this->getNomPa() . '/' . $this->getDescriptionPa() . '/' . $this->getDateCreation() . '/' . $this->getDateDerniereModif() . '/' .$this->getHashCode(). '/' .$this->getActivation();
     }
 
     //Tranforme l'objet en tableau associatif (Equipe, default null)
@@ -129,6 +139,7 @@ class Course
                 'dateCreation' => $this->getDateCreation(),
                 'dateDerniereModif' => $this->getDateDerniereModif(),
                 'hashCode' => $this->getHashCode(),
+                'activation' => $this->getActivation()
             );
     }
     

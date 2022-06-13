@@ -35,7 +35,6 @@
         <div class="main-panel" id=<?php echo isset($editId)?$editId:""?>>
            <?php include './Views/Parcour/createParcoursCenter.php';?>
         </div>
-
       </div>
 
     </div>   

@@ -43,7 +43,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
             $parcour_board = array();
 
             $where = isset($utilisateur) && !$gameSearch ? array('createur' => $utilisateur->getCodeM()) :null;
-            $parcour_array = Parcour::existParcour($where, array('codePa', 'createur', 'nomPa', 'dateCreation'));
+            $parcour_array = Parcour::existParcour($where, array('codePa', 'createur', 'nomPa', 'dateCreation', 'activation'));
     
             while($parcour_params = $parcour_array->fetch(Fetch::_ASSOC)){
                 //Crée objet de slection global pour la vue.

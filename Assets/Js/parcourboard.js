@@ -83,13 +83,63 @@ for (i = 0; i < x.children.length; i++) {
                 }}); 
         }
     });
-    //Le boutton Edit de chaque ligne du tableau de parcour.
+    //Le boutton Edit  et activate de chaque ligne du tableau de parcour.
     if(x.children[i].getElementsByTagName('button')[2] != null){
         x.children[i].getElementsByTagName('button')[2].addEventListener('click', (e)=>{
             let id = e.currentTarget.id;
             let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+id+" ?");
             if(editInvit){  
                 sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: id});
+            }
+        });
+        //Activate.
+        x.children[i].getElementsByTagName('button')[3].addEventListener('click', (e)=>{
+            let id = e.currentTarget.id;
+            let nature = e.currentTarget.textContent;
+            let confirmActiv;
+            let flagactiv;
+            if(nature == "Désactiver"){
+                confirmActiv = confirm("Êtes vous sur de vouloir désactiver le parcour "+id+" ?");
+                if(confirmActiv){
+                    flagactiv = 0;
+                    $.ajax({url: RACINE+'Parcour/Parcour_controller/disableParcour/',type: "post",
+                    data: {idParcour: id, flag: flagactiv }, success: function(resp){
+                        if(resp == '200'){
+                          if(flagactiv == 0){
+                            $('.btn-outline-danger').addClass('btn-outline-success').removeClass('btn-outline-danger')
+                            e.target.innerHTML = "<i class='mdi mdi-eye btn-icon-prepend'></i>Activer";
+                            x.children[i-1].getElementsByTagName('button')[0].disabled = true;
+                          } else{
+                            $('.btn-outline-success').addClass('btn-outline-danger').removeClass('btn-outline-success')
+                              e.target.innerHTML = "<i class='mdi mdi-eye-off btn-icon-prepend'></i>Désactiver";
+                              x.children[i-1].getElementsByTagName('button')[0].disabled = false;
+                          } 
+                        }
+                 }}); 
+                }else{
+                    return;
+                }           
+            }else{
+                confirmActiv = confirm("Êtes vous sur de vouloir activer le parcour "+id+" ?");
+                if(confirmActiv){
+                    flagactiv = 1;
+                    $.ajax({url: RACINE+'Parcour/Parcour_controller/disableParcour/',type: "post",
+                    data: {idParcour: id, flag: flagactiv }, success: function(resp){
+                        if(resp == '200'){
+                          if(flagactiv == 0){
+                            $('.btn-outline-danger').addClass('btn-outline-success').removeClass('btn-outline-danger')
+                            e.target.innerHTML = "<i class='mdi mdi-eye btn-icon-prepend'></i>Activer";
+                            x.children[i-1].getElementsByTagName('button')[0].disabled = true;
+                          } else{
+                            $('.btn-outline-success').addClass('btn-outline-danger').removeClass('btn-outline-success')
+                              e.target.innerHTML = "<i class='mdi mdi-eye-off btn-icon-prepend'></i>Désactiver";
+                              x.children[i-1].getElementsByTagName('button')[0].disabled = false;
+                          } 
+                        }
+                 }}); 
+                }else{
+                    return;
+                } 
             }
         });
     } 

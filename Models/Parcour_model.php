@@ -22,7 +22,9 @@ namespace Projet_Web_parcours\Models;
         
         //Met à jour un parcour.
         public static function updateParcour($what, $where){ 
-           Model::update(table: "parcour", params_what: $what->to_Array(), params_where: $where);       
+         is_object($what)?Model::update(table: "parcour", params_what: $what->to_Array(), params_where: $where):
+         Model::update(table: "parcour", params_what: $what, params_where: $where);  ;
+                
         }
 
          //Supprime un parcour.

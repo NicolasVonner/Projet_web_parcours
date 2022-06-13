@@ -199,7 +199,7 @@ class Parcour_controller extends Index_controller{
           ); 
           $parcour = new Course($course_params);  
           //On met à jour le parcour.
-          Parcour::updateParcour($parcour,array("codePa" => $parcour->getCodePa()));
+          Parcour::updateParcour($parcour, array("codePa" => $parcour->getCodePa()));
           //On bloque l'historique pour ce parcour pour éviter les reprises qui ne fonctionnent pas.
             //On récupère le datetime.
           date_default_timezone_set('Europe/Paris');
@@ -362,7 +362,14 @@ class Parcour_controller extends Index_controller{
       }
       echo empty($activityMap)? "There are no activity" : json_encode($activityMap);
     }
-    
+    function disableParcour(){
+      // die("On souhaite agir sur le parcour =>".$_POST['idParcour']."Afin de le rendre =====>".$_POST['flag']);
+      $parcour = $_POST['idParcour'];
+      $flag = $_POST['flag'];
+      // die("====>".$parcour."======>".$flag);
+      Parcour::updateParcour(array("activation" => intval($flag)), array("CodePa" =>$parcour));
+      echo '200';
+    }
     //TODO verifier qu'on à bien 2 possibilités avec 1 bit vue qu'il y a convertion. -> Des milliers de parcours pourraient avoir un code trop important pour rien.
     //Retour un hascode unique pour un parcour
     function generatehash(){

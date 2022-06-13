@@ -16,8 +16,14 @@ let currentStep = null;
 let actStep = null;
 
 let spotCount = 0;
+let game = true;
 
-geoloc();
+// geoloc();
+
+// do{
+//     var pos = geoloc();//TODO faire une fonciton récurente qui 
+
+// }while(game)
 
 let map = L.map('map').setView([51.505, -0.09], 13);
 L.tileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${accessToken}`, {
@@ -32,11 +38,13 @@ let markerGroup = L.layerGroup().addTo(map);
 let lineGroup = L.layerGroup().addTo(map);
 
 function geoloc(){ // ou tout autre nom de fonction
+    let arrayLocal = new Array;
     var geoSuccess = function(position) { // Ceci s'exécutera si l'utilisateur accepte la géolocalisation
         startPos = position;
         userlat = startPos.coords.latitude;
         userlon = startPos.coords.longitude;
         console.log("lat: "+userlat+" - lon: "+userlon);
+        arrayLocal.push(userlat, userlon); //Tableau de coordonné.
     };
     var geoFail = function(){ // Ceci s'exécutera si l'utilisateur refuse la géolocalisation
         console.log("refus");
@@ -220,8 +228,15 @@ const validGamePoints = () =>{
             //SI on est en debut de partie on verifie si step + 1 
             if(currentStep == null){
                 if(localStep == gameObject.positions.length){
+<<<<<<< Updated upstream
                     alert("C'est la fin du parcour, bien joué");//todo Système de note parcour.
                     openRankModal();
+=======
+                    alert("C'est la fin du parcour, bien joué, vous allez être redirigé vers l'acceuil");//todo Système de note parcour.
+                    game = false; //On stop la fonciton récurrente de géo-loccalisation
+                    location.href = RACINE;
+                    return;
+>>>>>>> Stashed changes
                 }
                 actStep = gameObject.positions[step].activites.length != 0? 0 : null;//Si on est sur un début de game.
                 document.querySelector("#nextStep").textContent = step  == gameObject.positions.length? "Arrivée" : step; 
@@ -229,8 +244,15 @@ const validGamePoints = () =>{
 
             }else{// if(currentStep != null)
                 if(localStep+1 == gameObject.positions.length){
+<<<<<<< Updated upstream
                     alert("C'est la fin du parcour, bien joué");//todo Système de note parcour.
                     openRankModal();
+=======
+                    alert("C'est la fin du parcour, bien joué, vous allez être redirigé vers l'acceuil");//todo Système de note parcour.
+                    game = false;//On stop la fonciton récurrente de géo-loccalisation
+                    location.href = RACINE;
+                    return;
+>>>>>>> Stashed changes
                 }
                 currentStep ++;
                 actStep = gameObject.positions[currentStep].activites.length != 0? 0 : null; //Si on est sur un reprise et que la partie continue.
