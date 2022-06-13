@@ -17,8 +17,8 @@ const openRankModal = () => {
 const closeRankModal = () => {
     $("#modal").removeClass("show");
     $(".modal-overlay").removeClass("show");
-    //location.href = RACINE;
-    //return;
+    location.href = RACINE;
+    return;
 };
 
 // permet de changer la couleur du label (étoile) en fonction de conditions

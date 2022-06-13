@@ -228,15 +228,9 @@ const validGamePoints = () =>{
             //SI on est en debut de partie on verifie si step + 1 
             if(currentStep == null){
                 if(localStep == gameObject.positions.length){
-<<<<<<< Updated upstream
                     alert("C'est la fin du parcour, bien joué");//todo Système de note parcour.
                     openRankModal();
-=======
-                    alert("C'est la fin du parcour, bien joué, vous allez être redirigé vers l'acceuil");//todo Système de note parcour.
-                    game = false; //On stop la fonciton récurrente de géo-loccalisation
-                    location.href = RACINE;
-                    return;
->>>>>>> Stashed changes
+                    
                 }
                 actStep = gameObject.positions[step].activites.length != 0? 0 : null;//Si on est sur un début de game.
                 document.querySelector("#nextStep").textContent = step  == gameObject.positions.length? "Arrivée" : step; 
@@ -244,15 +238,8 @@ const validGamePoints = () =>{
 
             }else{// if(currentStep != null)
                 if(localStep+1 == gameObject.positions.length){
-<<<<<<< Updated upstream
                     alert("C'est la fin du parcour, bien joué");//todo Système de note parcour.
                     openRankModal();
-=======
-                    alert("C'est la fin du parcour, bien joué, vous allez être redirigé vers l'acceuil");//todo Système de note parcour.
-                    game = false;//On stop la fonciton récurrente de géo-loccalisation
-                    location.href = RACINE;
-                    return;
->>>>>>> Stashed changes
                 }
                 currentStep ++;
                 actStep = gameObject.positions[currentStep].activites.length != 0? 0 : null; //Si on est sur un reprise et que la partie continue.
