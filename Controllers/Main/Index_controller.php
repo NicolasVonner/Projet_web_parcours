@@ -4,6 +4,7 @@
 use Projet_Web_parcours\Models\Utilisateur;
 use Projet_Web_parcours\Models\Parcour;
 use Projet_Web_parcours\Models\Position;
+use Projet_Web_parcours\Models\Note;
 use Projet_Web_parcours\Entities\User;
 use Projet_Web_parcours\Entities\Course;
 use Projet_Web_parcours\Entities\Point;
@@ -55,6 +56,21 @@ use Projet_Web_parcours\Assets\settings\Settings;
                 $parcour = new Course($parcour_params);
                 $courses->parcour = $parcour;
                 //On récupère le createur
+
+                //On récupère la moyenne
+                $note_list_request = Note::existNote(array("codePa"=> $parcour_params['codePa']));
+                $note_list = $note_list_request->fetchAll();
+                $notes = array_map(
+                  function($x) {
+                      return $x->note;
+                  }, $note_list
+                );
+                if(count($notes)) {
+                    $courses->averageNotes = array_sum($notes)/count($notes);
+                }
+                else {
+                    $courses->averageNotes = null;
+                }
     
                 //On récupère la première position.
                 $position_array = Position::existPosition(array('parcour'=> $courses->parcour->getCodePa()), array('nomPo', 'pays'));

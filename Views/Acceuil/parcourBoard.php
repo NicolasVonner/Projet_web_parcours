@@ -33,8 +33,9 @@
                                                 <h6 class="preview-subject">'.$value->parcour->getNomPa().'</h6>
                                                 <p class="text-muted mb-0">Départ : '.$value->position->getNomPo().'</p>
                                               </div>
-                                              <div class="flex-grow" style="margin-right: 10px;">
-                                                <p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
+                                              <div class="flex-grow" style="margin-right: 10px;">';
+                                                echo $value->averageNotes != null ? '<p id='.$value->parcour->getCodePa().' class="text-muted average-notes">'.$value->averageNotes.' stars</p>':'';
+                                                echo '<p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
                                                 <p class="text-muted">Créateur : '; 
                                                 echo $value->parcour->getCreateur() == $utilisateur->getUsername()? "Moi":$value->parcour->getCreateur();
                                                 echo'</p>
@@ -50,8 +51,9 @@
                                                 <h6 class="preview-subject">'.$value->parcour->getNomPa().'</h6>
                                                 <p class="text-muted mb-0">Départ : '.$value->position->getNomPo().'</p>
                                               </div>
-                                              <div class="flex-grow" style="margin-right: 10px;">
-                                                <p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
+                                              <div class="flex-grow" style="margin-right: 10px;">';
+                                                echo $value->averageNotes != null ? '<p id='.$value->parcour->getCodePa().' class="text-muted average-notes">'.$value->averageNotes.' stars</p>':'';
+                                                echo '<p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
                                                 <p class="text-muted mb-0">'.$value->steps.' étapes</p>
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
@@ -64,8 +66,9 @@
                                                 <h6 class="preview-subject">'.$value->parcour->getNomPa().'</h6>
                                                 <p class="text-muted mb-0">Départ : '.$value->position->getNomPo().'</p>
                                               </div>
-                                              <div class="flex-grow" style="margin-right: 10px;">
-                                                <p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
+                                              <div class="flex-grow" style="margin-right: 10px;">';
+                                                echo $value->averageNotes != null ? '<p id='.$value->parcour->getCodePa().' class="text-muted average-notes">'.$value->averageNotes.' stars</p>':'';
+                                                echo '<p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
                                                 <p class="text-muted mb-0">'.$value->steps.' étapes</p>
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">

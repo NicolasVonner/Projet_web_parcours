@@ -6,14 +6,11 @@ use Projet_Web_parcours\Models\Position;
 use Projet_Web_parcours\Models\Activite;
 use Projet_Web_parcours\Models\Note;
 use Projet_Web_parcours\Entities\Review;
-use Projet_Web_parcours\Entities\User;
 use Projet_Web_parcours\Entities\Course;
 use Projet_Web_parcours\Entities\Point;
 use Projet_Web_parcours\Entities\Activity;
-use Projet_Web_parcours\Entities\Jeu_texte;
 use Projet_Web_parcours\Entities\HistoParcour;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
-use Projet_Web_parcours\Assets\enums\game\Type;
 use Projet_Web_parcours\Assets\settings\Settings;
 
 require('Controllers/Main/Index_controller.php');

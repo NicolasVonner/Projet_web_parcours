@@ -56,7 +56,7 @@
                 </div>
             </div>
     </div>
-    <!--<button id="open-modal">Open modal</button>-->
+    <button id="open-modal">Open modal</button>
     <div id="modal" role="dialog" aria-modal="true" aria-labelledby="add-review-header" class="">
         <div class="float-end"><button id="close-modal" class="btn btn-light" aria-label="close" title="Close">X</button></div>
         <div id="review-form-container">

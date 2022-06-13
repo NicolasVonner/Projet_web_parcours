@@ -2,7 +2,7 @@ let inputList = $(".rate input");
 let note = "";
 
 window.onload = () => {
-    //$("#open-modal").on("click",openRankModal);
+    $("#open-modal").on("click",openRankModal);
     $("#close-modal").on("click",closeRankModal);
     $("#send-rating").on("click",sendRank);
 }
@@ -17,8 +17,8 @@ const openRankModal = () => {
 const closeRankModal = () => {
     $("#modal").removeClass("show");
     $(".modal-overlay").removeClass("show");
-    location.href = RACINE;
-    return;
+    //location.href = RACINE;
+    //return;
 };
 
 // permet de changer la couleur du label (étoile) en fonction de conditions
@@ -96,9 +96,10 @@ const sendRank = () => {
         // on envoie l'objet stars au Game_controller
         $.post(RACINE+"Game/Game_controller/addNoteToParcours","stars="+JSON.stringify(stars) , function(result){
             // si le résultat est autre que sended, ça veut dire qu'on a déjà envoie une note dans ce parcours
-            if (result != "sended") {
-                alert("Erreur, tu a déjà laissé une note dans ce parcours!");
-            }
+            console.log(result);
+            // if (result != "sended") {
+            //     alert("Erreur, tu a déjà laissé une note dans ce parcours!");
+            // }
         });
         closeRankModal(); // on ferme le modal
     }

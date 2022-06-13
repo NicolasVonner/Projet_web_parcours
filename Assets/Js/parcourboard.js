@@ -44,6 +44,15 @@ function verifySize(){
     }
 }
 
+let p = document.getElementsByClassName('average-notes');
+for (i = 0; i < p.length; i++)
+{
+    p[i].addEventListener('click', (e)=>{
+        let codePa = e.currentTarget.id;
+        sendParams(RACINE+'Review/Review_controller/displayReviewPage/', {codePa: codePa});
+    });
+}
+
 let x =  document.getElementById('list');
 for (i = 0; i < x.children.length; i++) { 
     //Le boutton PLay de chaque ligne du tableau de parcour.
