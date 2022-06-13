@@ -266,6 +266,7 @@ class Parcour_controller extends Index_controller{
            }
           }
         }
+        
         function deleteParcour(){
           // die("Nous voulons supprimer le parcour =>".$_POST['idDeleteParcour']);
           $idparcour = isset($_POST['idDeleteParcour'])?$_POST['idDeleteParcour']:null;

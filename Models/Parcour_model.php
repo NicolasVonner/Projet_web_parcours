@@ -20,11 +20,15 @@ namespace Projet_Web_parcours\Models;
            }   
         }
         
+         //Renvoie tous les utilisateurs.
+        public static function existParcourAll(){  
+            return Model::select(table: "parcour");        
+        }
+        
         //Met à jour un parcour.
         public static function updateParcour($what, $where){ 
          is_object($what)?Model::update(table: "parcour", params_what: $what->to_Array(), params_where: $where):
-         Model::update(table: "parcour", params_what: $what, params_where: $where);  ;
-                
+         Model::update(table: "parcour", params_what: $what, params_where: $where);  ;       
         }
 
          //Supprime un parcour.

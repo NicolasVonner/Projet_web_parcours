@@ -41,4 +41,9 @@ use \Exception;
          public static function deleteEquipe($where){ 
             Model::delete("equipe", params_where: $where);       
          }
+
+        //Renvoie tous les utilisateurs.
+        public static function existEquipeAll(){  
+            return Model::select(table: "equipe");        
+        }
     }

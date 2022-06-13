@@ -130,7 +130,7 @@ class Settings_controller extends Index_controller {
         header("Location: ".Settings::RACINE);
     } else{
       echo "erreur dans l'identitifiant de l'utilisateur qu'il cherche a suprimer";
-      die();
+      die('pouette');
     }
 
    }

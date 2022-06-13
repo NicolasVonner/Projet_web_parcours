@@ -22,6 +22,7 @@ let game = true;
 
 // do{
 //     var pos = geoloc();//TODO faire une fonciton récurente qui 
+// settime 
 
 // }while(game)
 
