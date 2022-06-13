@@ -1,5 +1,6 @@
 <?php use Projet_Web_parcours\Assets\settings\Settings;?>
-<?php echo'
+<?php 
+echo'
 
       <div class="row ">
       <div class="col-12 grid-margin style="margin-bottom: 0; overflow: auto; height: 400px;">

@@ -142,7 +142,7 @@ class Classement_controller extends Index_controller{
               //On push l'objet dans le tableau de rank.
               array_push($rankBox, $perf);
               // echo"Le joueur à mis : ".$perf->time."  ======> La date de début est ".var_dump($departureTime)." ===> La date de fin est".var_dump($endTime);
-              // die("Le joueur à mis : ======> La date de début est ".var_dump($total)." ===> La date de fin est".var_dump($endTime)."====> La difference de temps est".var_dump($perf->time) );
+               die("Le joueur à mis : ======> La date de début est ".var_dump($total)." ===> La date de fin est".var_dump($endTime)."====> La difference de temps est".var_dump($perf->time) );
               // echo'Le nombre est à : '.$nombre;
               $departureTime = 0;
               $nombre = $position_number;
