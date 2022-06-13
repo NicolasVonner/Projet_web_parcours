@@ -9,6 +9,7 @@
     <link rel="stylesheet" href= <?php echo Settings::RACINE."template/assets/css/style.css"?>>
     <link rel="stylesheet" href= <?php echo Settings::RACINE."Assets/Css/settings.css"?>>
     <link rel="shortcut icon" href= <?php echo Settings::RACINE."template/assets/images/favicon.png"?>/>
+    <script src=<?php echo Settings::RACINE."Assets/settings/Settings.js"?>></script>
   </head>
   <body>
     <?php include './Views/Settings/settingsCenter.php';?>

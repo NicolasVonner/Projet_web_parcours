@@ -16,4 +16,11 @@ use \Exception;
         public static function persistNote($note){  
            Model::insert("note", $note->to_Array());          
         }
+
+        //suprimer un note
+        //appeller quand on suprime un parcour dans le parcour controller
+        public static function deleteNote($where){ 
+         Model::delete("note", params_where: $where);       
+      }
+
     }

@@ -13,6 +13,7 @@ use Projet_Web_parcours\Entities\HistoParcour;
 use Projet_Web_parcours\Assets\enums\request\Fetch;
 use Projet_Web_parcours\Assets\enums\game\Type;
 use Projet_Web_parcours\Assets\settings\Settings;
+use Projet_Web_parcours\Models\Note;
 
 
 //TODO mettre un namespace et appeler la classe par cette intermediaire
@@ -33,7 +34,38 @@ class Parcour_controller extends Index_controller{
             $utilisateur = new User($utilisateur_params); 
         }      
         //On vérifie si c'est une modification.
-        $editId = isset($_POST['idParcour'])? $_POST['idParcour']:null;
+          if(isset($_POST['idParcour'])){
+            $editId =$_POST['idParcour'] ;
+            $noteData=Note::existNote(array("codePa"=>htmlspecialchars($_POST['idParcour'])));
+            $noteData=$noteData->fetchAll();
+            if(!empty($noteData)){
+              $graphValue=[0,0,0,0,0];
+              foreach($noteData as $value){
+                switch($value->note){
+                case 1:
+                  $graphValue[0]+=1;
+                  break;
+              case 2:
+                $graphValue[1]+=1;
+                  break;
+              case 3:
+                $graphValue[2]+=1;
+                  break;
+              case 4:
+                $graphValue[3]+=1;
+                  break;
+                case 5:
+                  $graphValue[4]+=1;
+                    break;
+                  }
+                
+              }
+          } 
+        } 
+        else {
+          $editId=null;
+        }
+       
       }
       require('Views/Parcour/createParcours_view.php');
     }
@@ -252,6 +284,7 @@ class Parcour_controller extends Index_controller{
           //On ajoute le code du parcour
           $this->deleteElements($deleteTab);
           Parcour::deleteParcour(array("codePa"=>$idparcour));
+          Note::deleteNote(array("codePa"=>$idparcour)); //on suprime les note associer a ce parcours
           unset($deleteObj);
           unset($deleteTab);
           header('Location: '.Settings::RACINE.'');

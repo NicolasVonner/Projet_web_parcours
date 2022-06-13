@@ -23,7 +23,9 @@ class Model extends Connexion{
             }else{
                 $sql = "SELECT "; 
                 //On concatène les éléments à sélectionner.
+                
                 if(isset($param_what)){
+                    //die(var_dump($param_what));
                     if(is_array($param_what)){
                         if(sizeof($param_what) == 1 && $param_what[0] == ""){
                             $sql .= "* ";

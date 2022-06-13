@@ -83,6 +83,18 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+<div class="col grid-margin stretch-card">
+                <div class="card">
+<div class="card-body text-center">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div  class="chart-container" style="position: relative; height:40vh; width:80vw">
+  <canvas id="pie-chart"  ></canvas>
+</div>
+</div>
+</div>
+</div>
+</div>
             <div class="text-center">
               <button id="create-parcours" type="button" class="btn btn-primary text-center">Finish</button>
             </div>

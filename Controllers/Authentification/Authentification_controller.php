@@ -72,6 +72,7 @@ require('Controllers/Main/Index_controller.php');
            "dateNaissance"=>htmlspecialchars($_POST['dateNaissance']),
            "dateInscription"=>htmlspecialchars(date('Y-m-d')),
            "avatar"=>htmlspecialchars($_POST['avatar']),
+           "role"=>0,
          ); 
          $utilisateur = new User($utilisateur_params);   
          $password_confirm = htmlspecialchars($_POST['confirmPassword']);
@@ -156,6 +157,7 @@ require('Controllers/Main/Index_controller.php');
                //On crée la session utilisateur
                $_SESSION['username'] = $utilisateur->getUsername();
                $_SESSION['userID'] = $utilisateur->getCodeM();
+               $_SESSION['userRole']=$utilisateur->getRole();
                //On renvoie l'utilisateur sur l'acceuil
                //$this->rootDirection(utilisateur: $utilisateur);
                header("Location: ".Settings::RACINE);

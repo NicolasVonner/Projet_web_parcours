@@ -21,8 +21,11 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin=""></script>
+   <script src=<?php echo Settings::RACINE."Assets/Js/chartCreator.js"?>></script>
   </head>
-  <body>
+  <body  onload="chartCreatorPie(['1 start', '2 start', '3 start', '4 start', '5 start'], ['#3e95cd', '#8e5ea2','#3cba9f','#e8c3b9','#c45850'],
+    <?php echo json_encode($graphValue); ?>,
+    'Notes','Note du parcours par  les joueurs entre 1 et 5')">
     <div class="container-scroller">
       <?php include './Views/navSide.php';?>
       <!-- partial -->
@@ -42,5 +45,6 @@
     <script src=<?php echo Settings::RACINE."Assets/settings/Settings.js"?>></script>
     <script src=<?php echo Settings::RACINE."Assets/Js/parcour.js"?>></script>
     <script src=<?php echo Settings::RACINE."Assets/Js/activity.js"?>></script>
+    <script src= <?php echo Settings::RACINE."assets/chart.js/Chart.min.js"?> ></script>
   </body>
 </html>

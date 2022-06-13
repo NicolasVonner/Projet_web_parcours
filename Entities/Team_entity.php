@@ -2,12 +2,13 @@
 
 namespace Projet_Web_parcours\Entities;
 
-class Equipe
+class Team
 {
     private $codeE;
     private $nomE;
-    private $dateInscription;
-   //private $logoE="";
+    private $dateCrea;
+    private $codeCreateur;
+   private $emblemE;
    
 
     //Constructeur
@@ -48,25 +49,33 @@ class Equipe
         $this->nomE = $new_nom;
     }
 
-    public function getDateInscription()
+    public function getdateCrea	()
     {
-        return $this->dateInscription;
+        return $this->dateCrea	;
     }
-    public function setDateInscription($new_date)
+    public function setdateCrea	($new_date)
     {
-        $this->dateInscription = $dateInscription;
+        $this->dateCrea	 = $new_date;
     }
     
-
-    /*
-    public function getLogo()
+    public function getcodeCreateur	()
     {
-        return $this->logoE;
+        return $this->codeCreateur;
     }
-    public function setLogo($new_logo)
+    public function setcodeCreateur	($new_codeCreateur)
     {
-        $this->avatar = $new_logo;
-    } */
+        $this->codeCreateur = $new_codeCreateur;
+    }
+
+    
+    public function getEmblemE()
+    {
+        return $this->emblemE;
+    }
+    public function setEmblemE($new_emblem)
+    {
+        $this->emblemE = $new_emblem;
+    } 
 
     
 
@@ -80,12 +89,16 @@ class Equipe
     public function to_Array(): array{
         return !isset($this->codeE)? array (
                                           'nomE' => $this->getNomE(),
-                                        'dateCreationE' => $this->getDateInscription()
+                                        'dateCrea' => $this->getdateCrea(),
+                                        'codeCreateur'=> $this->getcodeCreateur(),
+                                        'emblemE'=>$this->getEmblemE(),
                                     ):
                                     array (
                                         'codeE' => $this->getCodeE(),
                                         'nomE' => $this->getNomE(),
-                                        'dateCreationE' => $this->getDateInscription(),
+                                        'dateCrea' => $this->getdateCrea(),
+                                        'codeCreateur'=> $this->getcodeCreateur(),
+                                        'emblemE'=>$this->getEmblemE(),
                                     );
     }
     

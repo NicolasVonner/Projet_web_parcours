@@ -39,4 +39,11 @@ use \Exception;
         public static function updateUser($what, $where){ 
            Model::update(table: "membre", params_what: $what, params_where: $where);       
         }
+
+         //suprimer un utilisateur, fonctionalité reserver au admin pour le compte d'un autre utilisateur.
+         //chaque utilisateur peut suprimer sont propre compte dans le cadre du droit a l'oublie
+         public static function deleteUser($where){ 
+            Model::delete(table: "membre", params_where: $where);      
+         }
+        
     }

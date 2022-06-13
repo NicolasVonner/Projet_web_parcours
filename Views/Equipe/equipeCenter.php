@@ -9,30 +9,31 @@
               </div>
               <div class="card-body px-5 py-5">
                 <h3 class="card-title text-left mb-3">Crée votre équipe</h3>
-                <form method="POST" action=<?php echo Settings::RACINE."Authentification/Authentification_controller/verify_signup"?>>
+                <form method="POST" action=<?php echo Settings::RACINE."Equipe/Equipe_controller/verify_signup"?>>
                  <div class="form-group">
+                 <input id="userId" name="userId" type="hidden" value="<?php echo $utilisateur->getCodeM(); ?>"  >
                     <label>Nom de l'équipe</label>
-                    <input type="text" placeholder="nom de l'équipe" name="firstname" class="form-control p_input">
+                    <input type="text" placeholder="nom de l'équipe" name="teamname" class="form-control p_input">
                   </div>       
                   <div class="form-group">
                     <div class="dropdown">
                           <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuOutlineButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> choisisez l'emblem de votre équipe </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton2" style="margin-bottom: 0; overflow: auto; height: 110px;">                    
                               <?php
-                                $dir ='Assets\Images\faces';
+                                $dir ='Assets\Images\emblems';
                                   // Ouvre un dossier bien connu, et liste tous les fichiers
                                   if (is_dir($dir)) {
                                     if ($dh = opendir($dir)) {
                                         while (($file = readdir($dh)) !== false) {
                                           if($file != "." && $file != "..")
-                                          echo "<img class='img-sm avatar' src= '".Settings::RACINE."Assets/Images/faces/".$file."' alt=''>";
+                                          echo "<img class='img-sm avatar' src= '".Settings::RACINE."Assets/Images/emblems/".$file."' alt='emblem_team'>";
                                         }
                                         closedir($dh);
                                     }
                                   }
                               ?>                  
                             </div>
-                          <img src= <?php echo Settings::RACINE."Assets/Images/faces/face8.jpg"?> alt="image" id="avatar-preview" class="rounded-circle"/>
+                          <img src= <?php echo Settings::RACINE."Assets/Images/emblem/face8.jpg"?> alt="image" id="avatar-preview" class="rounded-circle"/>
                           
                     </div>
                     <input type="text" id="form-avatar" value="face8.jpg" name="avatar" hidden>
@@ -80,4 +81,3 @@
     </div>
     <script src= <?php echo Settings::RACINE."template/assets/vendors/js/vendor.bundle.base.js"?>></script>
     <script src= <?php echo Settings::RACINE."template/assets/js/misc.js"?>></script>
-    <script src= <?php echo Settings::RACINE."Assets/Js/signup.js"?>></script>

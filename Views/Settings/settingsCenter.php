@@ -13,8 +13,10 @@
           <div class="card-body px-5 py-5">
             <div class="form-group">
               <a href=<?php echo Settings::RACINE?>>Back</a>
+              <p class="text-muted mb-1"><button id="delete-user" value="<?php echo $utilisateur->getCodeM()?>" type="button" class="btn btn-outline-danger"> <i class="mdi mdi-delete-forever"></i>Supprimer votre compte</button></p>
             </div>
             <h3 class="card-title text-left mb-3">Update profile</h3>
+            
             <form method="POST" action=<?php echo Settings::RACINE."Settings/Settings_controller/verify_settings/".$utilisateur->getCodeM()?>>
               <div class="form-group">
                 <label>First name</label>

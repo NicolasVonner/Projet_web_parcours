@@ -127,3 +127,30 @@ function changeInputColor(messageSize, currentValue){
     return BORDER_OK;
 }
 
+
+//suprimer sont propre sont compte
+$(document).on('click', '#delete-user', function(e) {
+    let response  = confirm("Etes vous sur de bien vouloir suprimer votre comptes  tous les données associé score, parcours, équipe seront suprimer de manière définitive");
+    if(response)
+    sendDelete(RACINE+'Settings/Settings_controller/deleteOurOwnAcount/', {idDeleteUser: e.target.value})
+        
+});
+
+function sendDelete(path, parameters, method='post') {
+
+    const form = document.createElement('form');
+    form.method = method;
+    form.action = path;
+    document.body.appendChild(form);
+
+    for (const key in parameters) {
+        const formField = document.createElement('input');
+        formField.type = 'hidden';
+        formField.name = key;
+        formField.value = parameters[key];
+
+        form.appendChild(formField);
+    }
+    form.submit();
+}
+

@@ -103,4 +103,40 @@ class Settings_controller extends Index_controller {
       //die("Le nouveau mot est =>".$str);
    }
 
+   //l'utilisateur peut suprimer sont propre compte 
+   //afin qu'on concereve pas ces données.
+   public function deleteOurOwnAcount(){
+   
+    $idButton=$_POST["idDeleteUser"]; //id qui est dans le boutton
+    $correspondance_array = Utilisateur::existUser(array('username' => $_SESSION['username']));
+    if($correspondance_array->rowCount() != 0){
+        $utilisateur_params = $correspondance_array->fetch(Fetch::_ASSOC);
+        $utilisateur = new User($utilisateur_params);
+   }     
+    if($idButton==$utilisateur->getCodeM()){ //si c'est bien sont propre compte qu'on chercher a suprimer
+        Utilisateur::deleteUser(array('codeM' => $utilisateur->getCodeM()));
+        //TODO
+        //Parcour::deleteParcour(array("createur"=>$idparcour));
+        //il faut suprimer les parcours et les équipe s'il en est le créateurs
+
+
+        Note::deleteNote(array("codeM"=>$utilisateur->getCodeM()));//on suprime les note que l'utilisateur a ajouter sur les parcours des autres
+        //suprimer les parcours crée par l'utilisateur
+        if(true){ //s'il est le créateur d'une équipe. on suprimer l'équipe en enlèvant tous c'est membre
+          //Equipe::deleteEquipe($where=(array('codeE' => $equipe)));
+        }
+        $_SESSION['username'] = null;
+        session_destroy(); 
+        header("Location: ".Settings::RACINE);
+    } else{
+      echo "erreur dans l'identitifiant de l'utilisateur qu'il cherche a suprimer";
+      die();
+    }
+
+   }
+   //pour pouvoir passer de joueurs a admin
+   public function askToBeAdmin(){
+     
+   }
+
 }
