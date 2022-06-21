@@ -77,6 +77,10 @@ class Parcour_controller extends Index_controller{
            //On construit toutes les infos concernant le parcour, object pour js.
            //On vas chercher les infos du parcour.
            $parcour_request = Parcour::existParcour(array('codePa' => $idParcour));
+           //On vérifie si le parcour existe
+           if(empty($parcour_request->fetchAll())){
+            header("Location: ".Settings::RACINE);
+          };
            $parcour_array =  $parcour_request->fetch(Fetch::_ASSOC);
            //On crée le parcour.
            $parcour = new stdClass();

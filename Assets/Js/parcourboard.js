@@ -31,15 +31,27 @@ function verifySize(){
         for (i = 0; i < x.children.length; i++) { 
             x.children[i].getElementsByTagName('button')[0].innerHTML = '<i class="mdi mdi-play btn-icon-prepend"></i>';
             x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-crown btn-icon-prepend"></i>';
-            if(x.children[i].getElementsByTagName('button')[2] != undefined){
+            if(x.children[i].getElementsByTagName('button')[2] != undefined){ //Si il y a un edit il y a un activate/desactivate.
                 x.children[i].getElementsByTagName('button')[2].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>';
+                let nature = x.children[i].getElementsByTagName('button')[3].textContent;
+                if(nature == "Désactiver")
+                    x.children[i].getElementsByTagName('button')[3].innerHTML = '<i class="mdi mdi-eye-off btn-icon-prepend"></i>';
+                else 
+                    x.children[i].getElementsByTagName('button')[3].innerHTML = '<i class="mdi mdi-eye btn-icon-prepend"></i>'; 
             }
         }
     }else{
         for (i = 0; i < x.children.length; i++) { 
             x.children[i].getElementsByTagName('button')[0].innerHTML = '<i class="mdi mdi-play btn-icon-prepend"></i>Jouer';
             x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-crown btn-icon-prepend"></i>Rank';
-           if(x.children[i].getElementsByTagName('button')[2] != undefined) x.children[i].getElementsByTagName('button')[2].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>Edit';
+           if(x.children[i].getElementsByTagName('button')[2] != undefined){
+            x.children[i].getElementsByTagName('button')[2].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>Edit';
+                let nature = x.children[i].getElementsByTagName('button')[3].textContent;
+                if(nature == "Désactiver")
+                    x.children[i].getElementsByTagName('button')[3].innerHTML = '<i class="mdi mdi-eye-off btn-icon-prepend"></i>Désactiver';
+                else 
+                    x.children[i].getElementsByTagName('button')[3].innerHTML = '<i class="mdi mdi-eye btn-icon-prepend"></i>Activer'; 
+           }
         }
     }
 }
@@ -57,7 +69,7 @@ let x =  document.getElementById('list');
 for (i = 0; i < x.children.length; i++) { 
     //Le boutton PLay de chaque ligne du tableau de parcour.
     x.children[i].getElementsByTagName('button')[0].addEventListener('click', (e)=> {
-        if(e.currentTarget.id == ""){//Si le non membre veux jouer à un parcour du board
+        if(e.currentTarget.value == ""){//Si le non membre veux jouer à un parcour du board
             let singupInvit = confirm("Seul les membres peuvent lancer un parcour, voulez vous être rediriger vers le menu d'authentification?");
             singupInvit? location.href = RACINE+'Authentification/Authentification_controller/displaySignin' : false;
         }else{//Si le membre veux jouer à un parcour du board

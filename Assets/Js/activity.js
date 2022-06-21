@@ -26,6 +26,7 @@ $(document).on('click', '#add-activity', function() { // show modal
     $("#create-activity").show();
     $("#create-activity").html("Create");
     $('#create-activity').attr("onclick",`sendActivityData()`);
+    $("#create-activity").prop("disabled",true);
 });
 
 const viewActivity = (actIndex) => {
@@ -44,6 +45,7 @@ const editActivity = (actIndex) => {
     $("#create-activity").show();
     $("#create-activity").html("Edit");
     $('#create-activity').attr("onclick",`sendActivityData(${parcour.positions[spotIndex].activites[actIndex].id})`);
+    $("#create-activity").prop("disabled",true);
 };
 
 $(document).on('click', '.closeModal', function() { // close modal
@@ -79,6 +81,43 @@ const openConfig = (activity, canEdit) => {
                         <input type="text" class="form-control" id="${prop}" placeholder="${prop}" ${canEdit ? "" : "readonly"}>
                     </div>
                 `);
+               //todo mettre un listener sur les inputs, faire la vérification coté back.
+
+                document.getElementById(prop).addEventListener('keyup', (e) => {
+                    let devinette = document.getElementById('devinette');
+                    let response = document.getElementById('reponse');
+                    let indice = document.getElementById('indice');
+                    let choix_1 = document.getElementById('choix_1');
+                    let choix_2 = document.getElementById('choix_2');
+                    let choix_3 = document.getElementById('choix_3');
+                    let choix_4 = document.getElementById('choix_4');
+                    let submit = document.getElementById('create-activity'); //TODO ...............
+                    //On vérifie si on peux débloquer le create
+                    if(devinette.value != "" && response.value != ""){
+                        console.log("On est dans le premier step");
+                            if(choix_1.value === response.value ||
+                                choix_2.value === response.value ||
+                                choix_3.value === response.value ||
+                                choix_4.value === response.value){
+                                    console.log("On est dans le deuxieme step");
+                                    if(choix_1.value != "" &&  choix_2.value!= "" || 
+                                    choix_1.value != "" &&  choix_3.value!= "" ||
+                                    choix_1.value != "" &&  choix_4.value!= "" ||
+                                    choix_2.value != "" &&  choix_3.value!= "" ||
+                                    choix_2.value != "" &&  choix_4.value!= "" ||
+                                    choix_3.value != "" &&  choix_4.value!= ""){
+                                        submit.disabled = false;
+                                    }else {
+                                        submit.disabled = true; 
+                                    }
+                            }else{
+                                submit.disabled = true; 
+                            }
+                    }else{
+                        submit.disabled = true; 
+                    }
+                    
+                });
             }
         });
     }else{
@@ -104,11 +143,28 @@ const sendActivityData = (id) => {
     console.log("Les valeurs d'input sont ( SendActivityData() ) =>"+JSON.stringify(gameFieldInfo));
 
     //TODO faire une fonction pour verifier si ya des champs vides (min 2) -> choix_1 et choix_2.Ou Réactiver al fonction au minimum
-    // let allFilled = formData.every((field) => {
-    //     return field.value !== "";
-    // });
+    let response = gameFieldInfo["reponse"];
+    let flagResp = false;
+    let flagChoix = false;
+    let choiceCount = 0;
+    let allFilled = Object.keys(gameFieldInfo).forEach((key) => {
+        console.log("La clefs est =>"+key+ "La valeur est =>"+gameFieldInfo[key]);
+        let splitKey = key.split('_');
+        if(splitKey.length == 2 && splitKey[0] == "choix"){
+            if(gameFieldInfo[key] == response){
+                flagResp = true;
+            }
+        }
+    });
+
+    //Si le user n'as pas entré de solution possible.
+    if(!flagResp){
+        alert("Aucuns choix ne correpond à la réponse saisie");
+        return;
+    }
+
     //console.log("====>gameFieldInfo"+JSON.stringify(gameFieldInfo));
-    let allFilled = true;
+    allFilled = true;
 
     if (allFilled) {
         let currentSpotIndex = parcour.positions.findIndex((element)=>element.nomPo === adress.innerText);

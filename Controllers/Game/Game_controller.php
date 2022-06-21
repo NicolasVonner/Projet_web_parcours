@@ -18,10 +18,10 @@ require('Controllers/Main/Index_controller.php');
  class Game_controller extends Index_controller {
 
     //TODO Charger les informations utilisateur et les implenter dans la vue +  faire des fonction de mise à jour des infos du menbres + static?
-    function launchParcourGame($test){
-        require('Views/Authentification/signin_view.php');
-        die("Ici on lance le parcour avec l'id : ".$test[0]);
-    }
+    // function launchParcourGame($test){
+    //     require('Views/Authentification/signin_view.php');
+    //     die("Ici on lance le parcour avec l'id : ".$test[0]);
+    // }
 
     //Appel le formulaire d'entrée de hash game.
     function displayHashForm($error = null){
@@ -38,6 +38,23 @@ require('Controllers/Main/Index_controller.php');
       $codePa = isset($_POST['codePa'])?$_POST['codePa']:null;
       //Si les deux codes sont nulles on return vers l'acceuil.
       if(!isset($hashcode) && !isset($codePa)) header("Location: ".Settings::RACINE);
+      //On vérifie si le parcour n'est pas bloqué et si il existe.
+      $dataParams = isset($codePa)?$codePa: $hashcode;
+      if(isset($dataParams)){
+        //On verifie que la combinaison de paramètre est au bon format
+        if (sizeof(explode('_',$dataParams)) != 2) header("Location: ".Settings::RACINE);
+        if(explode('_',$dataParams)[0] != "codePa" && explode('_',$dataParams)[0] != "hash") header("Location: ".Settings::RACINE);            
+        //On vérifie si le parcour n'est pas bloqué et si il existe.
+        $codeP = explode('_',$dataParams)[1];
+        $typeP = !isset($codePa)?"hashCode":"codePa";
+        $pass = Parcour::existParcour(array($typeP => $codeP), array("activation")); //todo centraliser, nettoyer le code
+        $activData = $pass->fetch(Fetch::_ASSOC);
+        $datasLength = intval(sizeof($pass->fetchAll()));
+        if( intval(sizeof($activData)) === 0 || $activData['activation'] === 0){
+          header("Location: ".Settings::RACINE);
+        }
+      }
+      
       //On récupère le step si il y en à un en post ou via la session de jeu.
       if(isset($_SESSION['game'])){
         $step = $_SESSION['game'];
