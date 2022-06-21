@@ -40,7 +40,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
         // require('Views/api_data_view.php');//todo faire page de mise en forme, renvoie le donnée.
      }
 
-    //On réagis au get.
+     //On réagis au get.
      function getParcour($arrayParams){
    
          if(isset($arrayParams[1]) && $arrayParams[1] == "") array_pop($arrayParams);
@@ -60,7 +60,7 @@ use Projet_Web_parcours\Assets\settings\Settings;
         // require('Views/api_data_view.php');//todo faire page de mise en forme, renvoie le donnée.
      }
 
-      //On réagis au get.
+     //On réagis au get.
      function getPosition($arrayParams){
    
          if(isset($arrayParams[1]) && $arrayParams[1] == "") array_pop($arrayParams);

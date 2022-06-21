@@ -88,12 +88,6 @@ const displayGamePoints = () =>{
     });
 };
     
-    //todo vérifier si la reponse à l'activité est ok, si oui afficher message et suite si non afficher alert et toz.
-    //todo verifier si il y a une autre acitivite, afficher -> appeler la methode d'affichage de la prochaine activité (creer methode).
-    //todo si c'est ok, insérer dans historique activité et parcour.
-    //todo incrémenter la session['game'] en ajax et le surrent step.
-    //todo appeler displayGamePoints.
-
 const openGamePoints = () =>{
     //if(joueur est sur le point){}
     //Si il n'y à pas d'activité sur la position on passe au point d'aprés. //todo fonction à appeler sur listener click d'arrivé ou géolocalisation.
@@ -222,7 +216,7 @@ const validGamePoints = () =>{
     game.parcour = gameObject.codePa;
     game.position = currentStep == null? gameObject.positions[localStep-1].codePo:gameObject.positions[localStep].codePo;
         //On ajoute le step à historique parcour et incremente la session de jeu.
-        $.post(RACINE+'Game/Game_controller/incrementStepSession',"gameStep="+JSON.stringify(game) , function(result){
+        $.post(RACINE+'Game/Game_controller/incrementStepSession',{gameStep : JSON.stringify(game)} , function(result){
             console.log("Le step courant à été incrémenté : " + result);
         }).then(res => { //On implémente la vue et initialise le step activité.
             //On vérifie si on à gagné
@@ -336,9 +330,3 @@ const displaySpotInfo = (index) => {
         //actStep = gameObject.positions[currentStep].activites.length > 1?1:null;//todo normalement c'est géré avec la bdd pour l'instant c'est comme ça.
         //Si c'est le départ on lance le jeux du départ durectement, si non on à déja validé le jeu du step 
     }
-
-    //TODO On enregistre la session pour dernier step mais quand on reprend, c'est la merde, pas possible de reprendre dernier step.
-    //TODO Afficher les parcour d'avant et pas que les n derniers?
-    //TODO quand c'est le dernier ne pas enregistrer
-
-//TODO pour les Reprise prendre le tuple avec la date la plus vieille.

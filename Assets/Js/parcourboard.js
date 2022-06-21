@@ -7,7 +7,7 @@ document.getElementById("searchbar").addEventListener("keyup", (e)=>{
 //REDIMENTIONNEMENT du contenu des bouttons.
 //Pour le démarrage de l'appli.
 verifySize()
-window.addEventListener('resize', verifySize);
+window.addEventListener('resize', verifySize); //todo faire pour activer / désactiver
 
 //Functions
 
@@ -61,7 +61,7 @@ for (i = 0; i < x.children.length; i++) {
             let singupInvit = confirm("Seul les membres peuvent lancer un parcour, voulez vous être rediriger vers le menu d'authentification?");
             singupInvit? location.href = RACINE+'Authentification/Authentification_controller/displaySignin' : false;
         }else{//Si le membre veux jouer à un parcour du board
-                var codePa = "codePa_" + e.currentTarget.id;
+                var codePa = "codePa_" + e.currentTarget.value;
                 $.ajax({url: RACINE+'Game/Game_controller/verifyParcourStep/'+codePa, success: function(histo){
                     console.log("=====>"+histo);
                     if(histo == "non exist"){
@@ -86,7 +86,7 @@ for (i = 0; i < x.children.length; i++) {
     //Le boutton Edit  et activate de chaque ligne du tableau de parcour.
     if(x.children[i].getElementsByTagName('button')[2] != null){
         x.children[i].getElementsByTagName('button')[2].addEventListener('click', (e)=>{
-            let id = e.currentTarget.id;
+            let id = e.currentTarget.value;
             let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+id+" ?");
             if(editInvit){  
                 sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: id});
@@ -94,58 +94,42 @@ for (i = 0; i < x.children.length; i++) {
         });
         //Activate.
         x.children[i].getElementsByTagName('button')[3].addEventListener('click', (e)=>{
-            let id = e.currentTarget.id;
+            let id = e.currentTarget.value;
             let nature = e.currentTarget.textContent;
             let confirmActiv;
+            let elem = e.currentTarget;
             let flagactiv;
+            let buttonPlacement = elem.id;
+            console.log("Activ-Desactiv ==>"+nature +" Id ===>"+buttonPlacement);
             if(nature == "Désactiver"){
                 confirmActiv = confirm("Êtes vous sur de vouloir désactiver le parcour "+id+" ?");
-                if(confirmActiv){
-                    flagactiv = 0;
-                    $.ajax({url: RACINE+'Parcour/Parcour_controller/disableParcour/',type: "post",
-                    data: {idParcour: id, flag: flagactiv }, success: function(resp){
-                        if(resp == '200'){
-                          if(flagactiv == 0){
-                            $('.btn-outline-danger').addClass('btn-outline-success').removeClass('btn-outline-danger')
-                            e.target.innerHTML = "<i class='mdi mdi-eye btn-icon-prepend'></i>Activer";
-                            x.children[i-1].getElementsByTagName('button')[0].disabled = true;
-                          } else{
-                            $('.btn-outline-success').addClass('btn-outline-danger').removeClass('btn-outline-success')
-                              e.target.innerHTML = "<i class='mdi mdi-eye-off btn-icon-prepend'></i>Désactiver";
-                              x.children[i-1].getElementsByTagName('button')[0].disabled = false;
-                          } 
-                        }
-                 }}); 
-                }else{
-                    return;
-                }           
+                flagactiv = 0;       
             }else{
                 confirmActiv = confirm("Êtes vous sur de vouloir activer le parcour "+id+" ?");
-                if(confirmActiv){
-                    flagactiv = 1;
-                    $.ajax({url: RACINE+'Parcour/Parcour_controller/disableParcour/',type: "post",
-                    data: {idParcour: id, flag: flagactiv }, success: function(resp){
-                        if(resp == '200'){
-                          if(flagactiv == 0){
-                            $('.btn-outline-danger').addClass('btn-outline-success').removeClass('btn-outline-danger')
-                            e.target.innerHTML = "<i class='mdi mdi-eye btn-icon-prepend'></i>Activer";
-                            x.children[i-1].getElementsByTagName('button')[0].disabled = true;
-                          } else{
-                            $('.btn-outline-success').addClass('btn-outline-danger').removeClass('btn-outline-success')
-                              e.target.innerHTML = "<i class='mdi mdi-eye-off btn-icon-prepend'></i>Désactiver";
-                              x.children[i-1].getElementsByTagName('button')[0].disabled = false;
-                          } 
-                        }
-                 }}); 
-                }else{
-                    return;
-                } 
+                flagactiv = 1;
             }
+            //Confirmation activation ou désactivation.
+            if(confirmActiv){
+                $.ajax({url: RACINE+'Parcour/Parcour_controller/disableParcour/',type: "post",
+                data: {idParcour: id, flag: flagactiv }, success: function(resp, status){
+                      if(flagactiv == 0){
+                        $('.btn-outline-danger.'+id).removeClass('btn-outline-danger').addClass('btn-outline-success');
+                        elem.innerHTML = "<i class='mdi mdi-eye btn-icon-prepend'></i>Activer";
+                        x.children[buttonPlacement].getElementsByTagName('button')[0].disabled = true;
+                      }else{
+                        $('.btn-outline-success.'+id).addClass('btn-outline-danger').removeClass('btn-outline-success');
+                        elem.innerHTML = "<i class='mdi mdi-eye-off btn-icon-prepend'></i>Désactiver";
+                        x.children[buttonPlacement].getElementsByTagName('button')[0].disabled = false;
+                      } 
+             }});
+            }else{
+                return;
+            } 
         });
     } 
     //Le boutton Rank de chaque ligne du tableau de parcour.
             x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
-                let id = e.currentTarget.id;
+                let id = e.currentTarget.value;
                 let editInvit = confirm("Êtes vous sur de vouloir consulter le classement du parcour "+id+" ?");
                 if(editInvit){  
                     sendParams(RACINE+'Classement/Classement_controller/displayRankingPage/', {idParcour: id});

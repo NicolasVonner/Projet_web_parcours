@@ -17,7 +17,8 @@
                       <div class="col-12" style="margin-bottom: 0; overflow: auto; height: 400px;">
                         <div class="preview-list" id="list">
                           <?php
-                          foreach($parcour_board as $value){
+                          //TODO mettre value et pas id pour le numéro n du parcour.
+                          foreach($parcour_board as $key => $value){
                                     echo '
                                         <div class="preview-item border-bottom">
                                             <div class="preview-thumbnail">
@@ -43,16 +44,16 @@
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">';
                                               echo intval($value->parcour->getActivation()) == 0?
-                                              '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Joue</button disabled>'
+                                              '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;" disabled><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>'
                                               :
-                                             ' <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>'
+                                             ' <button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>'
                                               ;                      
-                                                echo '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
-                                                echo $value->parcour->getCreateur() == $utilisateur->getUsername()? '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-warning btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-border-color btn-icon-prepend"></i>Edit</button>':'';
+                                                echo '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
+                                                echo $value->parcour->getCreateur() == $utilisateur->getUsername()? '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-warning btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-border-color btn-icon-prepend"></i>Edit</button>':'';
                                                 if($value->parcour->getCreateur() == $utilisateur->getUsername() && $value->parcour->getActivation() == 0) {
-                                                  echo '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-success btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-eye-off btn-icon-prepend"></i>Activer</button>';
+                                                  echo '<button type="button" id='.$key.' value='.$value->parcour->getCodePa().' class="btn btn-outline-success btn-icon-text' .$value->parcour->getCodePa().'" style="margin-bottom: 3%;"><i class="mdi mdi-eye-off btn-icon-prepend"></i>Activer</button>';
                                                 }elseif($value->parcour->getCreateur() == $utilisateur->getUsername() && $value->parcour->getActivation() == 1){
-                                                  echo '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-danger btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-eye-off btn-icon-prepend"></i>Désactiver</button>';
+                                                  echo '<button type="button" id='.$key.' value='.$value->parcour->getCodePa().' class="btn btn-outline-danger btn-icon-text' .$value->parcour->getCodePa().'" style="margin-bottom: 3%;"><i class="mdi mdi-eye-off btn-icon-prepend"></i>Désactiver</button>';
                                                 }
 
                                             }else if(isset($utilisateur) && !$gameSearch){
@@ -68,18 +69,18 @@
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">';
                                               echo intval($value->parcour->getActivation()) == 0?
-                                              '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button disabled>'
+                                              '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;" disabled><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>'
                                               :
-                                             ' <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>'
+                                             ' <button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>'
                                               ;
-                                                echo '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>
-                                                <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-warning btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-border-color btn-icon-prepend"></i>Edit</button>';
-                                               echo $value->parcour->getActivation() == 0? '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-success btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-eye btn-icon-prepend"></i>Activer</button>':
-                                                '<button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-danger btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-eye-off btn-icon-prepend"></i>Désactiver</button>';
+                                                echo '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>
+                                                <button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-warning btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-border-color btn-icon-prepend"></i>Edit</button>';
+                                               echo $value->parcour->getActivation() == 0? '<button type="button" id = '.$key.' value ='.$value->parcour->getCodePa().' class="btn btn-outline-success btn-icon-text '.$value->parcour->getCodePa().'" style="margin-bottom: 3%;"><i class="mdi mdi-eye btn-icon-prepend"></i>Activer</button>':
+                                                '<button type="button" id = '.$key.' value='.$value->parcour->getCodePa().' class="btn btn-outline-danger btn-icon-text '.$value->parcour->getCodePa().'" style="margin-bottom: 3%;"><i class="mdi mdi-eye-off btn-icon-prepend"></i>Désactiver</button>';
                                             }else{
                                               echo '
                                               <div class="flex-grow" style="margin-right: 10px;">
-                                                <h6 class="preview-subject">'.$value->parcour->getNomPa().'</h6>
+                                                <h6 class="preview-subject">'.$value->parcour->getNomPa().'</h6> 
                                                 <p class="text-muted mb-0">Départ : '.$value->position->getNomPo().'</p>
                                               </div>
                                               <div class="flex-grow" style="margin-right: 10px;">';
@@ -89,7 +90,7 @@
                                               </div>
                                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                                 <button type="button" class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>
-                                                <button type="button" id='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
+                                                <button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
                                             }
                                     echo '
                                               </div>

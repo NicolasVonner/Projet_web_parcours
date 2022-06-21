@@ -58,7 +58,7 @@ class Classement_controller extends Index_controller{
       // die("Le nom du parcour est ==>".$nomParcour);
       //uasort($rankBox, "my_sort");
       //die("====>Le tableau de rank est ===>". var_dump($rankBox));
-      require('Views/Rank/rank_view.php'); //TODO require la vue.
+      require('Views/Rank/rank_view.php');
     }
 
     function buildRankArray($parcour){
@@ -66,7 +66,6 @@ class Classement_controller extends Index_controller{
         if(!isset($parcour)) header('Location: '.Settings::RACINE);
         $position_array = Position::existPosition(array("parcour" =>$parcour), array("COUNT(*) AS positions"));
         $position_number = $position_array->fetch(Fetch::_ASSOC)['positions'];
-        // die("On a".$position_number."positions pour ce parcour");
         //On récupère tout les joueurs
         $player_request = Parcour::existParcourHisto(null,array("DISTINCT joueur") );
         $players_array =  $player_request->fetchAll();
@@ -77,13 +76,12 @@ class Classement_controller extends Index_controller{
         $departureTime = 0;
         $endTime = 0;
         $rankBox = [];
-        // echo'$nombre 
-        //       '.$nombre ;
         foreach($players_array as $player){
           $joueur = $player->joueur;
           //On récupère les historique parcour du joueur.
-          $histo_request = Parcour::existParcourHisto(array("parcour"=>$parcour),array("step", "time"));
-          while($histo = $histo_request->fetch(Fetch::_ASSOC)){
+          $histo_request = Parcour::existParcourHisto(array("parcour"=>$parcour, "joueur" => $joueur),array("step", "time"), array("time"));
+          // die("On a".var_dump($histo_request)."positions pour ce parcour"); 
+          while($histo = $histo_request->fetch(Fetch::_ASSOC)){ 
             //On vérifie si on à récupéré toutes les positions en début de boucle.
             $step = intval($histo["step"]);
             //Si c'est un début de recherche.
@@ -119,7 +117,9 @@ class Classement_controller extends Index_controller{
                 $endTime = $histo["time"];
               }
             }
+            //echo "===>nombre".$nombre;
             if($nombre == 0){
+              echo 'ON A UN PARCOUR';
               $perf = new stdClass();
               $date1=date_create($endTime);
               $date2=date_create($departureTime);
@@ -141,9 +141,9 @@ class Classement_controller extends Index_controller{
               $perf->date = $endTime;
               //On push l'objet dans le tableau de rank.
               array_push($rankBox, $perf);
-              // echo"Le joueur à mis : ".$perf->time."  ======> La date de début est ".var_dump($departureTime)." ===> La date de fin est".var_dump($endTime);
+              //echo"Le joueur à mis : ".$perf->time."  ======> La date de début est ".var_dump($departureTime)." ===> La date de fin est".var_dump($endTime);
               //  die("Le joueur à mis : ======> La date de début est ".var_dump($total)." ===> La date de fin est".var_dump($endTime)."====> La difference de temps est".var_dump($perf->time) );
-              // echo'Le nombre est à : '.$nombre;
+             //echo 'Le nombre est à : '.var_dump($total);
               $departureTime = 0;
               $nombre = $position_number;
               $currentStepSearch = 1; //todo voir pour mettre à 2.
