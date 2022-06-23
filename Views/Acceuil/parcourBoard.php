@@ -35,14 +35,21 @@
                                                 <p class="text-muted mb-0">Départ : '.$value->position->getNomPo().'</p>
                                               </div>
                                               <div class="flex-grow" style="margin-right: 10px;">';
-                                                echo $value->averageNotes != null ? '<p id='.$value->parcour->getCodePa().' class="text-muted average-notes">'.$value->averageNotes.' stars</p>':'';
                                                 echo '<p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
                                                 <p class="text-muted">Créateur : '; 
                                                 echo $value->parcour->getCreateur() == $utilisateur->getUsername()? "Moi":$value->parcour->getCreateur();
                                                 echo'</p>
-                                                <p class="text-muted mb-0">'.$value->steps.' étapes</p>
-                                              </div>
-                                              <div class="me-auto text-sm-right pt-2 pt-sm-0">';
+                                                <p class="text-muted">Etapes : '.$value->steps.'</p>';
+                                                echo $value->parcour->getCreateur() == $utilisateur->getUsername()? "<p class='text-muted'>Hash code : ".$value->parcour->getHashCode()."</p>":"";
+                                                if($value->averageNotes != null){     
+                                                  for($i = 0; $i < intval($value->averageNotes); $i++){
+                                                    echo '<i class="mdi mdi-star"></i>';
+                                                  }
+                                                }else {
+                                                  echo '<i class="mdi mdi-star-off"></i>';
+                                                }
+                                                echo ' </div>
+                                                  <div class="me-auto text-sm-right pt-2 pt-sm-0">';
                                               echo intval($value->parcour->getActivation()) == 0?
                                               '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;" disabled><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>'
                                               :
@@ -63,11 +70,18 @@
                                                 <p class="text-muted mb-0">Départ : '.$value->position->getNomPo().'</p>
                                               </div>
                                               <div class="flex-grow" style="margin-right: 10px;">';
-                                                echo $value->averageNotes != null ? '<p id='.$value->parcour->getCodePa().' class="text-muted average-notes">'.$value->averageNotes.' stars</p>':'';
                                                 echo '<p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
-                                                <p class="text-muted mb-0">'.$value->steps.' étapes</p>
-                                              </div>
-                                              <div class="me-auto text-sm-right pt-2 pt-sm-0">';
+                                                <p class="text-muted">Etapes : '.$value->steps.'</p>
+                                                <p class="text-muted">Hash code : '.$value->parcour->getHashCode().'</p>';
+                                                if($value->averageNotes != null){     
+                                                  for($i = 0; $i < intval($value->averageNotes); $i++){
+                                                    echo '<i class="mdi mdi-star"></i>';
+                                                  }
+                                                }else {
+                                                  echo '<i class="mdi mdi-star-off"></i>';
+                                                }
+                                              echo '</div>
+                                                <div class="me-auto text-sm-right pt-2 pt-sm-0">';
                                               echo intval($value->parcour->getActivation()) == 0?
                                               '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;" disabled><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>'
                                               :
@@ -84,13 +98,20 @@
                                                 <p class="text-muted mb-0">Départ : '.$value->position->getNomPo().'</p>
                                               </div>
                                               <div class="flex-grow" style="margin-right: 10px;">';
-                                                echo $value->averageNotes != null ? '<p id='.$value->parcour->getCodePa().' class="text-muted average-notes">'.$value->averageNotes.' stars</p>':'';
                                                 echo '<p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
-                                                <p class="text-muted mb-0">'.$value->steps.' étapes</p>
-                                              </div>
-                                              <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                                <button type="button" class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>
-                                                <button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
+                                                <p class="text-muted mb-0">Etapes : '.$value->steps.'</p>';
+                                                if($value->averageNotes != null){     
+                                                  for($i = 0; $i < intval($value->averageNotes); $i++){
+                                                    echo '<i class="mdi mdi-star"></i>';
+                                                  }
+                                                }else {
+                                                  echo '<i class="mdi mdi-star-off"></i>';
+                                                }
+                                                echo'
+                                                </div>
+                                                <div class="me-auto text-sm-right pt-2 pt-sm-0">
+                                                  <button type="button" class="btn btn-outline-primary btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-play btn-icon-prepend"></i>Jouer</button>
+                                                  <button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
                                             }
                                     echo '
                                               </div>

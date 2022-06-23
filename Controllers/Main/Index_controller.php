@@ -43,12 +43,12 @@ use Projet_Web_parcours\Assets\settings\Settings;
             $parcour_board = array();
 
             $where = isset($utilisateur) && !$gameSearch ? array('createur' => $utilisateur->getCodeM()) :null;
-            $parcour_array = Parcour::existParcour($where, array('codePa', 'createur', 'nomPa', 'dateCreation', 'activation'));
+            $parcour_array = Parcour::existParcour($where, array('codePa', 'createur', 'nomPa', 'dateCreation', 'hashCode', 'activation'));
     
             while($parcour_params = $parcour_array->fetch(Fetch::_ASSOC)){
                 //Crée objet de slection global pour la vue.
                 $courses = new stdClass();
-                //On modifier l'array hydrateur pour ajouter le réel username.
+                //On modifie l'array hydrateur pour ajouter le réel username.
                 $username_createur = Utilisateur::existUser(array('codeM'=>$parcour_params['createur']), array('username'));
                 $username = $username_createur->fetch(Fetch::_ASSOC);
                 $parcour_params['createur'] = $username['username'];
