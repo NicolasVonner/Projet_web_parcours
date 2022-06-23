@@ -21,16 +21,15 @@ class Review_controller extends Index_controller{
         header('Location: '.Settings::RACINE.'');
         return;
       }else{
-
         $correspondance_array = Utilisateur::existUser(array('username' => $_SESSION['username']));
         if($correspondance_array->rowCount() != 0){
             $utilisateur_params = $correspondance_array->fetch(Fetch::_ASSOC);
             $utilisateur = new User($utilisateur_params); 
-        }      
-        //On vérifie si c'est une modification.
-        $editId = isset($_POST['idParcour'])? $_POST['idParcour']:null;
-
-        // on crée un tableau de review
+        } else{
+            header('Location: '.Settings::RACINE.'');
+            return;
+        }    
+        // On crée un tableau de review
         $reviewBox = [];
 
         $codePa = $_POST['codePa'];
@@ -39,14 +38,10 @@ class Review_controller extends Index_controller{
 
         $parcour_name_stmt = Parcour::existParcour(array("codePa"=>$codePa));
         $nomParcour = $parcour_name_stmt->fetch(Fetch::_ASSOC)["nomPa"];
-
-
         foreach($note_list as $note) {
-          $utilisateur_stmt = Utilisateur::existUser(array('codeM' => $note->codeM));
-          $utilisateur = $utilisateur_stmt->fetch(Fetch::_ASSOC);
           $review = array(
-            "avatar"=>$utilisateur['avatar'],
-            "username"=>$utilisateur['username'],
+            "avatar"=>$utilisateur->getAvatar(),
+            "username"=>$utilisateur->getUsername(),
             "note"=>$note->note,
             "commentaire"=>$note->commentaire
           );

@@ -77,7 +77,7 @@ class Parcour_controller extends Index_controller{
            $course = new stdClass();
            //On construit toutes les infos concernant le parcour, object pour js.
            //On vas chercher les infos du parcour.
-           $parcour_request = Parcour::existParcour(array('codePa' => 78));
+           $parcour_request = Parcour::existParcour(array('codePa' => $idParcour));
            $parcour_array =  $parcour_request->fetch(Fetch::_ASSOC);
             //On vérifie si le parcour existe
            if($parcour_array == false){

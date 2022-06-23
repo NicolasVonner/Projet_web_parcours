@@ -44,6 +44,7 @@
   <body>
      <?php include './Views/Review/review_center.php';?>
      <script src= <?php echo Settings::RACINE."Assets/settings/Settings.js"?>></script>
+     <script src= <?php echo Settings::RACINE."Assets/Js/review.js"?>></script>
      <script src= <?php echo Settings::RACINE."Assets/Js/acceuil.js"?>></script>
   </body>
 </html>
