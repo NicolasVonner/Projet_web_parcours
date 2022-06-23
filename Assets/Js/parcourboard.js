@@ -57,6 +57,10 @@ function verifySize(){
 }
 
 let p = document.getElementsByClassName('average-notes');
+if(document.querySelector("div.average-notes") != undefined){
+    document.querySelector("div.average-notes").addEventListener("mouseover", (e)=>{
+        console.log("SALUT LES PD");
+});};
 for (i = 0; i < p.length; i++)
 {
     p[i].addEventListener('click', (e)=>{
