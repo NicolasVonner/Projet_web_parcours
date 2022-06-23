@@ -23,9 +23,14 @@ class Settings_controller extends Index_controller {
       require('Views/Settings/settings_view.php');
     }
 
-    function verify_settings($code = null) {
+    function verify_settings($code) {
+      //Si on a pas d'id user on sort.
+      if (sizeof($code) == 0 || !isset($code)) {
+        return;
+      }
       //Construction de l'array pour l'hydrateur du constructeur de la classe User =>>>
       $utilisateur_params = array(
+        "codeM"=>htmlspecialchars($code[0]),
         "nomM"=>htmlspecialchars($_POST['lastname']),
         "prenomM"=>htmlspecialchars( $_POST['firstname']),
         "username"=>htmlspecialchars($_POST['username']),
@@ -35,8 +40,28 @@ class Settings_controller extends Index_controller {
         "dateInscription"=>htmlspecialchars(date('Y-m-d')),
         "avatar"=>htmlspecialchars($_POST['avatar']),
       ); 
-      $utilisateur = new User($utilisateur_params);   
-
+      $utilisateur = new User($utilisateur_params); 
+      
+      //On traite le mot de passe en amont.
+      if($utilisateur->getPassword() == null){
+        $user_param = Utilisateur::existUser(array('codeM' =>$utilisateur->getCodeM()), array('password'));
+        $pass = $user_param->fetch(fetch::_ASSOC)["password"];
+        $utilisateur->setPassword($pass); 
+      }else{
+        //Vérification du mot de passe
+        //TODO il manque l'interdiction de mettre des "\".Message erreur qui indique que mauvais regex.
+        if(!preg_match("/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?!.*[()--+={}\[\]|\"\\:;'<>,.?\/_₹~`\s]).{8,40})/", $utilisateur->getPassword())){
+          $this->displaySettings(array("Password (Format invalid)"));
+           return;
+        }
+         //On vérifie si les mots de passe sont identiques
+         if($_POST['confirmPassword'] != $utilisateur->getPassword()){
+            $this->displaySettings(array("Les mots de passes ne correspondent pas"));
+            return;
+         }
+          $pass = password_hash(htmlspecialchars($this->removeAccent($utilisateur->getPassword())),PASSWORD_DEFAULT);
+          $utilisateur->setPassword($pass); 
+      }
       //Vérification des champs vides
       [$flag, $datasEmpty] = $this->emptyFields($utilisateur);
       if($flag){
@@ -54,15 +79,10 @@ class Settings_controller extends Index_controller {
         $this->displaySettings(array("Username (Format invalid)"));
         return;
       }
+      // die("USERNAME ===>".$utilisateur->getUsername());
+      //On met à jour le username
+      $_SESSION['username'] = $utilisateur->getUsername();
 
-      //Vérification du mot de passe
-      //TODO il manque l'interdiction de mettre des "\".Message erreur qui indique que mauvais regex.
-      if(!preg_match("/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?!.*[()--+={}\[\]|\"\\:;'<>,.?\/_₹~`\s]).{8,40})/", $utilisateur->getPassword())){
-        $this->displaySettings(array("Password (Format invalid)"));
-        return;
-      }
-      //On hash le mot de pass
-      $utilisateur->setPassword(password_hash($utilisateur->getPassword(),PASSWORD_DEFAULT));
       //TODO Regex pour l'id de l@Mail
       //Vérification conformité de l'@ mail
       if(!filter_var($utilisateur->getAdresseMail(), FILTER_VALIDATE_EMAIL)){
@@ -70,15 +90,12 @@ class Settings_controller extends Index_controller {
         return;
       }
 
-      if ($code != null) {
-        Utilisateur::updateUser($utilisateur->to_Array(), array('codeM' => $code[0]));
-      }
+      //On met à jour le user.
+      Utilisateur::updateUser($utilisateur->to_Array(), array('codeM' => $utilisateur->getCodeM()));
       
-      //On crée la session utilisateur
-      $_SESSION['username'] = $utilisateur->getUsername();
       //On renvoie l'utilisateur sur l'acceuil
       //$this->rootDirection(utilisateur: $utilisateur);
-      header("Location: ".Settings::RACINE);
+      header("Location: ".Settings::RACINE."Settings/Settings_controller/displaySettings");
     }
 
     //Vérifie si il y a des champs vides dans l'objet passé en paramètre
@@ -130,13 +147,7 @@ class Settings_controller extends Index_controller {
         header("Location: ".Settings::RACINE);
     } else{
       echo "erreur dans l'identitifiant de l'utilisateur qu'il cherche a suprimer";
-      die('pouette');
     }
 
    }
-   //pour pouvoir passer de joueurs a admin
-   public function askToBeAdmin(){
-     
-   }
-
 }

@@ -14,7 +14,6 @@ class User
     private $dateNaissance;
     private $avatar;
     private $equipe;
-    private $role;
 
     //Constructeur
     function __construct($datas)
@@ -124,15 +123,6 @@ class User
     public function setEquipe($new_equipe)
     {
         $this->equipe = $new_equipe;
-    }
-
-    public function getRole()
-    {
-        return $this->role;
-    }
-    public function setRole($new_role)
-    {
-        $this->role = $new_role;
     }
 
     //Methodes d'affichage de l'objet

@@ -13,7 +13,6 @@
           <div class="card-body px-5 py-5">
             <div class="form-group">
               <a href=<?php echo Settings::RACINE?>>Back</a>
-              <p class="text-muted mb-1"><button id="delete-user" value="<?php echo $utilisateur->getCodeM()?>" type="button" class="btn btn-outline-danger"> <i class="mdi mdi-delete-forever"></i>Supprimer votre compte</button></p>
             </div>
             <h3 class="card-title text-left mb-3">Update profile</h3>
             
@@ -39,6 +38,11 @@
                 <label>Password</label>
                 <input type="password" id="password" placeholder="Password" name="password" minlength="8" maxlength="40" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?!.*[()--+={}\[\]|&quot\\:;'<>,.?/_₹~`\s]).{8,40})" class="form-control p_input">
                 <div id="password-error" class="zone-error"></div>
+              </div>
+              <div class="form-group">
+                    <label>Confirmation password</label>
+                    <input type="password" id="confirmPassword" placeholder="Password" name="confirmPassword" minlength="8" maxlength="40" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?!.*[()--+={}\[\]|&quot\\:;'<>,.?/_₹~`\s]).{8,40})" class="form-control p_input">
+                   <div id="password-error" class="zone-error"></div>
               </div>
               <div class="form-group">
                 <label>Birthday</label>
@@ -73,6 +77,7 @@
                 <button type="submit" class="btn btn-primary btn-block enter-btn">Update</button>
               </div>
             </form>
+            <p class="text-muted mb-1"><button id="delete-user" value="<?php echo $utilisateur->getCodeM()?>" type="button" class="btn btn-outline-danger"> <i class="mdi mdi-delete-forever"></i>Supprimer votre compte</button></p>
             <?php
               //Affiche les oublies
               if(isset($errors) && !empty($errors)){

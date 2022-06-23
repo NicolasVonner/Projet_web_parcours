@@ -56,22 +56,25 @@ function verifySize(){
     }
 }
 
+//Les notes du parcourboard.
 let p = document.getElementsByClassName('average-notes');
 if(document.querySelector("div.average-notes") != undefined){
     document.querySelector("div.average-notes").addEventListener("mouseover", (e)=>{
-        console.log("SALUT LES PD");
-});};
+        console.log("La note est :"+e.currentTarget.id); //TODO faire une info bulle.
+    });
+};
 for (i = 0; i < p.length; i++)
 {
     p[i].addEventListener('click', (e)=>{
         let codePa = e.currentTarget.id;
+        // window.alert("ID====>"+codePa);
         sendParams(RACINE+'Review/Review_controller/displayReviewPage/', {codePa: codePa});
     });
 }
 
 let x =  document.getElementById('list');
 for (i = 0; i < x.children.length; i++) { 
-    //Le boutton PLay de chaque ligne du tableau de parcour.
+    //Le boutton play de chaque ligne du tableau de parcour.
     x.children[i].getElementsByTagName('button')[0].addEventListener('click', (e)=> {
         if(e.currentTarget.value == ""){//Si le non membre veux jouer à un parcour du board
             let singupInvit = confirm("Seul les membres peuvent lancer un parcour, voulez vous être rediriger vers le menu d'authentification?");

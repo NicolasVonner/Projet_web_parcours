@@ -42,7 +42,7 @@
                                                 <p class="text-muted">Etapes : '.$value->steps.'</p>';
                                                 echo $value->parcour->getCreateur() == $utilisateur->getUsername()? "<p class='text-muted'>Hash code : ".$value->parcour->getHashCode()."</p>":"";
                                                 if($value->averageNotes != null){     
-                                                  echo'<div class ="average-notes" id = '.$value->averageNotes.'>';   
+                                                  echo'<div class ="average-notes" id = '.$value->parcour->getCodePa().'>';   
                                                     for($i = 0; $i < intval($value->averageNotes); $i++){
                                                       echo '<i class="mdi mdi-star"></i>';
                                                     }
@@ -73,7 +73,7 @@
                                                 <p class="text-muted">Etapes : '.$value->steps.'</p>
                                                 <p class="text-muted">Hash code : '.$value->parcour->getHashCode().'</p>';
                                                 if($value->averageNotes != null){     
-                                                  echo'<div class ="average-notes" id = '.$value->averageNotes.'>';   
+                                                  echo'<div class ="average-notes" id = '.$value->parcour->getCodePa().'>';   
                                                     for($i = 0; $i < intval($value->averageNotes); $i++){
                                                       echo '<i class="mdi mdi-star"></i>';
                                                     }
@@ -102,7 +102,7 @@
                                                 echo '<p class="text-muted">Publié le : '.$value->parcour->getDateCreation().'</p>
                                                 <p class="text-muted">Etapes : '.$value->steps.'</p>';
                                                 if($value->averageNotes != null){   
-                                                  echo'<div class ="average-notes" id = '.$value->averageNotes.'>';   
+                                                  echo'<div class ="average-notes" id = '.$value->parcour->getCodePa().'>';   
                                                     for($i = 0; $i < intval($value->averageNotes); $i++){
                                                       echo '<i class="mdi mdi-star"></i>';
                                                     }
