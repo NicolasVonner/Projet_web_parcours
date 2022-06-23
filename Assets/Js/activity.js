@@ -45,7 +45,7 @@ const editActivity = (actIndex) => {
     $("#create-activity").show();
     $("#create-activity").html("Edit");
     $('#create-activity').attr("onclick",`sendActivityData(${parcour.positions[spotIndex].activites[actIndex].id})`);
-    $("#create-activity").prop("disabled",true);
+    $("#create-activity").prop("disabled",false);
 };
 
 $(document).on('click', '.closeModal', function() { // close modal
@@ -58,6 +58,46 @@ const getInputType = (type) => {
         if (type.includes(typeDB))
             return inputType.get(typeDB);
     }
+};
+
+const listenActivForm = (prop) =>{
+    //todo mettre un listener sur les inputs, faire la vérification coté back.
+
+    document.getElementById(prop).addEventListener('keyup', (e) => {
+        let devinette = document.getElementById('devinette');
+        let response = document.getElementById('reponse');
+        let indice = document.getElementById('indice');
+        let choix_1 = document.getElementById('choix_1');
+        let choix_2 = document.getElementById('choix_2');
+        let choix_3 = document.getElementById('choix_3');
+        let choix_4 = document.getElementById('choix_4');
+        let submit = document.getElementById('create-activity'); //TODO ...............
+        //On vérifie si on peux débloquer le create
+        if(devinette.value != "" && response.value != ""){
+            console.log("On est dans le premier step");
+                if(choix_1.value === response.value ||
+                    choix_2.value === response.value ||
+                    choix_3.value === response.value ||
+                    choix_4.value === response.value){
+                        console.log("On est dans le deuxieme step");
+                        if(choix_1.value != "" &&  choix_2.value!= "" || 
+                        choix_1.value != "" &&  choix_3.value!= "" ||
+                        choix_1.value != "" &&  choix_4.value!= "" ||
+                        choix_2.value != "" &&  choix_3.value!= "" ||
+                        choix_2.value != "" &&  choix_4.value!= "" ||
+                        choix_3.value != "" &&  choix_4.value!= ""){
+                            submit.disabled = false;
+                        }else {
+                            submit.disabled = true; 
+                        }
+                }else{
+                    submit.disabled = true; 
+                }
+        }else{
+            submit.disabled = true; 
+        }
+        
+    });
 };
 
 const openConfig = (activity, canEdit) => {
@@ -81,43 +121,8 @@ const openConfig = (activity, canEdit) => {
                         <input type="text" class="form-control" id="${prop}" placeholder="${prop}" ${canEdit ? "" : "readonly"}>
                     </div>
                 `);
-               //todo mettre un listener sur les inputs, faire la vérification coté back.
-
-                document.getElementById(prop).addEventListener('keyup', (e) => {
-                    let devinette = document.getElementById('devinette');
-                    let response = document.getElementById('reponse');
-                    let indice = document.getElementById('indice');
-                    let choix_1 = document.getElementById('choix_1');
-                    let choix_2 = document.getElementById('choix_2');
-                    let choix_3 = document.getElementById('choix_3');
-                    let choix_4 = document.getElementById('choix_4');
-                    let submit = document.getElementById('create-activity'); //TODO ...............
-                    //On vérifie si on peux débloquer le create
-                    if(devinette.value != "" && response.value != ""){
-                        console.log("On est dans le premier step");
-                            if(choix_1.value === response.value ||
-                                choix_2.value === response.value ||
-                                choix_3.value === response.value ||
-                                choix_4.value === response.value){
-                                    console.log("On est dans le deuxieme step");
-                                    if(choix_1.value != "" &&  choix_2.value!= "" || 
-                                    choix_1.value != "" &&  choix_3.value!= "" ||
-                                    choix_1.value != "" &&  choix_4.value!= "" ||
-                                    choix_2.value != "" &&  choix_3.value!= "" ||
-                                    choix_2.value != "" &&  choix_4.value!= "" ||
-                                    choix_3.value != "" &&  choix_4.value!= ""){
-                                        submit.disabled = false;
-                                    }else {
-                                        submit.disabled = true; 
-                                    }
-                            }else{
-                                submit.disabled = true; 
-                            }
-                    }else{
-                        submit.disabled = true; 
-                    }
-                    
-                });
+                //On écoutes les changements du formulaire.
+                listenActivForm(prop);
             }
         });
     }else{
@@ -129,7 +134,10 @@ const openConfig = (activity, canEdit) => {
                         <input type="text" value="${values[index]}" class="form-control" id="${prop}" placeholder="${prop}" ${canEdit ? "" : "readonly"}>
                     </div>
                 `);
+                //On écoutes les changements du formulaire.
+                listenActivForm(prop);
             }
+
         });
     } 
 };
