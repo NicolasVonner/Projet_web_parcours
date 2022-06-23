@@ -286,7 +286,12 @@ $(document).on('click', '#delete-parcours', function() {
 if(document.getElementsByClassName("main-panel")[0].id !== ""){
     let idParcour = document.getElementsByClassName("main-panel")[0].id;
          $.ajax({url: RACINE+'Parcour/Parcour_controller/createObjetEdit/'+idParcour, async: false, success: function(course){
-            var  parcourData = JSON.parse(course); 
+            if(course == "false"){
+                alert("Parcour innexistant");
+                location.href = RACINE;
+                return;
+            }
+            var parcourData = JSON.parse(course); 
             parcour = parcourData;
         }}).then(res => {
         document.querySelector("#parcourName").textContent = parcour.nomPa;

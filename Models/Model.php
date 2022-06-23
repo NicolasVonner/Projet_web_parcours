@@ -36,11 +36,11 @@ class Model extends Connexion{
                         }
 
                     }else{
-                        $sql .= " * "; //todo nettoyer le model.
+                        $sql .= "* "; //todo nettoyer le model.
                     }
                    
                 }else{
-                    $sql .= " * "; 
+                    $sql .= "* "; 
                 }
                 //On concatène les jointures si jamais il y a plusieurs tables.
                 $sql .= "FROM ";
@@ -129,7 +129,7 @@ class Model extends Connexion{
                     }
                 }
             }
-            // if($table == 'membre') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
+            // if($table == 'parcour') die("========>".var_dump($sql). "=======>".var_dump($array_prepare));
             return self::launch($sql, $array_prepare);
         }
         

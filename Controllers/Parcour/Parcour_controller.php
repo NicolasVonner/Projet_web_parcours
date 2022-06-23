@@ -35,7 +35,7 @@ class Parcour_controller extends Index_controller{
         }      
         //On vérifie si c'est une modification.
           if(isset($_POST['idParcour'])){
-            $editId =$_POST['idParcour'] ;
+            $editId =$_POST['idParcour'];
             // $noteData=Note::existNote(array("codePa"=>htmlspecialchars($_POST['idParcour'])));
             // $noteData=$noteData->fetchAll();
             // if(!empty($noteData)){
@@ -73,16 +73,19 @@ class Parcour_controller extends Index_controller{
     //Renvoie l'objet à modifier à l'ajax
     function createObjetEdit($elementPa){  
           $idParcour = $elementPa[0];
+          // die("===> on vas chercher le parcour =>".$idParcour); //todo Ok
            $course = new stdClass();
            //On construit toutes les infos concernant le parcour, object pour js.
            //On vas chercher les infos du parcour.
-           $parcour_request = Parcour::existParcour(array('codePa' => $idParcour));
-           //On vérifie si le parcour existe
-           if(empty($parcour_request->fetchAll())){
-            header("Location: ".Settings::RACINE);
-          };
+           $parcour_request = Parcour::existParcour(array('codePa' => 78));
            $parcour_array =  $parcour_request->fetch(Fetch::_ASSOC);
-           //On crée le parcour.
+            //On vérifie si le parcour existe
+           if($parcour_array == false){
+            echo("false");
+            return;
+            // header("Location: ".Settings::RACINE);
+           };
+           //On crée le parcour. //TODO probleme recuperer rien
            $parcour = new stdClass();
            foreach($parcour_array as $parcourAttribute => $value)
                $parcour->$parcourAttribute = $value;
@@ -124,7 +127,6 @@ class Parcour_controller extends Index_controller{
             //On ajoute la position dans le parcour.
             array_push($course->positions, $position);
           }
-          //die("L'objet que l'on vas envoyer au js est ==>".json_encode($course));
           echo json_encode($course);
           unset($course);
     }
