@@ -19,16 +19,12 @@ use Projet_Web_parcours\Assets\settings\Settings;
                     <ul class="navbar-nav navbar-nav-right">';
                     if(!isset($utilisateur) || empty($utilisateur)){
                       echo'
-                        <a href="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignup">
-                          <li class="nav-item">
-                            <button type="button" class="btn btn-outline-light btn-fw" id="signUp" style="border: none;min-width: auto;"> Sign Up</button>
-                          </li>
-                        </a>
-                        <a href="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignin">
-                          <li class="nav-item">
-                            <button type="button" class="btn btn-outline-light btn-fw" id="signIn" style="border: none;min-width: auto;"> Sign In</button>
-                          </li>
-                        </a>';
+                      <li class="nav-item"> 
+                        <button type="button" class="btn btn-outline-light btn-fw" id="signUp" style="border: none;min-width: auto;"><a href="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignup">Sign Up</a></button>
+                      </li>
+                      <li class="nav-item">   
+                        <button type="button" class="btn btn-outline-light btn-fw" id="signIn" style="border: none;min-width: auto;"><a href="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignin"> Sign In</a></button>     
+                      </li>';
                     }else{
                       echo'
                         <li class="nav-item dropdown">
