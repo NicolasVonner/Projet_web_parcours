@@ -62,9 +62,10 @@
                                               ;                      
                                                 echo '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-info btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-crown btn-icon-prepend"></i>Ranking</button>';
                                                 echo $value->parcour->getCreateur() == $utilisateur->getUsername()? '<button type="button" value='.$value->parcour->getCodePa().' class="btn btn-outline-warning btn-icon-text" style="margin-bottom: 3%;"><i class="mdi mdi-border-color btn-icon-prepend"></i>Edit</button>':'';
-                                                echo $value->parcour->getActivation() == 0? '<button type="button" id = '.$key.' value ='.$value->parcour->getCodePa().' class="btn btn-outline-success btn-icon-text '.$value->parcour->getCodePa().'" style="margin-bottom: 3%;"><i class="mdi mdi-eye btn-icon-prepend"></i>Activer</button>':
-                                                '<button type="button" id = '.$key.' value='.$value->parcour->getCodePa().' class="btn btn-outline-danger btn-icon-text '.$value->parcour->getCodePa().'" style="margin-bottom: 3%;"><i class="mdi mdi-eye-off btn-icon-prepend"></i>Désactiver</button>';
-
+                                                if($value->parcour->getCreateur() == $utilisateur->getUsername()){
+                                                  echo $value->parcour->getActivation() == 0? '<button type="button" id = '.$key.' value ='.$value->parcour->getCodePa().' class="btn btn-outline-success btn-icon-text '.$value->parcour->getCodePa().'" style="margin-bottom: 3%;"><i class="mdi mdi-eye btn-icon-prepend"></i>Activer</button>':
+                                                  '<button type="button" id = '.$key.' value='.$value->parcour->getCodePa().' class="btn btn-outline-danger btn-icon-text '.$value->parcour->getCodePa().'" style="margin-bottom: 3%;"><i class="mdi mdi-eye-off btn-icon-prepend"></i>Désactiver</button>';
+                                                }
                                             }else if(isset($utilisateur) && !$gameSearch){
                                               echo '
                                               <div class="flex-grow" style="margin-right: 10px;">
