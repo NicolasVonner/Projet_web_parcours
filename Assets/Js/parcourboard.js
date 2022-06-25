@@ -7,7 +7,7 @@ document.getElementById("searchbar").addEventListener("keyup", (e)=>{
 //REDIMENTIONNEMENT du contenu des bouttons.
 //Pour le démarrage de l'appli.
 verifySize()
-window.addEventListener('resize', verifySize); //todo faire pour activer / désactiver
+window.addEventListener('resize', verifySize);
 
 //Functions
 

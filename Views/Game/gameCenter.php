@@ -56,13 +56,12 @@
                 </div>
             </div>
     </div>
-    <button id="open-modal">Open modal</button>
     <div id="modal" role="dialog" aria-modal="true" aria-labelledby="add-review-header" class="">
         <div class="float-end"><button id="close-modal" class="btn btn-light" aria-label="close" title="Close">X</button></div>
         <div id="review-form-container">
-            <h2 id="add-review-header">Do you want to rate this parcours?</h2>
+            <h2 id="add-review-header">>Voulez vous noter ce parcour?</h2>
             <div class="fieldset">
-                <label>Give us your rates</label>
+                <label>Donnez votre note</label>
                 <div class="rate">
                     <input type="radio" id="star1" name="rate" value="1" />
                     <label for="star1" title="1 start">&#9733;</label>
@@ -77,11 +76,11 @@
                 </div>
             </div>
             <div id="text-zone">
-                <label for="commentaire">Leave a comment:</label>
+                <label for="commentaire">Laissez un commentaire:</label>
                 <textarea id="commentaire" name="commentaire"></textarea>
             </div>
             <div class="rate">
-                <button id="send-rating" class="btn btn-warning m-1">Send ratings</button>
+                <button id="send-rating" class="btn btn-warning m-1">Envoyer</button>
             </div>
             <p id="error-text"></p>
         </div>

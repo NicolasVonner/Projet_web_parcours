@@ -7,13 +7,13 @@ window.onload = () => {
     $("#send-rating").on("click",sendRank);
 }
 
-// permet d'ouvrir le modal
+// Permet d'ouvrir le modal
 const openRankModal = () => {
     $("#modal").addClass("show");
     $(".modal-overlay").addClass("show");
 };
 
-// permet de fermer le modal
+// Permet de fermer le modal
 const closeRankModal = () => {
     $("#modal").removeClass("show");
     $(".modal-overlay").removeClass("show");
@@ -21,7 +21,7 @@ const closeRankModal = () => {
     return;
 };
 
-// permet de changer la couleur du label (étoile) en fonction de conditions
+// Permet de changer la couleur du label (étoile) en fonction de conditions
 const changeColorStar = (input,mouseover) => {
     // on récupére le label correspondant à l'input en paramètre
     let star = $("label[for='" + input.attr('id') + "']");
@@ -100,8 +100,11 @@ const sendRank = () => {
             // if (result != "sended") {
             //     alert("Erreur, tu a déjà laissé une note dans ce parcours!");
             // }
+        }).then((result) => {
+            closeRankModal(); // on ferme le modal
+        }).catch((err) => {
+            console.log("ERROR ENVOIE MODAL DATA NOTE=>"+err);
         });
-        closeRankModal(); // on ferme le modal
     }
     else { // sinon on affiche un message d'erreur dans le texte
         $("#error-text").text("Please rate by selecting a star.");

@@ -226,9 +226,9 @@ require('Controllers/Main/Index_controller.php');
   function addNoteToParcours(){
     $stars = json_decode($_POST["stars"]);
     //D'abord on vérifie que le parcour existe
-    $note_request = Note::existNote(array("codePa"=> $stars->codePa,"codeM"=>$_SESSION['userID']));
-    $note_array = $note_request->fetch(Fetch::_ASSOC);
-    if (empty($note_array)) {
+    // $note_request = Note::existNote(array("codePa"=> $stars->codePa, "codeM"=> $_SESSION['userID']));
+    // $note_array = $note_request->fetch(Fetch::_ASSOC);
+  //  if (sizeof($note_array) == 0) {
       $note_params = array(
         "codePa"=>htmlspecialchars($stars->codePa),
         "codeM"=>htmlspecialchars($_SESSION['userID']),
@@ -238,9 +238,9 @@ require('Controllers/Main/Index_controller.php');
       $new_note = new Review($note_params); 
       Note::persistNote($new_note);
       echo "sended";
-    }
-    else {
-      echo "already send";
-    }
+    // }
+    // else {
+      // echo "already send";
+    // }
   }
  }

@@ -46,6 +46,9 @@
                                                     for($i = 0; $i < intval($value->averageNotes); $i++){
                                                       echo '<i class="mdi mdi-star"></i>';
                                                     }
+                                                    if(gettype($value->averageNotes) == "double"){ //On ajoute une demie étoile si c'est un double //TODO Apporter plus de précision.
+                                                      echo '<i class="mdi mdi-star-half"></i>';
+                                                    }
                                                   echo'</div>';
                                                 }else {
                                                   echo '<i class="mdi mdi-star-off"></i>';
@@ -77,6 +80,9 @@
                                                     for($i = 0; $i < intval($value->averageNotes); $i++){
                                                       echo '<i class="mdi mdi-star"></i>';
                                                     }
+                                                    if(gettype($value->averageNotes) == "double"){ //On ajoute une demie étoile si c'est un double //TODO Apporter plus de précision.
+                                                      echo '<i class="mdi mdi-star-half"></i>';
+                                                    }
                                                   echo'</div>';
                                                 }else {
                                                   echo '<i class="mdi mdi-star-off"></i>';
@@ -105,6 +111,9 @@
                                                   echo'<div class ="average-notes" id = '.$value->parcour->getCodePa().'>';   
                                                     for($i = 0; $i < intval($value->averageNotes); $i++){
                                                       echo '<i class="mdi mdi-star"></i>';
+                                                    }
+                                                    if(gettype($value->averageNotes) == "double"){ //On ajoute une demie étoile si c'est un double //TODO Apporter plus de précision.
+                                                      echo '<i class="mdi mdi-star-half"></i>';
                                                     }
                                                   echo'</div>';
                                                 }else {
