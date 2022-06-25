@@ -45,7 +45,7 @@ const editActivity = (actIndex) => {
     openConfig({props : parcour.positions[spotIndex].activites[actIndex], nomAc: parcour.positions[spotIndex].activites[actIndex].nomAc},true);
     $("#create-activity").show();
     $("#create-activity").html("Edit");
-    $('#create-activity').attr("onclick",`sendActivityData(${parcour.positions[spotIndex].activites[actIndex].id})`);
+    $('#create-activity').attr("onclick",'sendActivityData(\''+parcour.positions[spotIndex].activites[actIndex].id+'\')');
     $("#create-activity").prop("disabled",false);
 };
 
@@ -144,7 +144,9 @@ const openConfig = (activity, canEdit) => {
 };
 
 const sendActivityData = (id) => {
-    console.log(" ===> ON PASE PAR LA");
+
+    //On récupère l'id sous la bonne forme
+    id = isNaN(parseInt(id))?id:parseInt(id);    
     gameFieldInfo= new Object();
     gameFieldInfo.nomAc = $("#select-activity").text();
     $("form").find(':input').toArray().map((input)=>{
@@ -180,6 +182,7 @@ const sendActivityData = (id) => {
         {
             if (id !== undefined) // si le paramètre id existe bel et bien alors on modifie l'activité.
             {
+
                 console.log("C'est une modification de l'activité "+ id +" de la position => "+currentSpotIndex);
                 let currentActivityIndex = parcour.positions[currentSpotIndex].activites.findIndex((activity)=>activity.id == id);
                 gameFieldInfo.id = id;//todo ->le but ?

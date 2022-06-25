@@ -54,7 +54,7 @@
                             </div>
                           </div>
                           <div class="text-center">
-                            <button id="create-activity" type="button" onclick="sendActivityData()" class="closeModal btn btn-primary btn-fw m-1">Créer</button>
+                            <button id="create-activity" type="button" class="closeModal btn btn-primary btn-fw m-1">Créer</button>
                           </div>
                         </div> 
                       </div>
