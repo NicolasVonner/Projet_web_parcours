@@ -18,7 +18,6 @@
                                           </p>
                                         </div>
                                       </div>
-                                      <h6 class="text-muted font-weight-normal"></h6>
                                     </div>
                                   </div>
                                 </div>

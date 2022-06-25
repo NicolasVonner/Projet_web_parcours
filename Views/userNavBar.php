@@ -20,10 +20,14 @@ use Projet_Web_parcours\Assets\settings\Settings;
                     if(!isset($utilisateur) || empty($utilisateur)){
                       echo'
                       <li class="nav-item"> 
-                        <button type="button" class="btn btn-outline-light btn-fw" id="signUp" style="border: none;min-width: auto;"><a href="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignup">Sign Up</a></button>
+                        <form action="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignup">
+                          <button type="submit" class="btn btn-outline-light btn-fw" id="signUp" style="border: none;min-width: auto;">Sign Up </button>
+                        </form>
                       </li>
-                      <li class="nav-item">   
-                        <button type="button" class="btn btn-outline-light btn-fw" id="signIn" style="border: none;min-width: auto;"><a href="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignin"> Sign In</a></button>     
+                      <li class="nav-item"> 
+                        <form action="'.Settings::RACINE.'Authentification/Authentification_controller/displaySignin">
+                          <button type="submit" class="btn btn-outline-light btn-fw" id="signIn" style="border: none;min-width: auto;">Sign In</button>
+                        </form>
                       </li>';
                     }else{
                       echo'
