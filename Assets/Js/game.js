@@ -220,29 +220,33 @@ const validGamePoints = () =>{
             console.log("Le step courant à été incrémenté : " + result);
         }).then(res => { //On implémente la vue et initialise le step activité.
             //On vérifie si on à gagné
-            //SI on est en debut de partie on verifie si step + 1 
+            //Si on est en debut de partie on verifie si step + 1 
             if(currentStep == null){
                 if(localStep == gameObject.positions.length){
                     alert("C'est la fin du parcour, bien joué");//todo Système de note parcour.
                     openRankModal();
-                    
+                }else{
+                    if(gameObject.positions[step] != undefined){
+                        actStep = gameObject.positions[step].activites.length != 0? 0 : null;//Si on est sur un début de game.
+                        document.querySelector("#nextStep").textContent = step  == gameObject.positions.length? "Arrivée" : step; 
+                        console.log("===>On est sur un debut de game classique avec Step =>"+step);
+                    }
                 }
-                actStep = gameObject.positions[step].activites.length != 0? 0 : null;//Si on est sur un début de game.
-                document.querySelector("#nextStep").textContent = step  == gameObject.positions.length? "Arrivée" : step; 
-                console.log("===>On est sur un debut de game classique avec Step =>"+step);
 
             }else{// if(currentStep != null)
                 if(localStep+1 == gameObject.positions.length){
                     alert("C'est la fin du parcour, bien joué");//todo Système de note parcour.
                     openRankModal();
+                }else{
+                    currentStep ++;
+                    actStep = gameObject.positions[currentStep].activites.length != 0? 0 : null; //Si on est sur un reprise et que la partie continue.
+                    document.querySelector("#nextStep").textContent = currentStep + 1 == gameObject.positions.length? "Arrivée" : currentStep;
                 }
-                currentStep ++;
-                actStep = gameObject.positions[currentStep].activites.length != 0? 0 : null; //Si on est sur un reprise et que la partie continue.
-                document.querySelector("#nextStep").textContent = currentStep + 1 == gameObject.positions.length? "Arrivée" : currentStep;
+
             }
             displayGamePoints();
+            delete(game);
         });
-        delete(game);
 };
 
 const displaySpotInfo = (index) => { 

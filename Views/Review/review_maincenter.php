@@ -23,6 +23,7 @@
                     <th> Joueur </th>
                     <th> note </th>
                     <th> commentaire </th>
+                    <th> date </th>
                   </tr>
                 </thead>
                 <tbody id="list">
@@ -36,6 +37,7 @@
                       <td> '.$review["username"].' </td>
                       <td>'.$review["note"].'</td>
                       <td>'.$review["commentaire"].'</td>
+                      <td>'.$review["date"].'</td>
                     </tr>';
                 }
                 echo'

@@ -29,22 +29,22 @@
               <div class="col grid-margin stretch-card">
                 <div class="card edit-box">
                   <div class="card-body text-center">
-                    <h1>Data of the point</h1>
+                    <h1>Infos de l'étape</h1>
                     <p id="adress"></p>
                     <div class="d-flex justify-content-between">
                       <p>Latitude: <span id="latitude"></span></p>
                       <p>Longitude: <span id="longitude"></span></p>
                     </div>
                     <div class="d-flex justify-content-center">
-                      <button id="add-activity" type="button" class="btn btn-success text-center" disabled>+ Add Activity</button>
+                      <button id="add-activity" type="button" class="btn btn-success text-center" disabled>+ Ajout activité</button>
                       <div id="myModal" class="modalConfig">
                         <!-- Modal content -->
                         <div class="modalConfig-content">
                           <div class="modalConfig-header text-center">
                             <div class="closeModal d-flex justify-content-end"><button type="button" class="btn btn-outline-secondary btn-sm">X</button></div>
-                            <h2>Add new Activity</h2>
+                            <h2>Ajouter une activité</h2>
                             <div class="dropdown">
-                              <button class="btn btn-outline-white dropdown-toggle" type="button" id="select-activity" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Activities </button>
+                              <button class="btn btn-outline-white dropdown-toggle" type="button" id="select-activity" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Activités </button>
                               <div id="activity-choice" class="dropdown-menu" aria-labelledby="dropdownMenuButton1"></div>
                             </div>
                           </div>
@@ -54,7 +54,7 @@
                             </div>
                           </div>
                           <div class="text-center">
-                            <button id="create-activity" type="button" onclick="sendActivityData()" class="closeModal btn btn-primary btn-fw m-1">Create</button>
+                            <button id="create-activity" type="button" onclick="sendActivityData()" class="closeModal btn btn-primary btn-fw m-1">Créer</button>
                           </div>
                         </div> 
                       </div>
@@ -62,7 +62,7 @@
                     <div class="row">
                       <div class="col grid-margin stretch-card d-flex justify-content-center">
                         <div class="card-body text-center">
-                          <h1>Activity List</h1>
+                          <h2>Liste d'activités</h2>
                           <div id="activity-list" class="list-group">
       
                           </div>
@@ -77,7 +77,7 @@
               <div class="col grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body text-center">
-                    <h1>Spots List</h1>
+                    <h1>Les étapes</h1>
                     <div id="parcours-list" class="list-group"></div>
                   </div>
                 </div>

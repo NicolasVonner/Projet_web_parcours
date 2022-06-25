@@ -1,3 +1,4 @@
+let addActivityButton = document.getElementById("add-activity");
 // import {RACINE} from '../settings/Settings.js';
 let inputType = new Map([
     ['varchar', 'text'],
@@ -134,8 +135,8 @@ const openConfig = (activity, canEdit) => {
                         <input type="text" value="${values[index]}" class="form-control" id="${prop}" placeholder="${prop}" ${canEdit ? "" : "readonly"}>
                     </div>
                 `);
-                //On écoutes les changements du formulaire.
-                listenActivForm(prop);
+            //On écoutes les changements du formulaire.
+            listenActivForm(prop);
             }
 
         });
@@ -143,33 +144,32 @@ const openConfig = (activity, canEdit) => {
 };
 
 const sendActivityData = (id) => {
+    console.log(" ===> ON PASE PAR LA");
     gameFieldInfo= new Object();
     gameFieldInfo.nomAc = $("#select-activity").text();
     $("form").find(':input').toArray().map((input)=>{
         gameFieldInfo[input.id] = input.value;
     });
     console.log("Les valeurs d'input sont ( SendActivityData() ) =>"+JSON.stringify(gameFieldInfo));
+    
+    // //Vérification de l'existance d'une vraie réponse -> useless car nouvelle fonctionnalité
+    // let response = gameFieldInfo["reponse"];
+    // let flagResp = false;
+    // let allFilled = Object.keys(gameFieldInfo).forEach((key) => {
+    //     console.log("La clefs est =>"+key+ "La valeur est =>"+gameFieldInfo[key]);
+    //     let splitKey = key.split('_');
+    //     if(splitKey.length == 2 && splitKey[0] == "choix"){
+    //         if(gameFieldInfo[key] == response){
+    //             flagResp = true;
+    //         }
+    //     }
+    // });
 
-    //TODO faire une fonction pour verifier si ya des champs vides (min 2) -> choix_1 et choix_2.Ou Réactiver al fonction au minimum
-    let response = gameFieldInfo["reponse"];
-    let flagResp = false;
-    let flagChoix = false;
-    let choiceCount = 0;
-    let allFilled = Object.keys(gameFieldInfo).forEach((key) => {
-        console.log("La clefs est =>"+key+ "La valeur est =>"+gameFieldInfo[key]);
-        let splitKey = key.split('_');
-        if(splitKey.length == 2 && splitKey[0] == "choix"){
-            if(gameFieldInfo[key] == response){
-                flagResp = true;
-            }
-        }
-    });
-
-    //Si le user n'as pas entré de solution possible.
-    if(!flagResp){
-        alert("Aucuns choix ne correpond à la réponse saisie");
-        return;
-    }
+    // //Si le user n'as pas entré de solution possible.
+    // if(!flagResp){
+    //     alert("Aucuns choix ne correpond à la réponse saisie");
+    //     return;
+    // }
 
     //console.log("====>gameFieldInfo"+JSON.stringify(gameFieldInfo));
     allFilled = true;
@@ -265,6 +265,8 @@ const removeActivity = (index) => {
 
 const displayActivityList = (actList) => { // affiche les activités dans la page <p class="m-1">${actList[i].nomAc} - ${actList[i].id}</p>
     console.log("On souhaite afficher la liste des activités de la position => Et c'est ======>"+JSON.stringify(actList));
+    //On vérifie si il y à déja trop d'activité sur l'étape
+    verifyActivSize(actList.length);
     activityList.innerHTML = "";
     for (let i = 0; i < actList.length; i++)
     {
@@ -276,10 +278,22 @@ const displayActivityList = (actList) => { // affiche les activités dans la pag
                 <p class="m-1">${actList[i].nomAc}</p>
             </div>
             <div class="d-flex justify-content-center h-100">
-                <button type="button" class="btn btn-secondary text-center" onclick="editActivity(${i})"><i class="mdi mdi-border-color m-0"></i></button>
-                <button type="button" class="btn btn-danger text-center" onclick="removeActivity(${i})">X</button>
+                <button type="button" class="btn btn-warning text-center" onclick="editActivity(${i})"><i class="mdi mdi-border-color m-0"></i></button>
+                <button type="button" class="btn btn-danger text-center" onclick="removeActivity(${i})"><i class="mdi mdi-delete m-0"></i></button>
             </div>
         `;
         activityList.appendChild(div);
     }
+};
+
+//On vérifie si il n'y à pas déjà trop d'activités pour une étape
+const verifyActivSize = (size) => {
+    console.log("SALUT lES GARS"+size);
+if(size >= 4){
+    addActivityButton.disabled = true;
+}else{
+    addActivityButton.disabled = false;
+}
+
+
 };

@@ -133,7 +133,10 @@ class Parcour_controller extends Index_controller{
     //Crée un parcour.
     function createParcour(){
       $course = json_decode($_POST["parcours"]);
-
+      //On vérifie si il n'y à pas trop de steps, si non on slice les step.
+      if(sizeof($course->positions) >= 10){
+        $course->positions = array_slice($course->positions, 0, 10);
+      }
       //On récupère le créateur
       $utilisateur = Utilisateur::existUser(array('username' => $_SESSION['username']), array('codeM'));
       $codeUser = (int)$utilisateur->fetch(Fetch::_ASSOC)['codeM'];
@@ -165,6 +168,11 @@ class Parcour_controller extends Index_controller{
        //TODO faire en sorte d'ajouter les activités correctement sur le JS.
        //On ajoute les activités.
        if(empty($point->activites))continue;
+       //On vérifie si il n'y à pas trop d'activités, si non on coupe.
+       if(sizeof($point->activites) >=4){
+        $point->activites = array_slice($point->activites, 0, 4);
+       }
+
        foreach($point->activites as $activity){
           $activ_params = (array)$activity;
           //On récupère le nom du jeu.

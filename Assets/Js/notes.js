@@ -97,13 +97,10 @@ const sendRank = () => {
         $.post(RACINE+"Game/Game_controller/addNoteToParcours","stars="+JSON.stringify(stars) , function(result){
             // si le résultat est autre que sended, ça veut dire qu'on a déjà envoie une note dans ce parcours
             console.log(result);
+            closeRankModal();
             // if (result != "sended") {
             //     alert("Erreur, tu a déjà laissé une note dans ce parcours!");
             // }
-        }).then((result) => {
-            closeRankModal(); // on ferme le modal
-        }).catch((err) => {
-            console.log("ERROR ENVOIE MODAL DATA NOTE=>"+err);
         });
     }
     else { // sinon on affiche un message d'erreur dans le texte

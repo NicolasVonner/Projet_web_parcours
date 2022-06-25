@@ -8,6 +8,7 @@ class Review
     private $codeM;
     private $note;
     private $commentaire;
+    private $dateN;
 
     //Constructeur
     function __construct($datas)
@@ -65,9 +66,18 @@ class Review
         $this->commentaire = $new_commentaire;
     }
 
+    public function getDateN()
+    {
+        return $this->dateN;
+    }
+    public function setDateN($new_dateN)
+    {
+        $this->dateN = $new_dateN;
+    }
+
     //Methodes d'affichage de l'objet
     public function __toString(): string{
-        return 'note => ' . $this->getCodePa() . '/' . $this->getCodeM() . '/' . $this->getNote(). '/'.  $this->getCommentaire();
+        return 'note => ' . $this->getCodePa() . '/' . $this->getCodeM() . '/' . $this->getNote(). '/'.  $this->getCommentaire(). '/'.  $this->getDateN();
     }
 
     //Tranforme l'objet en tableau associatif (Equipe, default null)
@@ -77,6 +87,7 @@ class Review
             'codeM' => $this->getCodeM(),
             'note' => $this->getNote(),
             'commentaire' => $this->getCommentaire(),
+            'dateN' => $this->getDateN(),
         );
     }
     //Tranforme l'objet en tableau associatif en ne gardant que certains paramètres 

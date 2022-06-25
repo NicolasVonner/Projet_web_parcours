@@ -25,10 +25,10 @@ if(deleteParcourButton !== null){
 function verifySize(){
         window.innerWidth < 780?
             deleteParcourButton.innerHTML  = "<i class='mdi mdi-delete'></i>":
-            deleteParcourButton.innerHTML = "<i class='mdi mdi-delete'></i>Delete";
+            deleteParcourButton.innerHTML = "<i class='mdi mdi-delete'></i>Supprimer";
         window.innerWidth < 780?
-            gameButton.innerHTML  = "+ Activity":
-            gameButton.innerHTML = "+ Add Activity";
+            gameButton.innerHTML  = "+ Activité":
+            gameButton.innerHTML = "+ Ajout activité";
 }
 
 
@@ -44,6 +44,10 @@ let markerGroup = L.layerGroup().addTo(map);
 let lineGroup = L.layerGroup().addTo(map);
 
 map.on('click',function(e){
+    if(parcour.positions.length >= 10){
+        alert("Vous avez atteind un nombre limite d'étapes pour un parcour, passez en mode prémium pour augmenter le nombre d'étape possible");
+        return;
+    }
     // on récupére laltitude et la longitude à partir du point dans lesquel on vient de cliquer
 	let lat = e.latlng.lat;
 	let lon = e.latlng.lng;
@@ -187,7 +191,7 @@ const displayMarkersList = (marker) => { //undefined? marker
             <p class="font-weight-bold m-1">${index + 1}.</p>
             <p class="m-1">${parcour.positions[index].nomPo}   (${parcour.positions[index].pays})</p>
         </div>
-        <button type="button" class="btn btn-danger text-center" onclick="removeMarker(${index})">X</button>
+        <button type="button" class="btn btn-danger text-center" onclick="removeMarker(${index})"><i class="mdi mdi-delete m-0"></i></button>
     `;
     // on l'ajoute dans notre list de spot dans le DOM
     parcoursList.appendChild(div);

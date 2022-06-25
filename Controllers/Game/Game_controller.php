@@ -225,22 +225,18 @@ require('Controllers/Main/Index_controller.php');
 
   function addNoteToParcours(){
     $stars = json_decode($_POST["stars"]);
-    //D'abord on vérifie que le parcour existe
-    // $note_request = Note::existNote(array("codePa"=> $stars->codePa, "codeM"=> $_SESSION['userID']));
-    // $note_array = $note_request->fetch(Fetch::_ASSOC);
-  //  if (sizeof($note_array) == 0) {
+    //On récupère le datetime.
+      date_default_timezone_set('Europe/Paris');
+      $date = date('Y-m-d H:i:s');
       $note_params = array(
         "codePa"=>htmlspecialchars($stars->codePa),
         "codeM"=>htmlspecialchars($_SESSION['userID']),
         "note"=>htmlspecialchars($stars->note),
         "commentaire"=>htmlspecialchars($stars->commentaire),
+        "dateN"=> htmlspecialchars($date),
       ); 
       $new_note = new Review($note_params); 
       Note::persistNote($new_note);
       echo "sended";
-    // }
-    // else {
-      // echo "already send";
-    // }
   }
  }

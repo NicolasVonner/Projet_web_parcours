@@ -43,7 +43,8 @@ class Review_controller extends Index_controller{
             "avatar"=>$utilisateur->getAvatar(),
             "username"=>$utilisateur->getUsername(),
             "note"=>$note->note,
-            "commentaire"=>$note->commentaire
+            "commentaire"=>$note->commentaire,
+            "date"=>$note->dateN
           );
           $reviewBox[] = $review;
         }
