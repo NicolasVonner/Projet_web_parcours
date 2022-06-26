@@ -10,7 +10,7 @@ let gameButton = document.getElementById("add-activity");
 let deleteParcourButton = document.getElementById('delete-parcours');
 let accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 //let markerList = [];
-
+let clickOff = false;
 let spotIndex;
 //Objet qui vas etre envoyé au serveur.
 let parcour = new Object();
@@ -44,6 +44,11 @@ let markerGroup = L.layerGroup().addTo(map);
 let lineGroup = L.layerGroup().addTo(map);
 
 map.on('click',function(e){
+    //Empêcher le double click telephone.
+    if(clickOff == true){
+        return;
+    }
+    clickOff = true;
     if(parcour.positions.length >= 10){
         alert("Vous avez atteind un nombre limite d'étapes pour un parcour, passez en mode prémium pour augmenter le nombre d'étape possible");
         return;
@@ -79,6 +84,7 @@ map.on('click',function(e){
         displaySpotInfo(index);
         displayAddGamesButton();
     })
+    setInterval(()=>clickOff = false, 2000);
 });
 
 // Permet de sélectionner un spot en bleu pour afficher les informations et centrer la carte
