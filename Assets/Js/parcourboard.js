@@ -107,7 +107,7 @@ for (i = 0; i < x.children.length; i++) {
     if(x.children[i].getElementsByTagName('button')[2] != null){
         x.children[i].getElementsByTagName('button')[2].addEventListener('click', (e)=>{
             let id = e.currentTarget.value;
-            let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour "+id+" ?");
+            let editInvit = confirm("Êtes vous sur de vouloir modifier le parcour ?");
             if(editInvit){  
                 sendParams(RACINE+'Parcour/Parcour_controller/displayParcourCreatePage/', {idParcour: id});
             }
@@ -122,10 +122,10 @@ for (i = 0; i < x.children.length; i++) {
             let buttonPlacement = elem.id;
             console.log("Activ-Desactiv ==>"+nature +" Id ===>"+buttonPlacement);
             if(nature == "Désactiver"){
-                confirmActiv = confirm("Êtes vous sur de vouloir désactiver le parcour "+id+" ?");
+                confirmActiv = confirm("Êtes vous sur de vouloir désactiver le parcour ?");
                 flagactiv = 0;       
             }else{
-                confirmActiv = confirm("Êtes vous sur de vouloir activer le parcour "+id+" ?");
+                confirmActiv = confirm("Êtes vous sur de vouloir activer le parcour ?");
                 flagactiv = 1;
             }
             //Confirmation activation ou désactivation.
@@ -158,7 +158,7 @@ for (i = 0; i < x.children.length; i++) {
     //Le boutton Rank de chaque ligne du tableau de parcour.
             x.children[i].getElementsByTagName('button')[1].addEventListener('click', (e)=>{
                 let id = e.currentTarget.value;
-                let editInvit = confirm("Êtes vous sur de vouloir consulter le classement du parcour "+id+" ?");
+                let editInvit = confirm("Êtes vous sur de vouloir consulter le classement du parcour ?");
                 if(editInvit){  
                     sendParams(RACINE+'Classement/Classement_controller/displayRankingPage/', {idParcour: id});
                 }

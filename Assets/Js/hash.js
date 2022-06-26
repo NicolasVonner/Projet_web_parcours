@@ -7,13 +7,13 @@ searchHashButton.addEventListener('click', (e)=>{
     hash = "hash_"+hash;
     if(hash != ""){
         $.ajax({url: RACINE+'Game/Game_controller/verifyParcourStep/'+hash, success: function(histo){
-            console.log("=====>"+histo);
+            // console.log("=====>"+histo);
             if(histo == "non exist"){
                 alert("Aucun parcour ne correspond à votre hascode, veuillez réessayer");//todo afficher un message sur le formulaire.
                 inputHash.value = "";
                 return;
             }else if(histo == false){
-                console.log("L'utilisateur doit commencer dès le début");
+                // console.log("L'utilisateur doit commencer dès le début");
                 sendBeginparcour(RACINE+'Game/Game_controller/displayGame', {hashcode: hash})
             }else{
                 var histoData = JSON.parse(histo); 

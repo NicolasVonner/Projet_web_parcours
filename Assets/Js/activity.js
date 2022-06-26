@@ -291,7 +291,6 @@ const displayActivityList = (actList) => { // affiche les activités dans la pag
 
 //On vérifie si il n'y à pas déjà trop d'activités pour une étape
 const verifyActivSize = (size) => {
-    console.log("SALUT lES GARS"+size);
 if(size >= 4){
     addActivityButton.disabled = true;
 }else{

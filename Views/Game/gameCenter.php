@@ -15,11 +15,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
     </div>
     <div class="row">
         <div class="text-center">
             <div class="col"><button type="button" class="btn btn-primary" id="valideStep" >Valide step</button></div>
+            <div class="col"><button type="button" class="btn btn-secondary" id="spotMe" >Localiser</button></div>
         </div>
     </div>
     <div class="row">
@@ -59,7 +60,7 @@
     <div id="modal" role="dialog" aria-modal="true" aria-labelledby="add-review-header" class="">
         <div class="float-end"><button id="close-modal" class="btn btn-light" aria-label="close" title="Close">X</button></div>
         <div id="review-form-container">
-            <h2 id="add-review-header">>Voulez vous noter ce parcour?</h2>
+            <h2 id="add-review-header">Voulez vous attribuer une note à ce parcour ?</h2>
             <div class="fieldset">
                 <label>Donnez votre note</label>
                 <div class="rate">
@@ -76,7 +77,7 @@
                 </div>
             </div>
             <div id="text-zone">
-                <label for="commentaire">Laissez un commentaire:</label>
+                <label for="commentaire">Laisser un commentaire:</label>
                 <textarea id="commentaire" name="commentaire"></textarea>
             </div>
             <div class="rate">

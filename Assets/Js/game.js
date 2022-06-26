@@ -4,6 +4,7 @@ let gameproblem = document.getElementById("gameproblem");
 let choices = document.getElementById("choices");
 let indice = document.getElementById("indice");
 let valideStep = document.getElementById("valideStep");
+let spotMe = document.getElementById("spotMe");
 let quitGame = document.getElementById("quitGame");
 
 
@@ -18,13 +19,79 @@ let actStep = null;
 let spotCount = 0;
 let game = true;
 
-// geoloc();
+var userlat;
+var userlong;
+var flag = 0;
+var positionIndex = null;
 
-// do{
-//     var pos = geoloc();//TODO faire une fonciton récurente qui 
-// settime 
+setInterval(()=>{
+  let nextStepPos = currentStep == null? step : currentStep; 
+  if(nextStepPos != null){
+    lat =  gameObject.positions[nextStepPos].coord[0];
+    long = gameObject.positions[nextStepPos].coord[1];
+    let distance;
+    console.log('Les prochaines coordonnées sont ==> Lat :'+lat+'===>Long :'+long);
+    geoloc();//TODO faire une fonciton récurente qui  
+    // console.log('Les prochaines coordonnées sont ==> Lat :'+lat+'===>Long :'+long);
+    console.log('Les actuelles coordonnées sont ==> Lat :'+userlat+'===>Long :'+userlong);
+    console.log("IL y a "+calcCrow(lat,long,userlat,userlong)+"KM entre le point et fabregas");
+    distance = calcCrow(lat,long,userlat,userlong);
+    if(parseInt(distance) == 0){
+        if(distance * 1000 <= 500){
+            if(flag != 500){
+                alert ("Vous êtes à 500 mètres du prochain point"); 
+                flag = 500;
+            }
+        }else if(distance * 1000 <= 100){
+            if(flag != 100){
+                alert ("Vous êtes à 100 mètres du prochain point");
+                flag = 100;
+            }
 
-// }while(game)
+        }else if(distance * 1000 <= 50){
+            if(flag != 50){
+                alert ("Vous êtes à 50 mètres du prochain point");
+                flag = 50;
+            }
+        }else if(distance * 1000 <= 10){
+            if(flag != 10){
+                openGamePoints();
+                flag = 10;
+            }
+        }else{
+            if(flag != 1){
+                alert ("Vous êtes à moins d'un Km de la prochaine étape, courage !! ");
+                flag = 1;
+            }
+
+            
+        }
+
+    }
+   }
+}, 3000);
+
+    //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
+    function calcCrow(lat1, lon1, lat2, lon2) 
+    {
+      var R = 6371; // km
+      var dLat = toRad(lat2-lat1);
+      var dLon = toRad(lon2-lon1);
+      var lat1 = toRad(lat1);
+      var lat2 = toRad(lat2);
+
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      var d = R * c;
+      return d;
+    }
+
+    // Converts numeric degrees to radians
+    function toRad(Value) 
+    {
+        return Value * Math.PI / 180;
+    }
 
 let map = L.map('map').setView([51.505, -0.09], 13);
 L.tileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${accessToken}`, {
@@ -38,14 +105,14 @@ L.tileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 let markerGroup = L.layerGroup().addTo(map);
 let lineGroup = L.layerGroup().addTo(map);
 
-function geoloc(){ // ou tout autre nom de fonction
-    let arrayLocal = new Array;
+function geoloc(lat, long){ // ou tout autre nom de fonction
     var geoSuccess = function(position) { // Ceci s'exécutera si l'utilisateur accepte la géolocalisation
+        let arrayLocal = new Array;
         startPos = position;
         userlat = startPos.coords.latitude;
-        userlon = startPos.coords.longitude;
-        console.log("lat: "+userlat+" - lon: "+userlon);
-        arrayLocal.push(userlat, userlon); //Tableau de coordonné.
+        userlong = startPos.coords.longitude;
+
+        // console.log("lat: "+userlat+" - lon: "+userlon);
     };
     var geoFail = function(){ // Ceci s'exécutera si l'utilisateur refuse la géolocalisation
         console.log("refus");
@@ -89,8 +156,6 @@ const displayGamePoints = () =>{
 };
     
 const openGamePoints = () =>{
-    //if(joueur est sur le point){}
-    //Si il n'y à pas d'activité sur la position on passe au point d'aprés. //todo fonction à appeler sur listener click d'arrivé ou géolocalisation.
     if(actStep == null){
         validGamePoints();
     }else{
@@ -101,6 +166,21 @@ const openGamePoints = () =>{
 //L'utilisateur valide 
 valideStep.addEventListener("click", (e)=>{
     openGamePoints();
+});
+
+//L'utilisateur se spot sur la carte 
+spotMe.addEventListener("click", (e)=>{
+    let coord = new Array;
+    coord.push(userlat,userlong);
+    L.marker(coord).addTo(markerGroup).bindPopup("Ma position");
+    positionIndex = markerGroup.length - 1;
+    //On delete le merker location
+    setTimeout(()=>{
+        console.log("ma bitr");
+        markerGroup.clearLayers();
+        displayGamePoints();
+    },5000)
+
 });
 
 //On affiche la prochaine activité.
@@ -164,7 +244,7 @@ quitGame.addEventListener("click",quitParcour);
 const activListenerActivity = (localStep) => { 
             document.querySelectorAll('#choices .btn').forEach(item => {
                 item.addEventListener('click', event => {
-                  console.log("L'utilisateur viens d'envoyer une reponse =>"+event.target.value);
+                //   console.log("L'utilisateur viens d'envoyer une reponse =>"+event.target.value);
                   if(verifyActivity(event.target.value)){
                     if(gameObject.positions[localStep].activites[actStep + 1] != undefined){
                         alert("Bravo, vous avez trouvé, passez à l'activité suivante"); //todo la on passe à la prochaine activité ou on valide.
@@ -176,7 +256,7 @@ const activListenerActivity = (localStep) => {
                         actStep = null;
                         //On vide l'espace d'affichage de enigmes.
                         cleanActivityZone();
-                        alert("Pallié suivant débloqué, enjoy !!! ");
+                        alert("Pallié suivant débloqué !!! ");
                         validGamePoints();
                     }
                   }else{//Si l'utilisateur donne une mauvaise réponse.
@@ -217,25 +297,27 @@ const validGamePoints = () =>{
     game.position = currentStep == null? gameObject.positions[localStep-1].codePo:gameObject.positions[localStep].codePo;
         //On ajoute le step à historique parcour et incremente la session de jeu.
         $.post(RACINE+'Game/Game_controller/incrementStepSession',{gameStep : JSON.stringify(game)} , function(result){
-            console.log("Le step courant à été incrémenté : " + result);
+            // console.log("Le step courant à été incrémenté : " + result);
         }).then(res => { //On implémente la vue et initialise le step activité.
             //On vérifie si on à gagné
             //Si on est en debut de partie on verifie si step + 1 
             if(currentStep == null){
                 if(localStep == gameObject.positions.length){
-                    alert("C'est la fin du parcour, bien joué");//todo Système de note parcour.
+                    alert("C'est la fin du parcour, félicitation !!!");//todo Système de note parcour.
+                    game = false;
                     openRankModal();
                 }else{
                     if(gameObject.positions[step] != undefined){
                         actStep = gameObject.positions[step].activites.length != 0? 0 : null;//Si on est sur un début de game.
                         document.querySelector("#nextStep").textContent = step  == gameObject.positions.length? "Arrivée" : step; 
-                        console.log("===>On est sur un debut de game classique avec Step =>"+step);
+                        // console.log("===>On est sur un debut de game classique avec Step =>"+step);
                     }
                 }
 
             }else{// if(currentStep != null)
                 if(localStep+1 == gameObject.positions.length){
-                    alert("C'est la fin du parcour, bien joué");//todo Système de note parcour.
+                    alert("C'est la fin du parcour, félicitation !!!");//todo Système de note parcour.
+                    game = false;
                     openRankModal();
                 }else{
                     currentStep ++;
@@ -296,8 +378,8 @@ const displaySpotInfo = (index) => {
             currentStep = 1;
         }
 
-        console.log("On à récupéré la game dans => "+JSON.stringify(gameObject));
-        console.log("On est au step ==>"+step);
+        // console.log("On à récupéré la game dans => "+JSON.stringify(gameObject));
+        // console.log("On est au step ==>"+step);
 
         //On implémente la vue pour le démarrage du jeu.  
 
