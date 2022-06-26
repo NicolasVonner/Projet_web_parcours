@@ -9,13 +9,13 @@
                   ?>
                   <div class="card-body text-center">
                     <h1 contenteditable="true" id="parcourName">Nom du parcours</h1>
-                    <p contenteditable="true" id="parcourDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan urna a hendrerit sagittis. Curabitur ultricies mi ac leo varius scelerisque. Aliquam vel lectus et nulla mattis efficitur in sit amet justo. Nunc sit amet nunc vitae massa aliquam dictum. Nulla eget nisl quis ligula consectetur accumsan in non nibh. Nunc egestas tellus sit amet quam pharetra, at sagittis ligula faucibus. Nulla tristique, sem vitae lacinia accumsan, erat eros sagittis erat, eget pellentesque elit justo at enim. Nam euismod odio at dui interdum, vel condimentum leo viverra. Pellentesque commodo lobortis orci non suscipit. Ut ac metus id libero sollicitudin commodo non at orci. Cras sapien odio, feugiat ac vestibulum sed, commodo non turpis. Integer consequat cursus convallis. Aliquam eget pharetra mauris, non sodales magna. Phasellus feugiat erat vitae pretium fringilla. Sed dignissim arcu urna, vitae sollicitudin ex lacinia nec. Sed vel tortor nec lectus ultrices rutrum.</p>
+                    <p contenteditable="true" id="parcourDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan urna a hendrerit sagittis.</p>
                   </div>
                 </div>
               </div>
             </div>
             <div class="row">
-              <div class="col grid-margin stretch-card">
+              <div class="col-12 col-sm-7 col-lg-7 grid-margin">
                 <div class="card edit-box">
                   <div class="card-body">
                     <div class="input-group mb-3">
@@ -26,10 +26,10 @@
                   </div>
                 </div>
               </div>
-              <div class="col grid-margin stretch-card">
+              <div class="col-12 col-sm-5 col-lg-5 grid-margin">
                 <div class="card edit-box">
                   <div class="card-body text-center">
-                    <h1>Infos de l'étape</h1>
+                    <h2>Infos de l'étape</h2>
                     <p id="adress"></p>
                     <div class="d-flex justify-content-between">
                       <p>Latitude: <span id="latitude"></span></p>
@@ -62,9 +62,10 @@
                     <div class="row">
                       <div class="col grid-margin stretch-card d-flex justify-content-center">
                         <div class="card-body text-center">
-                          <h2>Liste d'activités</h2>
-                          <div id="activity-list" class="list-group">
-      
+                          <h3>Liste d'activités</h3>
+                          <div class = "row">
+                              <!-- <div class="col-12" style="margin-bottom: 0; overflow: auto; height: 200px;"></div> -->
+                              <div id="activity-list" class=" col-12 list-group"></div>
                           </div>
                         </div>
                       </div>
@@ -77,7 +78,7 @@
               <div class="col grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body text-center">
-                    <h1>Les étapes</h1>
+                    <h2>Les étapes</h2>
                     <div id="parcours-list" class="list-group"></div>
                   </div>
                 </div>
