@@ -33,11 +33,12 @@ function verifySize(){
             x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-crown btn-icon-prepend"></i>';
             if(x.children[i].getElementsByTagName('button')[2] != undefined){ //Si il y a un edit il y a un activate/desactivate.
                 x.children[i].getElementsByTagName('button')[2].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>';
-                let nature = x.children[i].getElementsByTagName('button')[3].textContent;
+                let nature = x.children[i].getElementsByTagName('button')[3].textContent == ""?x.children[i].getElementsByTagName('button')[3].children[0].id:x.children[i].getElementsByTagName('button')[3].textContent;
+                //todo mettre un id quand pas text, car peut etre text vers pas text et pas text vers text
                 if(nature == "Désactiver")
-                    x.children[i].getElementsByTagName('button')[3].innerHTML = '<i class="mdi mdi-eye-off btn-icon-prepend"></i>';
+                    x.children[i].getElementsByTagName('button')[3].innerHTML = '<i id ="Désactiver" class="mdi mdi-eye-off btn-icon-prepend"></i>';
                 else 
-                    x.children[i].getElementsByTagName('button')[3].innerHTML = '<i class="mdi mdi-eye btn-icon-prepend"></i>'; 
+                    x.children[i].getElementsByTagName('button')[3].innerHTML = '<i id ="Activer" class="mdi mdi-eye btn-icon-prepend"></i>'; 
             }
         }
     }else{
@@ -46,7 +47,7 @@ function verifySize(){
             x.children[i].getElementsByTagName('button')[1].innerHTML = '<i class="mdi mdi-crown btn-icon-prepend"></i>Rank';
            if(x.children[i].getElementsByTagName('button')[2] != undefined){
             x.children[i].getElementsByTagName('button')[2].innerHTML = '<i class="mdi mdi-border-color btn-icon-prepend"></i>Edit';
-                let nature = x.children[i].getElementsByTagName('button')[3].textContent;
+            let nature = x.children[i].getElementsByTagName('button')[3].textContent == ""?x.children[i].getElementsByTagName('button')[3].children[0].id:x.children[i].getElementsByTagName('button')[3].textContent;
                 if(nature == "Désactiver")
                     x.children[i].getElementsByTagName('button')[3].innerHTML = '<i class="mdi mdi-eye-off btn-icon-prepend"></i>Désactiver';
                 else 
@@ -114,7 +115,7 @@ for (i = 0; i < x.children.length; i++) {
         //Activate.
         x.children[i].getElementsByTagName('button')[3].addEventListener('click', (e)=>{
             let id = e.currentTarget.value;
-            let nature = e.currentTarget.textContent;
+            let nature = e.currentTarget.textContent == ""?e.currentTarget.children[0].id:e.currentTarget.textContent;
             let confirmActiv;
             let elem = e.currentTarget;
             let flagactiv;
@@ -133,11 +134,19 @@ for (i = 0; i < x.children.length; i++) {
                 data: {idParcour: id, flag: flagactiv }, success: function(resp, status){
                       if(flagactiv == 0){
                         $('.btn-outline-danger.'+id).removeClass('btn-outline-danger').addClass('btn-outline-success');
-                        elem.innerHTML = "<i class='mdi mdi-eye btn-icon-prepend'></i>Activer";
+                        if(window.innerWidth < 780){
+                            elem.innerHTML = "<i id = 'Activer' class='mdi mdi-eye btn-icon-prepend'></i>";
+                        }else{
+                            elem.innerHTML = "<i class='mdi mdi-eye btn-icon-prepend'></i>Activer";
+                        }
                         x.children[buttonPlacement].getElementsByTagName('button')[0].disabled = true;
                       }else{
                         $('.btn-outline-success.'+id).addClass('btn-outline-danger').removeClass('btn-outline-success');
-                        elem.innerHTML = "<i class='mdi mdi-eye-off btn-icon-prepend'></i>Désactiver";
+                        if(window.innerWidth < 780){
+                            elem.innerHTML = "<i id='Désactiver' class='mdi mdi-eye-off btn-icon-prepend'></i>";
+                        }else{
+                            elem.innerHTML = "<i class='mdi mdi-eye-off btn-icon-prepend'></i>Désactiver";
+                        }
                         x.children[buttonPlacement].getElementsByTagName('button')[0].disabled = false;
                       } 
              }});
